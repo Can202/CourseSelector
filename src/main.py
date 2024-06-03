@@ -54,8 +54,43 @@ def get_valid_options(data):
         courses_id.append(i)
     courses_quantity, [courses_id] = many_sorts(courses_options, [courses_id])
     print(courses_id)
+    a = parse_course_info(text=data[5][2])
+    b = parse_course_info(text=data[6][2])
+    print(courses_conflict(dict1=a, dict2=b))
     
-    
+def parse_course_info(*,text =""):
+    ts = text.split(" ")
+    dic = {}
+    for i in range(len(ts)):
+        tsa = ts[i].split("/")
+        dic[f"{i}_type"] = tsa[0]
+        daysC = tsa[1].split(":")[0].split("-")
+        days = []
+        for j in range(len(daysC)):
+            days.append(daysC[j])
+        dic[f"{i}_days"] = days
+        
+        hoursC = tsa[1].split(":")[1].split("-")
+        hours = []
+        for j in range(len(hoursC)):
+            hours.append(hoursC[j])
+        dic[f"{i}_hours"] = hours
+    dic["len"] = len(ts)
+    return dic
+def courses_conflict(*, dict1, dict2):
+    conflit_in_days= False
+    conflit_in_hours= False
+    for i in range(dict1["len"]):
+        for j in range(dict2["len"]):
+            for k in range(len(dict1[f"{i}_days"])):
+                if dict1[f"{i}_days"][k] in ''.join(map(str, dict2[f"{j}_days"])):
+                    conflit_in_days= True
+            for k in range(len(dict1[f"{i}_hours"])):
+                if dict1[f"{i}_hours"][k] in ''.join(map(str, dict2[f"{j}_hours"])):
+                    conflit_in_hours= True
+            if conflit_in_days and conflit_in_hours:
+                return True
+    return False
 
 
 def many_sorts(principal, others):
