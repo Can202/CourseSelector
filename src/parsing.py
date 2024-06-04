@@ -30,6 +30,7 @@ def dict_courses_conflict(*, dict1, dict2):
     conflit_in_hours= False
     for i in range(dict1["len"]):
         for j in range(dict2["len"]):
+            conflit_in_days, conflit_in_hours = False, False
             for k in range(len(dict1[f"{i}_days"])):
                 if dict1[f"{i}_days"][k] in ''.join(map(str, dict2[f"{j}_days"])):
                     conflit_in_days= True
