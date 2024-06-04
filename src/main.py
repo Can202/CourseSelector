@@ -3,6 +3,7 @@ ROW_SKIP = 1
 COLUMN_SKIP = 1
 
 from func import *
+from parsing import *
 
 def main():
     while True:
@@ -43,20 +44,19 @@ def get_valid_options(data):
     courses_quantity, [courses_id] = many_sorts(courses_options, [courses_id])
     the_loop(data, courses_id, courses_options, 0)
 
-def the_loop(data, id, options, number, the_list = {"name": [], "calendar": []}):
+def the_loop(data, id, options, number, the_list = {"calendar": [], "name": []}):
     if number >= len(id):
         print(the_list)
         return the_list
     i = id[number]
     conflic = False
-    the_list[f"{number}"] = {}
     for j in range(len(the_list["calendar"])):
         for temp_k in range(options + COLUMN_SKIP):
             k = temp_k - COLUMN_SKIP
             conflic = courses_conflict(text1=the_list["calendar"][j], text2=data[i][k])
             if conflic == False:
-                the_list[f"{number}"]["name"].append(data[i][0])
-                the_list[f"{number}"]["calendar"].append(data[i][k])
+                the_list["name"].append(data[i][0])
+                the_list["calendar"].append(data[i][k])
                 break
         
     
@@ -86,6 +86,7 @@ def parse_course_info(*,text =""):
         dic[f"{i}_hours"] = hours
     dic["len"] = len(ts)
     return dic
+
 def dict_courses_conflict(*, dict1, dict2):
     conflit_in_days= False
     conflit_in_hours= False
