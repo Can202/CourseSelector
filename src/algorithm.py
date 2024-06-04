@@ -29,15 +29,17 @@ def the_loop(data, id, options, number, the_list = {"calendar": [], "name": []})
             val = 0
             val = available(data, i, k, the_list)
             if val != -1:
+                val2 = False
                 for j in range(len(the_list["calendar"])):
-                    val2 = courses_conflict(text1=the_list["calendar"][j], text2=data[1][k])
-                    if val2 == True:
-                        print(f"{data[i][0]} conflict found")
-                        break
+                    if val2 == False:
+                        if courses_conflict(text1=the_list["calendar"][j], text2=data[i][k]):
+                            val2=True
+                            print(courses_conflict(text1=the_list["calendar"][j], text2=data[i][k]))
+                            print(f"conflict found between {data[i][0]} {k}", data[i][k],"y", the_list["calendar"][j])
 
-                the_list["name"].append(data[i][0])
-                the_list["calendar"].append(data[i][k])
-                break
+                if val2 == False:
+                    the_list["name"].append(data[i][0])
+                    the_list["calendar"].append(data[i][k])
 
     else:
         the_list["name"].append(data[i][0])
