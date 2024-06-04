@@ -18,10 +18,8 @@ def get_valid_options(data):
 
 def the_loop(data, id, options, number, the_list = {"calendar": [], "name": []}):
     if number >= len(id):
-        print(the_list)
         return the_list
     i = id[number]
-    conflic = False
 
     if number != 0:
         for temp_k in range(len(options) - COLUMN_SKIP):
@@ -46,7 +44,6 @@ def the_loop(data, id, options, number, the_list = {"calendar": [], "name": []})
         the_list["calendar"].append(data[i][1])
     
     the_loop(data, id, options, number + 1, the_list)
-    return the_list
 
 def available(data, i, k, the_list):
     if data[i][k] == "":
