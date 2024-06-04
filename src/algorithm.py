@@ -14,12 +14,14 @@ def get_valid_options(data):
         courses_options.append(count_options(data[i]))
         courses_id.append(i)
     courses_quantity, [courses_id] = many_sorts(courses_options, [courses_id])
-    the_loop(data, courses_id, courses_options, 0)
+    a = the_loop(data, courses_id, courses_options, 0)
+    print(a)
 
 def the_loop(data, id, options, number, the_list = {"calendar": [], "name": []}):
     if number >= len(id):
         return the_list
     i = id[number]
+    print(f"{i}: ---{data[i][0]}---")
 
     if number != 0:
         for temp_k in range(len(options) - COLUMN_SKIP):
@@ -32,18 +34,19 @@ def the_loop(data, id, options, number, the_list = {"calendar": [], "name": []})
                     if val2 == False:
                         if courses_conflict(text1=the_list["calendar"][j], text2=data[i][k]):
                             val2=True
-                            print(courses_conflict(text1=the_list["calendar"][j], text2=data[i][k]))
                             print(f"conflict found between {data[i][0]} {k}", data[i][k],"y", the_list["calendar"][j])
 
                 if val2 == False:
+                    print(f"Selected {data[i][0]} {k}", data[i][k])
                     the_list["name"].append(data[i][0])
                     the_list["calendar"].append(data[i][k])
-
     else:
         the_list["name"].append(data[i][0])
         the_list["calendar"].append(data[i][1])
     
-    the_loop(data, id, options, number + 1, the_list)
+    
+    the_list = the_loop(data, id, options, number + 1, the_list)
+    return the_list
 
 def available(data, i, k, the_list):
     if data[i][k] == "":
