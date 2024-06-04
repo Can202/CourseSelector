@@ -1,6 +1,8 @@
 # Constants
 ROW_SKIP = 1
-COLUMN_SKIP = 2
+COLUMN_SKIP = 1
+
+from func import *
 
 def main():
     while True:
@@ -11,20 +13,6 @@ def main():
             start()
         if option_selected == "2":
             create_template()
-
-
-def csv_reader(*, path_file = ""):
-    file = open(path_file, "r", encoding="utf-8")
-    data = file.read()
-    file.close()
-    return data
-
-def plain_text_to_array(*, data = ""):
-    data_lines = data.split("\n")
-    data_splitted = []
-    for i in range(len(data_lines)):
-        data_splitted.append(data_lines[i].split(","))
-    return data_splitted
 
 def get_data():
     raw_data = csv_reader(path_file="data.csv")
@@ -61,17 +49,19 @@ def the_loop(data, id, options, number, the_list = {"name": [], "calendar": []})
         return the_list
     i = id[number]
     conflic = False
+    the_list[f"{number}"] = {}
     for j in range(len(the_list["calendar"])):
         for temp_k in range(options + COLUMN_SKIP):
             k = temp_k - COLUMN_SKIP
             conflic = courses_conflict(text1=the_list["calendar"][j], text2=data[i][k])
             if conflic == False:
-                the_list["name"].append(data[i][0])
-                the_list["calendar"].append(data[i][k])
+                the_list[f"{number}"]["name"].append(data[i][0])
+                the_list[f"{number}"]["calendar"].append(data[i][k])
                 break
         
     
     the_loop(data, id, options, number + 1, the_list)
+    return the_list
 
 def courses_conflict(*,text1 ="", text2=""):
     dic1 = parse_course_info(text =text1)
@@ -110,23 +100,6 @@ def dict_courses_conflict(*, dict1, dict2):
             if conflit_in_days and conflit_in_hours:
                 return True
     return False
-
-
-def many_sorts(principal, others):
-    n = len(principal)
-    for i in range(n):
-        swapped = False
-        for j in range(0, n-i-1):
-            if principal[j] > principal[j+1]:
-                principal[j], principal[j+1] = principal[j+1], principal[j]
-                for k in range(len(others)):
-                    others[k][j], others[k][j+1] = others[k][j+1], others[k][j]
-                swapped = True
-        if not swapped:
-            break
-    return [principal, others]
-
-        
 
 def count_options(row_data):
     count = 0
