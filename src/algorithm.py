@@ -14,16 +14,19 @@ def get_valid_options(data):
         courses_options.append(count_options(data[i]))
         courses_id.append(i)
     courses_quantity, [courses_id] = many_sorts(courses_options, [courses_id])
+
     a = the_loop(data, courses_id, courses_options, 0, {"calendar": [], "name": []})
     print(a)
 
-def the_loop(data, id, options, number, the_list = {"calendar": [], "name": []}, a = 0):
+def the_loop(data, id, options, number, the_list = {"calendar": [], "name": []}, cant = {"number": -1, "option": -1}):
     if number >= len(id):
         return the_list
     i = id[number]
     print(f"{i}: ---{data[i][0]}---")
 
-    if number != 0:
+    if number == cant["number"]:
+        pass
+    elif number != 0:
         for temp_k in range(len(options) - COLUMN_SKIP):
             k = temp_k + COLUMN_SKIP
             val = 0
