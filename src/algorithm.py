@@ -17,7 +17,7 @@ def get_valid_options(data):
     a = the_loop(data, courses_id, courses_options, 0, {"calendar": [], "name": []})
     print(a)
 
-def the_loop(data, id, options, number, the_list = {"calendar": [], "name": []}):
+def the_loop(data, id, options, number, the_list = {"calendar": [], "name": []}, a = 0):
     if number >= len(id):
         return the_list
     i = id[number]
