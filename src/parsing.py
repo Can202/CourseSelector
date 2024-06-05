@@ -10,6 +10,8 @@ def parse_course_info(*,text =""):
     dic = {}
     for i in range(len(ts)):
         tsa = ts[i].split("/")
+        if tsa[0] == "###":
+            return {"fail":True, "len":0}
         dic[f"{i}_type"] = tsa[0]
         daysC = tsa[1].split(":")[0].split("-")
         days = []
@@ -23,6 +25,7 @@ def parse_course_info(*,text =""):
             hours.append(hoursC[j])
         dic[f"{i}_hours"] = hours
     dic["len"] = len(ts)
+    dic["fail"] = False
     return dic
 
 def dict_courses_conflict(*, dict1, dict2):
