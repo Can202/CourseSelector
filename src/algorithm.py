@@ -18,44 +18,58 @@ def get_valid_options(data):
     a = the_loop(data, courses_id, courses_options, 0, {"calendar": [], "name": []})
     print(a)
 
-def the_loop(data, id, options, number, the_list = {"calendar": [], "name": []}, cant = {"number": -1, "option": -1}):
+def the_loop(data, id, options, number, the_list = {"calendar": [], "name": []}, cant = [{"number": 5, "option": 2},{"number": 4, "option": 2}]):
     if number >= len(id):
         return the_list
     i = id[number]
+    worked = False
     print(f"{i}: ---{data[i][0]}---")
+    
 
-    if number == cant["number"]:
-        pass
-    elif number != 0:
+    if number != 0:
         for temp_k in range(len(options) - COLUMN_SKIP):
             k = temp_k + COLUMN_SKIP
             val = 0
-            val = available(data, i, k, the_list)
+            val = available(data, i, k, the_list, number, cant)
             if val != -1:
                 val2 = False
                 for j in range(len(the_list["calendar"])):
                     if val2 == False:
                         if courses_conflict(text1=the_list["calendar"][j], text2=data[i][k]):
                             val2=True
-                            print(f"conflict found between {data[i][0]} {k}", data[i][k],"y", the_list["calendar"][j])
+                            print(f"conflict found between {data[i][0]} #{k}", data[i][k],"y",the_list["name"][j], the_list["calendar"][j])
 
                 if val2 == False:
-                    print(f"Selected {data[i][0]} {k}", data[i][k])
+                    print(f"Selected {data[i][0]} #{k}", data[i][k])
                     the_list["name"].append(data[i][0])
                     the_list["calendar"].append(data[i][k])
+                    worked = True
     else:
+        print(f"Selected {data[i][0]} #{1}", data[i][1])
         the_list["name"].append(data[i][0])
         the_list["calendar"].append(data[i][1])
+        worked = True
+
+    if worked == False:
+        the_list["name"].append("###")
+        the_list["calendar"].append("###")
+
     
     
     the_list = the_loop(data, id, options, number + 1, the_list)
     return the_list
 
-def available(data, i, k, the_list):
+def available(data, i, k, the_list, number, cant):
     if data[i][k] == "":
         return -1
     if data[i][0] in the_list["name"]:
         return -1
+    for m in range(len(cant)):
+        if cant[m]["number"] == number:
+            if k <= cant[m]["option"]:
+                print(f"{data[i][0]} #{k} already used")
+                return -1
+
     return 0
 
 
