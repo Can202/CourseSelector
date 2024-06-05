@@ -15,10 +15,10 @@ def get_valid_options(data):
         courses_id.append(i)
     courses_quantity, [courses_id] = many_sorts(courses_options, [courses_id])
 
-    a = the_loop(data, courses_id, courses_options, 0, {"calendar": [], "name": []})
+    a = make_calendar(data, courses_id, courses_options, 0, {"calendar": [], "name": []})
     print(a)
 
-def the_loop(data, id, options, number, the_list = {"calendar": [], "name": []}, cant = [{"number": -1, "option": -1}]):
+def make_calendar(data, id, options, number, the_list = {"calendar": [], "name": []}, cant = [{"number": -1, "option": -1}]):
     if number >= len(id):
         return the_list
     i = id[number]
@@ -57,7 +57,7 @@ def the_loop(data, id, options, number, the_list = {"calendar": [], "name": []},
 
     
     
-    the_list = the_loop(data, id, options, number + 1, the_list)
+    the_list = make_calendar(data, id, options, number + 1, the_list)
     return the_list
 
 def available(data, i, k, the_list, number, cant):
