@@ -18,7 +18,7 @@ def get_valid_options(data):
     a = the_loop(data, courses_id, courses_options, 0, {"calendar": [], "name": []})
     print(a)
 
-def the_loop(data, id, options, number, the_list = {"calendar": [], "name": []}, cant = [{"number": 5, "option": 2},{"number": 4, "option": 2}]):
+def the_loop(data, id, options, number, the_list = {"calendar": [], "name": []}, cant = [{"number": -1, "option": -1}]):
     if number >= len(id):
         return the_list
     i = id[number]
@@ -27,7 +27,7 @@ def the_loop(data, id, options, number, the_list = {"calendar": [], "name": []},
     
 
     if number != 0:
-        for temp_k in range(len(options) - COLUMN_SKIP):
+        for temp_k in range(len(data[i]) - COLUMN_SKIP):
             k = temp_k + COLUMN_SKIP
             val = 0
             val = available(data, i, k, the_list, number, cant)
@@ -51,7 +51,8 @@ def the_loop(data, id, options, number, the_list = {"calendar": [], "name": []},
         worked = True
 
     if worked == False:
-        the_list["name"].append("###")
+        print(f"{data[i][0]} not selected")
+        the_list["name"].append(data[i][0])
         the_list["calendar"].append("###")
 
     
