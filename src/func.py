@@ -35,4 +35,12 @@ def variation(list):
     return k
 
 def base_list(list, n):
-    pass
+    level = [0] * len(list)
+    for i in range(len(list)):
+        j = len(list) - i-1
+        level[j] = n % list[j]
+        n = n // list[j]
+    return level
+
+#for i in range(variation([2,4])+1):
+#    print(base_list([2,5], i))
