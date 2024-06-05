@@ -15,6 +15,13 @@ def get_valid_options(data):
         courses_id.append(i)
     courses_quantity, [courses_id] = many_sorts(courses_options, [courses_id])
 
+    all_calendars(data, courses_id, courses_options)
+
+def all_calendars(data, courses_id, courses_options):
+    n = variation(courses_options)
+    i = 0
+    while i < n:
+        pass
     a = make_calendar(data, courses_id, courses_options, 0, {"calendar": [], "name": []})
     print(a)
 

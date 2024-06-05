@@ -27,3 +27,12 @@ def many_sorts(principal, others):
         if not swapped:
             break
     return [principal, others]
+
+def variation(list):
+    k = 1
+    for i in range(len(list)):
+        k = k * list[i]
+    return k
+
+def base_list(list, n):
+    pass
