@@ -78,10 +78,14 @@ def make_calendar(data, id, options, number, the_list = {"calendar": [], "name":
                     the_list["calendar"].append(data[i][k])
                     worked = True
     else:
-        Debug(f"Selected {data[i][0]} #{1} {data[i][1]}")
-        the_list["name"].append(data[i][0])
-        the_list["calendar"].append(data[i][1])
-        worked = True
+        for temp_k in range(len(data[i]) - COLUMN_SKIP):
+            k = temp_k + COLUMN_SKIP
+            val = available(data, i, k, the_list, number, cant)
+            if val==0 and worked == False:
+                Debug(f"Selected {data[i][0]} #{k} {data[i][k]}")
+                the_list["name"].append(data[i][0])
+                the_list["calendar"].append(data[i][k])
+                worked = True
 
     if worked == False:
         print(f"{data[i][0]} not selected")
