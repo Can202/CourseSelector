@@ -18,8 +18,8 @@ def get_valid_options(data):
     all_calendars(data, courses_id, courses_options)
 
 def all_calendars(data, courses_id, courses_options):
-    #n = variation(courses_options)
-    n=10
+    n = variation(courses_options)
+    #n=10
     i = 0
     a=[]
     b=[]

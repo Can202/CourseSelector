@@ -6,7 +6,8 @@ def courses_conflict(*,text1 ="", text2=""):
     dic2 = parse_course_info(text =text2)
     return dict_courses_conflict(dict1=dic1, dict2=dic2)
 def parse_course_info(*,text =""):
-    ts = text.split(" ")
+    tsNF = text.split(" ")
+    ts = [i for i in tsNF if i]
     dic = {}
     for i in range(len(ts)):
         tsa = ts[i].split("/")
