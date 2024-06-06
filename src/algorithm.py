@@ -19,25 +19,28 @@ def get_valid_options(data):
     all_calendars(data, courses_id, courses_options)
 
 def all_calendars(data, courses_id, courses_options):
-    n = variation(courses_options)
+    #n = variation(courses_options)
+    n=10
     i = 0
     a=[]
     b=[]
     while (i < n):
-        ab = make_calendar(data, courses_id, courses_options, 0, {"calendar": [], "name": []})
+        ab = make_calendar(data, courses_id, courses_options, 0, {"calendar": [], "name": []}, i)
         a.append(ab[0])
 
-        i += 1
-    print(a)
+        print(a[i])
+        Debug("---NEXT---")
 
-def make_calendar(data, id, options, number, the_list = {"calendar": [], "name": []}, cant = [{"number": -1, "option": -1}], n=0):
+        i += 1
+
+def make_calendar(data, id, options, number, the_list = {"calendar": [], "name": []}, n=0):
     if number >= len(id):
         return [the_list, n]
     i = id[number]
     worked = False
-    Debug(f"{i}: ---{data[i][0]}---")
-    
+    cant = create_cant(options, n)
 
+    Debug(f"{i}: ---{data[i][0]}---")    
     if number != 0:
         for temp_k in range(len(data[i]) - COLUMN_SKIP):
             k = temp_k + COLUMN_SKIP
@@ -69,7 +72,7 @@ def make_calendar(data, id, options, number, the_list = {"calendar": [], "name":
 
     
     
-    [the_list, n] = make_calendar(data, id, options, number + 1, the_list)
+    [the_list, n] = make_calendar(data, id, options, number + 1, the_list, n)
     return [the_list, n]
 
 def available(data, i, k, the_list, number, cant):
@@ -80,11 +83,20 @@ def available(data, i, k, the_list, number, cant):
     for m in range(len(cant)):
         if cant[m]["number"] == number:
             if k <= cant[m]["option"]:
-                print(f"{data[i][0]} #{k} already used")
+                Debug(f"{data[i][0]} #{k} already used")
                 return -1
 
     return 0
 
+def create_cant(options,n):
+    opt = base_list(options, n)
+    cant = []
+    if n == 0:
+        cant.append({"number": -1, "option": -1})
+    else:
+        for i in range(len(opt)):
+            cant.append({"number": i, "option": opt[i]})
+    return cant
 
 def count_options(row_data):
     count = 0
@@ -93,3 +105,4 @@ def count_options(row_data):
         if row_data[i] != "":
             count += 1
     return count
+
