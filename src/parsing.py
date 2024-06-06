@@ -67,7 +67,7 @@ def get_day(day):
     if day==MONDAY:
         return 'L'
     if day==TUESDAY:
-        return 'T'
+        return 'M'
     if day==WEDNESDAY:
         return 'W'
     if day==THURSDAY:

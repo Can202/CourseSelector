@@ -18,22 +18,23 @@ def get_valid_options(data):
     all_calendars(data, courses_id, courses_options)
 
 def all_calendars(data, courses_id, courses_options):
-    #n = variation(courses_options)
-    n=10
+    n = variation(courses_options)
+    #n=10
     i = 0
     a=[]
     start_time = time.time()
     while (i < n):
         ab = make_calendar(data, courses_id, courses_options, 0, {"calendar": [], "name": []}, i)
         a.append(ab[0])
-
-        print(a[i])
         Debug("---NEXT---")
-
         i += 1
-    aa = [i for i in a if '###' not in i["calendar"]]
-    for i in range(len(aa)):
-        calendar_show(aa[i])
+    
+    # Remove lists that aren't complete
+    the_calendars = [i for i in a if '###' not in i["calendar"]]
+    Debug("---Calendars---")
+    for i in range(len(the_calendars)):
+        Debug(f"---Calendar {i}---")
+        calendar_show(the_calendars[i])
     print(f"Calendars Calculated: {n}")
     print("--- %s seconds ---" % (time.time() - start_time))
 
