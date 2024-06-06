@@ -33,9 +33,11 @@ def all_calendars(data, courses_id, courses_options):
     the_calendars = [i for i in a if '###' not in i["calendar"]]
     Debug("---Calendars---")
     for i in range(len(the_calendars)):
-        Debug(f"---Calendar {i}---")
+        Debug(f"---Calendar {i+1}---")
         calendar_show(the_calendars[i])
-    print(f"Calendars Calculated: {n}")
+
+    Debug(f"Calendars Calculated: {n}")
+    Debug(f"Calendars w/o conflicts: {len(the_calendars)}")
     print("--- %s seconds ---" % (time.time() - start_time))
 
 def make_calendar(data, id, options, number, the_list = {"calendar": [], "name": []}, n=0, c=0):
