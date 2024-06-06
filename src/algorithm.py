@@ -29,7 +29,7 @@ def make_calendar(data, id, options, number, the_list = {"calendar": [], "name":
         return [the_list, n]
     i = id[number]
     worked = False
-    print(f"{i}: ---{data[i][0]}---")
+    Debug(f"{i}: ---{data[i][0]}---")
     
 
     if number != 0:
@@ -43,15 +43,15 @@ def make_calendar(data, id, options, number, the_list = {"calendar": [], "name":
                     if val2 == False:
                         if courses_conflict(text1=the_list["calendar"][j], text2=data[i][k]):
                             val2=True
-                            print(f"conflict found between {data[i][0]} #{k}", data[i][k],"y",the_list["name"][j], the_list["calendar"][j])
+                            Debug(f"conflict found between {data[i][0]} #{k} {data[i][k]} y {the_list['name'][j]} {the_list['calendar'][j]}")
 
                 if val2 == False:
-                    print(f"Selected {data[i][0]} #{k}", data[i][k])
+                    Debug(f"Selected {data[i][0]} #{k} {data[i][k]}")
                     the_list["name"].append(data[i][0])
                     the_list["calendar"].append(data[i][k])
                     worked = True
     else:
-        print(f"Selected {data[i][0]} #{1}", data[i][1])
+        Debug(f"Selected {data[i][0]} #{1} {data[i][1]}")
         the_list["name"].append(data[i][0])
         the_list["calendar"].append(data[i][1])
         worked = True

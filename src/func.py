@@ -1,4 +1,4 @@
-
+DEBUG = True
 # Here will be functions to make some specific functionality
 
 def csv_reader(*, path_file = ""):
@@ -50,3 +50,7 @@ def base_n(list, alist):
         else:
             n += variation(list[i+1:]) * (alist[i] - 1 )
     return n
+
+def Debug(a):
+    if DEBUG:
+        print(a)
