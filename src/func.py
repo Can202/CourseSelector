@@ -42,3 +42,21 @@ def base_list(list, n):
         n = n // list[j]
     return level
 
+def base_n(list, alist):
+    n = 0
+    for i in range(len(list)):
+        if i == len(list)-1:
+            n += (alist[i] - 1)
+        else:
+            n += variation(list[i+1:-1]) * (alist[i] - 1 )
+    return n
+
+for i in range(variation([3,2,5])):
+    print(base_list([3,2,5], i))
+
+#print("")
+#a = base_list([3,2,5], 6)
+#print(a)
+#print (base_n([3,2,5], a))
+
+

@@ -20,14 +20,13 @@ def get_valid_options(data):
 def all_calendars(data, courses_id, courses_options):
     n = variation(courses_options)
     i = 0
-    while i < n:
-        pass
-    a = make_calendar(data, courses_id, courses_options, 0, {"calendar": [], "name": []})
+
+    [a, n] = make_calendar(data, courses_id, courses_options, 0, {"calendar": [], "name": []})
     print(a)
 
-def make_calendar(data, id, options, number, the_list = {"calendar": [], "name": []}, cant = [{"number": -1, "option": -1}]):
+def make_calendar(data, id, options, number, the_list = {"calendar": [], "name": []}, cant = [{"number": -1, "option": -1}], n=0):
     if number >= len(id):
-        return the_list
+        return [the_list, n]
     i = id[number]
     worked = False
     print(f"{i}: ---{data[i][0]}---")
@@ -64,8 +63,8 @@ def make_calendar(data, id, options, number, the_list = {"calendar": [], "name":
 
     
     
-    the_list = make_calendar(data, id, options, number + 1, the_list)
-    return the_list
+    [the_list, n] = make_calendar(data, id, options, number + 1, the_list)
+    return [the_list, n]
 
 def available(data, i, k, the_list, number, cant):
     if data[i][k] == "":
