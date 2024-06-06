@@ -5,7 +5,6 @@ from func import *
 from parsing import *
 import time
 
-
 def get_valid_options(data):
     # Options
     courses_quantity = len(data) - 1
@@ -46,7 +45,7 @@ def make_calendar(data, id, options, number, the_list = {"calendar": [], "name":
             k = temp_k + COLUMN_SKIP
             val = 0
             val = available(data, i, k, the_list, number, cant)
-            if val != -1:
+            if val == 0:
                 val2 = False
                 for j in range(len(the_list["calendar"])):
                     if val2 == False:
@@ -83,8 +82,8 @@ def available(data, i, k, the_list, number, cant):
     for m in range(len(cant)):
         if cant[m]["number"] == number:
             if k <= cant[m]["option"]:
-                Debug(f"{data[i][0]} #{k} already used")
-                return -1
+                Debug(f"{data[i][0]} #{k} already used {cant}")
+                return -2
 
     return 0
 
@@ -95,7 +94,7 @@ def create_cant(options,n):
         cant.append({"number": -1, "option": -1})
     else:
         for i in range(len(opt)):
-            cant.append({"number": i, "option": opt[i]})
+            cant.append({"number": i, "option": opt[i]-1})
     return cant
 
 def count_options(row_data):
