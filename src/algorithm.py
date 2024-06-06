@@ -32,7 +32,8 @@ def all_calendars(data, courses_id, courses_options):
 
         i += 1
     aa = [i for i in a if '###' not in i["calendar"]]
-    print(aa)
+    for i in range(len(aa)):
+        calendar_show(aa[i])
     print(f"Calendars Calculated: {n}")
     print("--- %s seconds ---" % (time.time() - start_time))
 

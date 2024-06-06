@@ -63,7 +63,6 @@ def what_is(day, hour, calendar):
                 return f"{dic[f'{j}_type']} {calendar['name'][i]}"
     return ""
 
-
 def get_day(day):
     if day==MONDAY:
         return 'L'
@@ -78,3 +77,22 @@ def get_day(day):
     if day==SATURDAY:
         return 'S'
     
+def calendar_show(calendar):
+    print()
+    for i in range(10):
+        for k in range(7):
+            j = k-1
+            if j == -1:
+                print(f"{i} ",end="")
+            elif i != 0:
+                s = what_is(get_day(j),i,calendar)
+                print(s.ljust(20), end="")
+            else:
+                s = get_day(j)
+                print(s.ljust(20), end="")
+            print("|", end="")
+        print()
+    print()
+
+#a = {'calendar': ['CLAS/L-W-V:2 AYU/M-J:4', 'LAB/L:5-6 CLAS/M-J:1', 'CLAS/M-J:2', 'CLAS/L-W:1 AYU/V:1', 'CLAS/L-W:3 AYU/J:6 TAL/V:3', 'LAB/L:4'], 'name': ['Cálculo II', 'Programación', 'Teología', 'Economía', 'Dinámica', 'Lab Dinámica']}
+#calendar_show(a)
