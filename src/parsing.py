@@ -93,6 +93,3 @@ def calendar_show(calendar):
             print("|", end="")
         print()
     print()
-
-#a = {'calendar': ['CLAS/L-W-V:2 AYU/M-J:4', 'LAB/L:5-6 CLAS/M-J:1', 'CLAS/M-J:2', 'CLAS/L-W:1 AYU/V:1', 'CLAS/L-W:3 AYU/J:6 TAL/V:3', 'LAB/L:4'], 'name': ['Cálculo II', 'Programación', 'Teología', 'Economía', 'Dinámica', 'Lab Dinámica']}
-#calendar_show(a)

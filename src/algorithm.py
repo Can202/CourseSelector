@@ -30,7 +30,18 @@ def all_calendars(data, courses_id, courses_options):
         i += 1
     
     # Remove lists that aren't complete
-    the_calendars = [i for i in a if '###' not in i["calendar"]]
+    aa = [i for i in a if '###' not in i["calendar"]]
+
+    # Remove duplicates
+    the_calendars = []
+    for i in range(len(aa)):
+        add = True
+        for j in range(len(the_calendars)):
+            if aa[i] == the_calendars[j]:
+                add = False
+        if add:
+            the_calendars.append(aa[i])
+    
     Debug("---Calendars---")
     for i in range(len(the_calendars)):
         Debug(f"---Calendar {i+1}---")
@@ -90,7 +101,7 @@ def available(data, i, k, the_list, number, cant):
     for m in range(len(cant)):
         if cant[m]["number"] == number:
             if k <= cant[m]["option"]:
-                Debug(f"{data[i][0]} #{k} already used {cant}")
+                Debug(f"{data[i][0]} #{k} already used")
                 return -2
 
     return 0
