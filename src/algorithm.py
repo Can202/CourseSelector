@@ -23,6 +23,7 @@ def all_calendars(data, courses_id, courses_options):
     i = 0
     a=[]
     b=[]
+    start_time = time.time()
     while (i < n):
         ab = make_calendar(data, courses_id, courses_options, 0, {"calendar": [], "name": []}, i)
         a.append(ab[0])
@@ -31,6 +32,8 @@ def all_calendars(data, courses_id, courses_options):
         Debug("---NEXT---")
 
         i += 1
+    print(f"Calendars Calculated: {n}")
+    print("--- %s seconds ---" % (time.time() - start_time))
 
 def make_calendar(data, id, options, number, the_list = {"calendar": [], "name": []}, n=0):
     if number >= len(id):
