@@ -1,5 +1,11 @@
 # The parse
 from func import * 
+MONDAY = 0
+TUESDAY = 1
+WEDNESDAY = 2
+THURSDAY = 3
+FRIDAY = 4
+SATURDAY = 5
 
 def courses_conflict(*,text1 ="", text2=""):
     dic1 = parse_course_info(text =text1)
@@ -48,3 +54,27 @@ def dict_courses_conflict(*, dict1, dict2):
 def get_data():
     raw_data = csv_reader(path_file="data.csv")
     return plain_text_to_array(data=raw_data)
+
+def what_is(day, hour, calendar):
+    for i in range(len(calendar["calendar"])):
+        dic = parse_course_info(text=calendar["calendar"][i])
+        for j in range(dic["len"]):
+            if (day in dic[f"{j}_days"]) and (str(hour) in dic[f"{j}_hours"]):
+                return f"{dic[f'{j}_type']} {calendar['name'][i]}"
+    return ""
+
+
+def get_day(day):
+    if day==MONDAY:
+        return 'L'
+    if day==TUESDAY:
+        return 'T'
+    if day==WEDNESDAY:
+        return 'W'
+    if day==THURSDAY:
+        return 'J'
+    if day==FRIDAY:
+        return 'V'
+    if day==SATURDAY:
+        return 'S'
+    

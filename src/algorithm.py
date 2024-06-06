@@ -18,11 +18,10 @@ def get_valid_options(data):
     all_calendars(data, courses_id, courses_options)
 
 def all_calendars(data, courses_id, courses_options):
-    n = variation(courses_options)
-    #n=10
+    #n = variation(courses_options)
+    n=10
     i = 0
     a=[]
-    b=[]
     start_time = time.time()
     while (i < n):
         ab = make_calendar(data, courses_id, courses_options, 0, {"calendar": [], "name": []}, i)
@@ -32,12 +31,14 @@ def all_calendars(data, courses_id, courses_options):
         Debug("---NEXT---")
 
         i += 1
+    aa = [i for i in a if '###' not in i["calendar"]]
+    print(aa)
     print(f"Calendars Calculated: {n}")
     print("--- %s seconds ---" % (time.time() - start_time))
 
-def make_calendar(data, id, options, number, the_list = {"calendar": [], "name": []}, n=0):
+def make_calendar(data, id, options, number, the_list = {"calendar": [], "name": []}, n=0, c=0):
     if number >= len(id):
-        return [the_list, n]
+        return [the_list, n+c, c]
     i = id[number]
     worked = False
     cant = create_cant(options, n)
@@ -74,8 +75,8 @@ def make_calendar(data, id, options, number, the_list = {"calendar": [], "name":
 
     
     
-    [the_list, n] = make_calendar(data, id, options, number + 1, the_list, n)
-    return [the_list, n]
+    [the_list, n, c] = make_calendar(data, id, options, number + 1, the_list, n, c)
+    return [the_list, n, c]
 
 def available(data, i, k, the_list, number, cant):
     if data[i][k] == "":
