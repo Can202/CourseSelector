@@ -3,6 +3,7 @@ ROW_SKIP = 0
 COLUMN_SKIP = 1
 from func import *
 from parsing import *
+import time
 
 
 def get_valid_options(data):
@@ -20,8 +21,13 @@ def get_valid_options(data):
 def all_calendars(data, courses_id, courses_options):
     n = variation(courses_options)
     i = 0
+    a=[]
+    b=[]
+    while (i < n):
+        ab = make_calendar(data, courses_id, courses_options, 0, {"calendar": [], "name": []})
+        a.append(ab[0])
 
-    [a, n] = make_calendar(data, courses_id, courses_options, 0, {"calendar": [], "name": []})
+        i += 1
     print(a)
 
 def make_calendar(data, id, options, number, the_list = {"calendar": [], "name": []}, cant = [{"number": -1, "option": -1}], n=0):

@@ -1,4 +1,4 @@
-DEBUG = True
+DEBUG = False
 # Here will be functions to make some specific functionality
 
 def csv_reader(*, path_file = ""):
