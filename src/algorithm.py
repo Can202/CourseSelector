@@ -46,6 +46,7 @@ def all_calendars(data, courses_id, courses_options):
     Debug("---Calendars---")
     for i in range(len(the_calendars)):
         Debug(f"---Calendar {i+1}---")
+        Debug(the_calendars[i])
         if DEBUG:
             calendar_show(the_calendars[i])
 

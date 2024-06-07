@@ -1,5 +1,13 @@
+
+import json
+
 DEBUG = False
 # Here will be functions to make some specific functionality
+
+def save_to_json():
+    pass
+def load_from_json():
+    pass
 
 def csv_reader(*, path_file = ""):
     file = open(path_file, "r", encoding="utf-8")

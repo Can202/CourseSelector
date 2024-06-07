@@ -30,6 +30,7 @@ def menu1():
 def menu2():
     print("What do you want to do?")
     print("[1] Show all calendars")
+    print("[2] Show best 3")
     print("[2] Show best 5")
     print("[3] Show best 10")
     print("[0] Exit")
@@ -82,6 +83,15 @@ def start():
                 calendar_show(the_calendars[i])
         if ans == "2":
             ln=0
+            if len(the_calendars) < 3:
+                ln = len(the_calendars)
+            else:
+                ln = 3
+            for i in range(ln):
+                print(f"---Calendar {i+1}---")
+                calendar_show(the_calendars[i])
+        if ans == "3":
+            ln=0
             if len(the_calendars) < 5:
                 ln = len(the_calendars)
             else:
@@ -89,7 +99,7 @@ def start():
             for i in range(ln):
                 print(f"---Calendar {i+1}---")
                 calendar_show(the_calendars[i])
-        if ans == "3":
+        if ans == "4":
             ln=0
             if len(the_calendars) < 5:
                 ln = len(the_calendars)
