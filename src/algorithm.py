@@ -5,7 +5,7 @@ from func import *
 from parsing import *
 import time
 
-def get_valid_options(data):
+def get_all_calendars(data):
     # Options
     courses_quantity = len(data) - 1
     courses_id = []
@@ -15,7 +15,8 @@ def get_valid_options(data):
         courses_id.append(i)
     courses_quantity, [courses_id] = many_sorts(courses_options, [courses_id])
 
-    all_calendars(data, courses_id, courses_options)
+    the_calendars = all_calendars(data, courses_id, courses_options)
+    return the_calendars
 
 def all_calendars(data, courses_id, courses_options):
     n = variation(courses_options)
@@ -45,11 +46,13 @@ def all_calendars(data, courses_id, courses_options):
     Debug("---Calendars---")
     for i in range(len(the_calendars)):
         Debug(f"---Calendar {i+1}---")
-        calendar_show(the_calendars[i])
+        if DEBUG:
+            calendar_show(the_calendars[i])
 
     Debug(f"Calendars Calculated: {n}")
     Debug(f"Calendars w/o conflicts: {len(the_calendars)}")
-    print("--- %s seconds ---" % (time.time() - start_time))
+    Debug(f"--- {(time.time() - start_time)} seconds ---", True)
+    return the_calendars
 
 def make_calendar(data, id, options, number, the_list = {"calendar": [], "name": []}, n=0, c=0):
     if number >= len(id):
@@ -88,7 +91,7 @@ def make_calendar(data, id, options, number, the_list = {"calendar": [], "name":
                 worked = True
 
     if worked == False:
-        print(f"{data[i][0]} not selected")
+        Debug(f"{data[i][0]} not selected")
         the_list["name"].append(data[i][0])
         the_list["calendar"].append("###")
 

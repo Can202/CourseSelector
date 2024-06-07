@@ -5,6 +5,7 @@ COLUMN_SKIP = 1
 from func import *
 from parsing import *
 from algorithm import *
+from pointsys import *
 
 def main():
     while True:
@@ -64,7 +65,40 @@ def start():
     data = get_data()
 
     # Doing the algorithm
-    options = get_valid_options(data)
+    the_calendars = get_all_calendars(data)
+
+    # Point system
+    points = point_system(the_calendars)
+
+    [points, [the_calendars]] = many_sorts_MAX(points, [the_calendars])
+    
+    while True:
+        ans = menu2()
+        if ans == "0":
+            break
+        if ans == "1":
+            for i in range(len(the_calendars)):
+                print(f"---Calendar {i+1}---")
+                calendar_show(the_calendars[i])
+        if ans == "2":
+            ln=0
+            if len(the_calendars) < 5:
+                ln = len(the_calendars)
+            else:
+                ln = 5
+            for i in range(ln):
+                print(f"---Calendar {i+1}---")
+                calendar_show(the_calendars[i])
+        if ans == "3":
+            ln=0
+            if len(the_calendars) < 5:
+                ln = len(the_calendars)
+            else:
+                ln = 10
+            for i in range(ln):
+                print(f"---Calendar {i+1}---")
+                calendar_show(the_calendars[i])
+
 
 def create_template():
     pass

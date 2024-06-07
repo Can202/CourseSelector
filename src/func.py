@@ -1,4 +1,4 @@
-DEBUG = True
+DEBUG = False
 # Here will be functions to make some specific functionality
 
 def csv_reader(*, path_file = ""):
@@ -20,6 +20,21 @@ def many_sorts(principal, others):
         swapped = False
         for j in range(0, n-i-1):
             if principal[j] > principal[j+1]:
+                principal[j], principal[j+1] = principal[j+1], principal[j]
+                for k in range(len(others)):
+                    others[k][j], others[k][j+1] = others[k][j+1], others[k][j]
+                swapped = True
+        if not swapped:
+            break
+    return [principal, others]
+
+
+def many_sorts_MAX(principal, others):
+    n = len(principal)
+    for i in range(n):
+        swapped = False
+        for j in range(0, n-i-1):
+            if principal[j] < principal[j+1]:
                 principal[j], principal[j+1] = principal[j+1], principal[j]
                 for k in range(len(others)):
                     others[k][j], others[k][j+1] = others[k][j+1], others[k][j]
@@ -51,6 +66,8 @@ def base_n(list, alist):
             n += variation(list[i+1:]) * (alist[i] - 1 )
     return n
 
-def Debug(a):
+def Debug(a, any=False):
     if DEBUG:
+        print(a)
+    elif any:
         print(a)
