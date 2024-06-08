@@ -80,6 +80,7 @@ def start():
         if ans == "1":
             for i in range(len(the_calendars)):
                 print(f"---Calendar {i+1}---")
+                print(f"score: {points[i]}")
                 calendar_show(the_calendars[i])
         if ans == "2":
             ln=0
@@ -89,6 +90,7 @@ def start():
                 ln = 3
             for i in range(ln):
                 print(f"---Calendar {i+1}---")
+                print(f"score: {points[i]}")
                 calendar_show(the_calendars[i])
         if ans == "3":
             ln=0
@@ -98,6 +100,7 @@ def start():
                 ln = 5
             for i in range(ln):
                 print(f"---Calendar {i+1}---")
+                print(f"score: {points[i]}")
                 calendar_show(the_calendars[i])
         if ans == "4":
             ln=0
