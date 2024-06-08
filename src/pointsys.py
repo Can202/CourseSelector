@@ -65,6 +65,7 @@ def free_modules(calendar, fm_days, fm_min, fm_max, fm_next):
             days +=1
     
     points -= 2 * abs(fm_days-days)
+
             
     return points
 
