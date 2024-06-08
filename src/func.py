@@ -4,10 +4,10 @@ import json
 DEBUG = False
 # Here will be functions to make some specific functionality
 
-def save_to_json():
-    pass
-def load_from_json():
-    pass
+def save_file(*, path,text):
+    file = open(path, "w", encoding="utf-8")
+    file.write(text)
+    file.close()
 
 def csv_reader(*, path_file = ""):
     file = open(path_file, "r", encoding="utf-8")
