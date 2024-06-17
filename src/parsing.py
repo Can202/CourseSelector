@@ -37,7 +37,7 @@ def parse_course_info(*,text =""):
         for j in range(len(hoursC)):
             hours.append(hoursC[j])
         dic[f"{i}_hours"] = hours
-    dic["len"] = len(ts)
+    dic["len"] = len(text_split)
     dic["fail"] = False
     return dic
 
