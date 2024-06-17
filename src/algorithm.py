@@ -72,7 +72,7 @@ def make_calendar(data, id, options, number, the_list = {"calendar": [], "name":
                 val2 = False
                 for j in range(len(the_list["calendar"])):
                     if val2 == False:
-                        if courses_conflict(text1=the_list["calendar"][j], text2=data[i][k]):
+                        if courses_conflict(first_schedule_in_str = the_list["calendar"][j], second_schedule_in_str = data[i][k]):
                             val2=True
                             Debug(f"conflict found between {data[i][0]} #{k} {data[i][k]} y {the_list['name'][j]} {the_list['calendar'][j]}")
 
