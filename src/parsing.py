@@ -44,14 +44,14 @@ def parse_course_info(*,text =""):
 # Look between two courses and check if they have some conflict hour/day (in Dict format).
 def dict_courses_conflict(*, dict1, dict2):
 
-    conflit_in_days, conflit_in_hours = False, False
+    conflict_in_days, conflict_in_hours = False, False
 
     for i in range(dict1["len"]):
         for j in range(dict2["len"]):
-            conflit_in_days = dicts_have_same(dict1[f"{i}_days"],dict2[f"{j}_days"])
-            conflit_in_hours = dicts_have_same(dict1[f"{i}_hours"],dict2[f"{j}_hours"])
+            conflict_in_days = dicts_have_same(dict1[f"{i}_days"], dict2[f"{j}_days"])
+            conflict_in_hours = dicts_have_same(dict1[f"{i}_hours"], dict2[f"{j}_hours"])
 
-            if conflit_in_days and conflit_in_hours:
+            if conflict_in_days and conflict_in_hours:
                 return True
     return False
 
