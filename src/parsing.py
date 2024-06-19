@@ -74,6 +74,29 @@ def what_is(day, hour, calendar):
             if (day in dic[f"{j}_days"]) and (str(hour) in dic[f"{j}_hours"]):
                 return f"{dic[f'{j}_type']} {calendar['name'][i]}"
     return ""
+    
+# This prints the calendar in a readable way.
+def calendar_show(calendar):
+    len_between_columns = 19
+    hour_options = 10
+    day_options = 6
+    start_hour_counter = 0
+    start_day_counter = -1 # day 0 is MONDAY, so to print first a column with the hours, we need to start at -1
+    
+    print()
+    for hour in range(start_hour_counter, hour_options):
+        for day in range(start_day_counter, day_options):
+            if day == start_day_counter:
+                print(f"{hour} ", end="")
+            elif hour == start_hour_counter:
+                str_day = get_day(day)
+                print(str_day.center(len_between_columns), end="")
+            else:
+                str_class = what_is(get_day(day),hour,calendar)
+                print(str_class.center(len_between_columns), end="")
+            print("|", end="")
+        print()
+    print()
 
 def get_day(day):
     if day==MONDAY:
@@ -88,21 +111,3 @@ def get_day(day):
         return 'V'
     if day==SATURDAY:
         return 'S'
-    
-# This prints the calendar in a readable way.
-def calendar_show(calendar):
-    print()
-    for i in range(10):
-        for k in range(7):
-            j = k-1
-            if j == -1:
-                print(f"{i} ",end="")
-            elif i != 0:
-                s = what_is(get_day(j),i,calendar)
-                print(s.ljust(20), end="")
-            else:
-                s = get_day(j)
-                print(s.ljust(20), end="")
-            print("|", end="")
-        print()
-    print()
