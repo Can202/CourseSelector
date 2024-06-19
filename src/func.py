@@ -51,11 +51,11 @@ def many_sorts_MAX(principal, others):
             break
     return [principal, others]
 
-def variation(list):
-    k = 1
-    for i in range(len(list)):
-        k = k * list[i]
-    return k
+def variation(some_list):
+    multiplication = 1
+    for element in some_list:
+        multiplication *= element
+    return multiplication
 
 def base_list(list, n):
     level = [0] * len(list)
@@ -74,8 +74,6 @@ def base_n(list, alist):
             n += variation(list[i+1:]) * (alist[i] - 1 )
     return n
 
-def Debug(a, any=False):
-    if DEBUG:
-        print(a)
-    elif any:
-        print(a)
+def Debug(text, ignore_debug_statement=False):
+    if DEBUG or ignore_debug_statement:
+        print(text)
