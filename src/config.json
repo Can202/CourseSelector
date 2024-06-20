@@ -4,8 +4,8 @@
     "days": "L M W J V",
     "free_module": {
         "quantity_days": 2,
-        "min_hours":1,
-        "max_hours":2,
-        "next_to": "Programación"
+        "min_hours": 1,
+        "max_hours": 2,
+        "next_to": "Programaci\u00f3n"
     }
 }

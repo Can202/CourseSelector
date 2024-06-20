@@ -6,6 +6,7 @@ from func import *
 from parsing import *
 from algorithm import *
 from pointsys import *
+import shutil
 
 def main():
     while True:
@@ -15,14 +16,14 @@ def main():
         if option_selected == "1":
             start()
         if option_selected == "2":
-            create_template()
+            reset_default()
         if option_selected == "3":
             configure()
 
 def menu1():
     print("What do you want to do?")
     print("[1] Read and analyze the data")
-    print("[2] Create template")
+    print("[2] Reset default")
     print("[3] Configure")
     print("[0] Exit")
     return input("Select: ")
@@ -126,8 +127,19 @@ def start():
                 calendar_show(the_calendars[i])
 
 
-def create_template():
-    pass
+def reset_default():
+    code = "Pi is equal to 4. Change my mind."
+    print(code)
+    sure = input("Write this to confirm:")
+    if code != sure:
+        print("Not going to reset")
+        return 0
+
+    shutil.copyfile("default/data.csv","data.csv")
+    shutil.copyfile("default/config.json","config.json")
+    print("Changed")
+    return 0
+
 
 if __name__ == "__main__":
     main()
