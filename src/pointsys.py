@@ -1,7 +1,9 @@
 from parsing import *
 
-def point_system(the_calendars, data):
+def point_system(the_calendars):
     points = [0] * len(the_calendars)
+
+    data = json_reader(path_file="config.json")
 
     start_time=data["start_time"]
     end_time=data["end_time"]

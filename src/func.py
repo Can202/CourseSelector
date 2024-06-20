@@ -15,6 +15,10 @@ def csv_reader(*, path_file = ""):
     file.close()
     return data
 
+def json_reader(*, path_file = ""):
+    with open(path_file, 'r') as file:
+        return json.load(file)
+
 def plain_text_to_array(*, data = ""):
     data_lines = data.split("\n")
     data_splitted = []
