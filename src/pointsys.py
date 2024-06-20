@@ -1,25 +1,21 @@
 from parsing import *
-EXAMPLE = {'calendar': ['LAB/L:5-6 CLAS/M-J:1', 'CLAS/M-J:2', 'CLAS/L-W-V:2 AYU/M-J:4', 'CLAS/L-W:1 AYU/V:1', 'CLAS/L-W:3 AYU/J:6 TAL/V:3', 'LAB/M:5'], 'name': ['Programación', 'Teología', 'Cálculo II', 'Economía', 'Dinámica', 'Lab Dinámica']}
-EXAMPLE2 = {'calendar': ['LAB/L:5-6 CLAS/M-J:1', 'CLAS/M-J:4', 'CLAS/L-W-J:3 LAB/M:6 AYU/V:1', 'CLAS/M-J:2 AYU/W:6', 'CLAS/L-W:4 AYU/J:6 TAL/V:4', 'LAB/V:5'], 'name': ['Programación', 'Teología', 'Cálculo II', 'Economía', 'Dinámica', 'Lab Dinámica']}
 
-def point_system(the_calendars):
+def point_system(the_calendars, data):
     points = [0] * len(the_calendars)
 
-    #Starters
-    a=1
-    b=4
-    days='L M W J V'
+    start_time=data["start_time"]
+    end_time=data["end_time"]
+    days=data["days"]
     
-    fm_days = 2
-    fm_min = 1
-    fm_max = 2
-    fm_next = "Programación"
-    #----
+    free_module_quantity_days = data["free_module"]["quantity_days"]
+    free_module_min_hours = data["free_module"]["min_hours"]
+    free_module_max_hours = data["free_module"]["max_hours"]
+    free_module_next_to = data["free_module"]["next_to"]
 
     for i in range(len(the_calendars)):
-        points[i] += classes_in_between_hours(the_calendars[i], a, b)
+        points[i] += classes_in_between_hours(the_calendars[i], start_time, end_time)
         points[i] += classes_in_days(the_calendars[i], days)
-        points[i] += free_modules(the_calendars[i], fm_days, fm_min, fm_max, fm_next)
+        points[i] += free_modules(the_calendars[i], free_module_quantity_days, free_module_min_hours, free_module_max_hours, free_module_next_to)
 
     return points
 
@@ -68,17 +64,3 @@ def free_modules(calendar, fm_days, fm_min, fm_max, fm_next):
             
     return points
 
-
-'''
-calendar_show(EXAMPLE)
-print(classes_in_between_hours(EXAMPLE, 1, 4))
-print(classes_in_days(EXAMPLE, 'L M W'))
-print(free_modules(EXAMPLE, 2, 1, 1, "Programación"))
-
-
-calendar_show(EXAMPLE2)
-print(classes_in_between_hours(EXAMPLE2, 1, 4))
-print(classes_in_days(EXAMPLE2, 'L M W'))
-print(free_modules(EXAMPLE2, 2, 1, 2, "Programación"))
-
-'''
