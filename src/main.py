@@ -48,8 +48,8 @@ def configure():
     print("7: from 17:30 to 18:40")
     print("8: from 18:50 to 20:00")
     print("9: from 20:10 to 21:20")
-    a = int(input("on what module you want to start? "))
-    b = int(input("on what module you want to end? "))
+    start_time = int(input("on what module you want to start? "))
+    end_time = int(input("on what module you want to end? "))
     
     print("Write the days that you would want to go to class (ex. L M W J V S).")
     days = input("days: ").upper()
@@ -59,6 +59,19 @@ def configure():
     fm_min = int(input("Minimum free modules: "))
     fm_max = int(input("Maximum free modules: "))
     fm_next = input("next to: ")
+
+    data = {
+        "start_time": start_time,
+        "end_time": end_time,
+        "days": days,
+        "free_module": {
+            "quantity_days": fm_days,
+            "min_hours":fm_min,
+            "max_hours":fm_max,
+            "next_to": fm_next
+        }
+    }
+    json_writer(path_file="config.json", data=data)
 
 
 
