@@ -5,6 +5,10 @@ from func import *
 from parsing import *
 import time
 
+
+# Function that only uses the data input to get all the calendars, using all_calendars function. 
+# This function maybe could be removed, as it now has something that isn'tt needed anymore, the special sorting
+# by quantity that it was used to save time in the old algorithm.
 def get_all_calendars(data):
     # Options
     courses_quantity = len(data) - 1
@@ -18,6 +22,8 @@ def get_all_calendars(data):
     the_calendars = all_calendars(data, courses_id, courses_options)
     return the_calendars
 
+
+# Function that returns the calendars without conflicts
 def all_calendars(data, courses_id, courses_options):
     start_time = time.time()
 
@@ -58,6 +64,7 @@ def all_calendars(data, courses_id, courses_options):
     Debug(f"--- {(time.time() - start_time)} seconds ---", True)
     return the_calendars
 
+# Function that check if a calendar has conflicts. It is used in all_calendars function to remove the ones with conflicts.
 def is_calendar_with_conflicts(calendar):
     n = len(calendar["calendar"])
     conflict = False
@@ -68,7 +75,7 @@ def is_calendar_with_conflicts(calendar):
     return conflict
 
 
-# Function that redoes the make_calendar functionality
+# Function that return all the posible calendar combinations, ignoring repetition, conflicts, etc. It is used in all_calendars, where the calendar list is cleaned with other functions
 def raw_list_of_all_calendars(data, courses_id, courses_options):
     list_of_calendars = []
     n = variation(courses_options)
@@ -89,15 +96,15 @@ def raw_list_of_all_calendars(data, courses_id, courses_options):
         list_of_calendars.append(new_calendar)
     return list_of_calendars
 
+# Function used to get combination of posible calendars with only one number identifier. It is used in the raw_list_of_all_calendars function.
+# For example, the identifier 55 makes the selection of courses [5,3,5,2,6,3]. So that means that the first course is going to be the section 5, and so on.
 def courses_combination(courses_options, attempt):
     n = len(courses_options)
     combination = [1] * n
     if attempt == 0:
-        return combination
-        
+        return combination  
     level = n
     divisor=99999999
-
     while level > 0:
         if attempt == 0:
             level = -500
@@ -113,7 +120,6 @@ def courses_combination(courses_options, attempt):
         division = attempt // divisor
         combination[-(level+1)] += division
         attempt = attempt % divisor
-    
     return combination
 
 
