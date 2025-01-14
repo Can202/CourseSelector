@@ -98,6 +98,7 @@ def raw_list_of_all_calendars(data, courses_id, courses_options):
 
 # Function used to get combination of posible calendars with only one number identifier. It is used in the raw_list_of_all_calendars function.
 # For example, the identifier 55 makes the selection of courses [5,3,5,2,6,3]. So that means that the first course is going to be the section 5, and so on.
+# The identifier 56 makes [5,3,5,2,6,4] and maybe the identifier 57 makes [5,3,5,2,7,1], etc.
 def courses_combination(courses_options, attempt):
     n = len(courses_options)
     combination = [1] * n
