@@ -7,7 +7,7 @@ import time
 
 
 # Function that only uses the data input to get all the calendars, using all_calendars function. 
-# This function maybe could be removed, as it now has something that isn'tt needed anymore, the special sorting
+# This function maybe could be removed, as it now has something that isn't needed anymore, the special sorting
 # by quantity that it was used to save time in the old algorithm.
 def get_all_calendars(data):
     # Options
