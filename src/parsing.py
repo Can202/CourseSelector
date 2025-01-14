@@ -7,6 +7,7 @@ THURSDAY = 3
 FRIDAY = 4
 SATURDAY = 5
 
+
 # Look between two courses and check if they have some conflict hour/day (in str).
 def courses_conflict(*,first_schedule_in_str ="", second_schedule_in_str=""):
     dic_1 = parse_course_info(text = first_schedule_in_str)

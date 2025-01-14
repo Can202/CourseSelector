@@ -19,30 +19,33 @@ def get_all_calendars(data):
     return the_calendars
 
 def all_calendars(data, courses_id, courses_options):
-    n = variation(courses_options)
-    #n=10
-    i = 0
-    a=[]
     start_time = time.time()
-    while (i < n):
-        ab = make_calendar(data, courses_id, courses_options, 0, {"calendar": [], "name": []}, i)
-        a.append(ab[0])
-        Debug("---NEXT---")
-        i += 1
-    
-    # Remove lists that aren't complete
-    aa = [i for i in a if '###' not in i["calendar"]]
+
+    n = variation(courses_options)
+    raw_list_of_complete_calendars = raw_list_of_all_calendars(data, courses_id, courses_options)
 
     # Remove duplicates
-    the_calendars = []
-    for i in range(len(aa)):
+    raw_list_of_unique_complete_calendars = []
+    for i in range(len(raw_list_of_complete_calendars)):
         add = True
-        for j in range(len(the_calendars)):
-            if aa[i] == the_calendars[j]:
+        for j in range(len(raw_list_of_unique_complete_calendars)):
+            if raw_list_of_complete_calendars[i] == raw_list_of_unique_complete_calendars[j]:
                 add = False
         if add:
-            the_calendars.append(aa[i])
-    
+            raw_list_of_unique_complete_calendars.append(raw_list_of_complete_calendars[i])
+
+    # Remove calendars that have conflict
+    the_calendars = []
+    for i in range(len(raw_list_of_unique_complete_calendars)):
+        if not is_calendar_with_conflicts(raw_list_of_unique_complete_calendars[i]):
+            Debug(f"Check for conflicts for calendar {i}, but didn't found any")
+            the_calendars.append(raw_list_of_unique_complete_calendars[i])
+        else:
+            Debug(f"Check for conflicts for calendar {i}, found them")
+            Debug(f"-------------------------")
+        
+
+
     Debug("---Calendars---")
     for i in range(len(the_calendars)):
         Debug(f"---Calendar {i+1}---")
@@ -55,74 +58,64 @@ def all_calendars(data, courses_id, courses_options):
     Debug(f"--- {(time.time() - start_time)} seconds ---", True)
     return the_calendars
 
-def make_calendar(data, id, options, number, the_list = {"calendar": [], "name": []}, n=0, c=0):
-    if number >= len(id):
-        return [the_list, n+c, c]
-    i = id[number]
-    worked = False
-    cant = create_cant(options, n)
+def is_calendar_with_conflicts(calendar):
+    n = len(calendar["calendar"])
+    conflict = False
+    for i in range(n):
+        for j in range(i+1, n):
+            if courses_conflict(first_schedule_in_str=calendar["calendar"][i], second_schedule_in_str=calendar["calendar"][j]):
+                conflict = True
+    return conflict
 
-    Debug(f"{i}: ---{data[i][0]}---")    
-    if number != 0:
-        for temp_k in range(len(data[i]) - COLUMN_SKIP):
-            k = temp_k + COLUMN_SKIP
-            val = 0
-            val = available(data, i, k, the_list, number, cant)
-            if val == 0:
-                val2 = False
-                for j in range(len(the_list["calendar"])):
-                    if val2 == False:
-                        if courses_conflict(first_schedule_in_str = the_list["calendar"][j], second_schedule_in_str = data[i][k]):
-                            val2=True
-                            Debug(f"conflict found between {data[i][0]} #{k} {data[i][k]} y {the_list['name'][j]} {the_list['calendar'][j]}")
 
-                if val2 == False:
-                    Debug(f"Selected {data[i][0]} #{k} {data[i][k]}")
-                    the_list["name"].append(data[i][0])
-                    the_list["calendar"].append(data[i][k])
-                    worked = True
-    else:
-        for temp_k in range(len(data[i]) - COLUMN_SKIP):
-            k = temp_k + COLUMN_SKIP
-            val = available(data, i, k, the_list, number, cant)
-            if val==0 and worked == False:
-                Debug(f"Selected {data[i][0]} #{k} {data[i][k]}")
-                the_list["name"].append(data[i][0])
-                the_list["calendar"].append(data[i][k])
-                worked = True
+# Function that redoes the make_calendar functionality
+def raw_list_of_all_calendars(data, courses_id, courses_options):
+    list_of_calendars = []
+    n = variation(courses_options)
+    for i in range(n):
+        new_calendar = {"calendar":[], "name":[]}
 
-    if worked == False:
-        Debug(f"{data[i][0]} not selected")
-        the_list["name"].append(data[i][0])
-        the_list["calendar"].append("###")
+        combinations = courses_combination(courses_options, i)
 
+        for j in range(len(courses_id)):
+            id = courses_id[j]
+            selection = combinations[j]
+            Debug(f"{id}: ---{data[id][0]}---")
+
+            new_calendar["name"].append(data[id][0])
+            new_calendar["calendar"].append(data[id][selection])
+
+        Debug("---NEXT---")
+        list_of_calendars.append(new_calendar)
+    return list_of_calendars
+
+def courses_combination(courses_options, attempt):
+    n = len(courses_options)
+    combination = [1] * n
+    if attempt == 0:
+        return combination
+        
+    level = n
+    divisor=99999999
+
+    while level > 0:
+        if attempt == 0:
+            level = -500
+            continue
+        while attempt < divisor:
+            if level < 0:
+                return -1
+            level -= 1
+            divisor=1
+            for i in range(1, level+1):
+                divisor *= courses_options[-i]
+        
+        division = attempt // divisor
+        combination[-(level+1)] += division
+        attempt = attempt % divisor
     
-    
-    [the_list, n, c] = make_calendar(data, id, options, number + 1, the_list, n, c)
-    return [the_list, n, c]
+    return combination
 
-def available(data, i, k, the_list, number, cant):
-    if data[i][k] == "":
-        return -1
-    if data[i][0] in the_list["name"]:
-        return -1
-    for m in range(len(cant)):
-        if cant[m]["number"] == number:
-            if k <= cant[m]["option"]:
-                Debug(f"{data[i][0]} #{k} already used")
-                return -2
-
-    return 0
-
-def create_cant(options,n):
-    opt = base_list(options, n)
-    cant = []
-    if n == 0:
-        cant.append({"number": -1, "option": -1})
-    else:
-        for i in range(len(opt)):
-            cant.append({"number": i, "option": opt[i]-1})
-    return cant
 
 def count_options(row_data):
     count = 0
