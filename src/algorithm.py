@@ -38,6 +38,7 @@ def all_calendars(data, courses_id, courses_options):
 
     # Remove calendars that have conflict (p.3)
     the_calendars = remove_calendars_with_conflict(the_calendars)
+    woconflict = len(the_calendars)
 
     # Combine calendars with the same schedule (p.4)
     if the_calendars[0]["nrc_active"]:
@@ -53,7 +54,8 @@ def all_calendars(data, courses_id, courses_options):
             calendar_show(the_calendars[i])
 
     Debug(f"Calendars Calculated: {n}")
-    Debug(f"Calendars w/o conflicts: {len(the_calendars)}")
+    Debug(f"Calendars w/o conflicts: {woconflict}")
+    Debug(f"Calendars w/o repetition nor conflicts: {len(the_calendars)}")
     Debug(f"--- {(time.time() - start_time)} seconds ---", ignore_debug_statement=True)
     return the_calendars
 
