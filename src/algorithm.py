@@ -148,9 +148,7 @@ def courses_combination(courses_options, attempt):
 
 
 def is_NRC_on(calendar_text):
-    if "$" in calendar_text:
-        return True
-    return False
+    return "$" in calendar_text
 
 def get_NRC_and_course_info(text):
     match = re.search(r"\$(\d+)", text)
@@ -160,9 +158,7 @@ def get_NRC_and_course_info(text):
     return int(number), remaining_text
 
 def is_customName_on(calendar_text):
-    if "%" in calendar_text:
-        return True
-    return False
+    return "%" in calendar_text
 
 def get_customName_and_course_info(text):
     match = re.search(r"%([a-zA-Z0-9_]+)", text)
