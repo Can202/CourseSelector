@@ -89,3 +89,11 @@ def Debug(text, *, debug_mode = True,ignore_debug_statement=False):
     else:
         if (not DEBUG) or ignore_debug_statement:
             print(text, end="")
+
+
+def loadingAnimation(*,part=0, i=0, n=100, done=False):
+    if done:
+        Debug("Loaded                           \n", debug_mode=False)
+        return
+    if i%1000 == 0:
+        Debug(f"Loading (p.{part}) " + "." * ((round(n, -3) - i)//1000) + " " * ((i)//1000) + "\r", debug_mode=False)
