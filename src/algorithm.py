@@ -84,8 +84,37 @@ def remove_calendars_with_conflict(calendars):
             Debug(f"-------------------------")
     return the_calendars
     
-def combine_NRC_for_exact_schedule(calendar):
-    return calendar
+def combine_NRC_for_exact_schedule(calendars):
+    n = len(calendars)
+    i = 0
+    while i < n:
+        j = i+1
+        loadingAnimation(part=4, i=i, n=n)
+        while j < n:
+            if two_calendars_have_the_same_schedule(calendars[i], calendars[j]):
+                calendars[i]["nrc"] = combine_NRCs(calendars[i]["nrc"], calendars[j]["nrc"])
+                calendars = remove_by_index(calendars, j)
+                j-=1
+                n = len(calendars)
+            j+=1
+        i+=1
+    return calendars
+
+def two_calendars_have_the_same_schedule(calendar1, calendar2):
+    for i in range(len(calendar1["calendar"])):
+        if not two_courses_have_the_same_schedule(calendar1["calendar"][i], calendar2["calendar"][i]):
+            return False
+    return True
+def two_courses_have_the_same_schedule(course1, course2):
+    if course1 == course2:
+        return True
+    return False
+
+def combine_NRCs(nrc1, nrc2):
+    for i in range(len(nrc1)):
+        if not (nrc2[i] in nrc1[i]):
+            nrc1[i] += ("/" + nrc2[i])
+    return nrc1
 
 # Function that check if a calendar has conflicts. It is used in all_calendars function to remove the ones with conflicts.
 def is_calendar_with_conflicts(calendar):
@@ -118,7 +147,7 @@ def raw_list_of_all_calendars(data, courses_id, courses_options):
             
             name = data[id][0]
             info = data[id][selection]
-            nrc = 0
+            nrc = "###"
 
             if is_NRC_on(info):
                 nrc, info = get_NRC_and_course_info(info)
@@ -179,7 +208,7 @@ def get_NRC_and_course_info(text):
     if match:
         number = match.group(1)
         remaining_text = text.replace(match.group(0), "").strip()
-    return int(number), remaining_text
+    return str(number), remaining_text
 
 def is_customName_on(calendar_text):
     return "%" in calendar_text

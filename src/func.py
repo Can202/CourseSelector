@@ -73,6 +73,11 @@ def base_list(list, n):
         n = n // list[j]
     return level
 
+def remove_by_index(lst, index):
+    if 0 <= index < len(lst):
+        del lst[index]
+    return lst
+
 def base_n(list, alist):
     n = 0
     for i in range(len(list)):
