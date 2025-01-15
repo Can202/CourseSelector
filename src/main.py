@@ -28,12 +28,14 @@ def menu1():
     print("[0] Exit")
     return input("Select: ")
 
-def menu2():
+def menu2(NRC_on):
     print("What do you want to do?")
     print("[1] Show all calendars")
     print("[2] Show best 3")
     print("[3] Show best 5")
     print("[4] Show best 10")
+    if NRC_on:
+        print("[5] Print NRC information of n calendar")
     print("[0] Exit")
     return input("Select: ")
 
@@ -81,6 +83,7 @@ def start():
 
     # Doing the algorithm
     the_calendars = get_all_calendars(data)
+    NRC_on = the_calendars[0]["nrc_active"]
 
     # Point system
     points = point_system(the_calendars)
@@ -88,7 +91,7 @@ def start():
     [points, [the_calendars]] = many_sorts_MAX(points, [the_calendars])
     
     while True:
-        ans = menu2()
+        ans = menu2(NRC_on)
         if ans == "0":
             break
         if ans == "1":
@@ -99,6 +102,17 @@ def start():
             show_n_calendars(the_calendars, points,5)
         if ans == "4":
             show_n_calendars(the_calendars, points,10)
+        if ans == "5" and NRC_on:
+            create_NRC_list(the_calendars, points)
+
+def create_NRC_list(calendars, points):
+    n = int(input("Number of the calendar: ")) - 1
+    print(f"---Calendar {n+1}---")
+    calendar_show(calendars[n])
+    print(f"score: {points[n]}")
+    print("NRCs:")
+    for i in range(len(calendars[n]["name"])):
+        print(f"{calendars[n]['name'][i]}: {calendars[n]['nrc'][i]}")
 
 def show_n_calendars(calendars, points, n=0):
     ln = 0

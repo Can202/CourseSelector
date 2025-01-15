@@ -1,7 +1,7 @@
 
 import json
 
-DEBUG = True
+DEBUG = False
 # Here will be functions to make some specific functionality
 
 def save_file(*, path,text):

@@ -77,27 +77,42 @@ def what_is(day, hour, calendar):
     return ""
     
 # This prints the calendar in a readable way.
-def calendar_show(calendar):
+def calendar_show(calendar, PRINT = True):
     len_between_columns = 19
     hour_options = 10
     day_options = 6
     start_hour_counter = 0
     start_day_counter = -1 # day 0 is MONDAY, so to print first a column with the hours, we need to start at -1
-    
-    print()
+    text= ""
+
+    if PRINT:
+        print()
+    text += "\n"
     for hour in range(start_hour_counter, hour_options):
         for day in range(start_day_counter, day_options):
             if day == start_day_counter:
-                print(f"{hour} ", end="")
+                if PRINT:
+                    print(f"{hour} ", end="")
+                text += f"{hour} "
             elif hour == start_hour_counter:
                 str_day = get_day(day)
-                print(str_day.center(len_between_columns), end="")
+                if PRINT:
+                    print(str_day.center(len_between_columns), end="")
+                text += str_day.center(len_between_columns)
             else:
                 str_class = what_is(get_day(day),hour,calendar)
-                print(str_class.center(len_between_columns), end="")
-            print("|", end="")
+                if PRINT:
+                    print(str_class.center(len_between_columns), end="")
+                text += str_class.center(len_between_columns)
+            if PRINT:
+                print("|", end="")
+            text += "|"
+        if PRINT:
+            print()
+        text += "\n"
+    if PRINT:
         print()
-    print()
+    text += "\n"
 
 def get_day(day):
     if day==MONDAY:
