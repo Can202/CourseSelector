@@ -108,6 +108,12 @@ def two_calendars_have_the_same_schedule(calendar1, calendar2):
 def two_courses_have_the_same_schedule(course1, course2):
     if course1 == course2:
         return True
+    course1list = course1.split(" ")
+    course2list = course2.split(" ")
+    if sorted(course1list) == sorted(course2list):
+        return True
+    if get_days_array(course1) == get_days_array(course2):
+        return True
     return False
 
 def combine_NRCs(nrc1, nrc2):

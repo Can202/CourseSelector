@@ -24,3 +24,8 @@ data=[['Cálculo II', 'CLAS/L-W-V:2 AYU/M-J:4', 'CLAS/L-W-V:4 LAB/W:1 AYU/J:4', 
 courses_id=[1, 3, 0, 2, 4, 5]
 courses_options=[2, 2, 3, 3, 6, 16]
 print(algorithm.raw_list_of_all_calendars(data, courses_id, courses_options))
+
+
+
+print("----------")
+print(parsing.get_days_array("CLAS/L-W-V:2 AYU/M-J:4") == parsing.get_days_array("CLAS/L-W:2 CLAS/V:2 AYU/M-J:4"))

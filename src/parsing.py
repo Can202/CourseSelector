@@ -1,4 +1,5 @@
 from func import * 
+import numpy
 
 MONDAY = 0
 TUESDAY = 1
@@ -41,6 +42,26 @@ def parse_course_info(*,text =""):
     dic["len"] = len(text_split)
     dic["fail"] = False
     return dic
+
+def get_days_array(course_str):
+    array = [[""] * 6 for _ in range(9)]
+    course_split = course_str.split(" ")
+    course_info = []
+    for i in range(len(course_split)):
+        course_info.append(course_split[i].split("/"))
+
+    for i in range(len(course_info)):
+        info = (course_info[i][1]).split(":")
+        days_not = info[0].split("-")
+        hour = info[1].split("-")
+        days = []
+        for j in range(len(days_not)):
+            days.append(get_day_from_Letter(days_not[j]))
+        for j in range(len(days)):
+            for k in range(len(hour)):
+                array[int(hour[k])-1][days[j]] = course_info[i][0]
+
+    return array
 
 # Look between two courses and check if they have some conflict hour/day (in Dict format).
 def dict_courses_conflict(*, dict1, dict2):
@@ -127,3 +148,17 @@ def get_day(day):
         return 'V'
     if day==SATURDAY:
         return 'S'
+    
+def get_day_from_Letter(day):
+    if day=='L':
+        return MONDAY
+    if day=='M':
+        return TUESDAY
+    if day=='W':
+        return WEDNESDAY
+    if day=='J':
+        return THURSDAY
+    if day=='V':
+        return FRIDAY
+    if day=='S':
+        return SATURDAY
