@@ -29,31 +29,19 @@ def all_calendars(data, courses_id, courses_options):
     start_time = time.time()
 
     n = variation(courses_options)
-    raw_list_of_complete_calendars = raw_list_of_all_calendars(data, courses_id, courses_options)
 
-    # Remove duplicates
-    raw_list_of_unique_complete_calendars = []
-    ln = len(raw_list_of_complete_calendars)
-    for i in range(ln):
-        loadingAnimation(part=2, i=i, n=ln)
-        add = True
-        for j in range(len(raw_list_of_unique_complete_calendars)):
-            if raw_list_of_complete_calendars[i] == raw_list_of_unique_complete_calendars[j]:
-                add = False
-        if add:
-            raw_list_of_unique_complete_calendars.append(raw_list_of_complete_calendars[i])
+    # Create list of posible calendars (p.1)
+    the_calendars = raw_list_of_all_calendars(data, courses_id, courses_options)
 
-    # Remove calendars that have conflict
-    the_calendars = []
-    for i in range(len(raw_list_of_unique_complete_calendars)):
-        loadingAnimation(part=3, i=i, n=len(raw_list_of_unique_complete_calendars))
-        if not is_calendar_with_conflicts(raw_list_of_unique_complete_calendars[i]):
-            Debug(f"Check for conflicts for calendar {i}, but didn't found any")
-            the_calendars.append(raw_list_of_unique_complete_calendars[i])
-        else:
-            Debug(f"Check for conflicts for calendar {i}, found them")
-            Debug(f"-------------------------")
-        
+    # Remove duplicates (p.2)
+    the_calendars = remove_duplicates_of_calendars(the_calendars)
+
+    # Remove calendars that have conflict (p.3)
+    the_calendars = remove_calendars_with_conflict(the_calendars)
+
+    # Combine calendars with the same schedule (p.4)
+    if the_calendars[0]["nrc_active"]:
+        the_calendars = combine_NRC_for_exact_schedule(the_calendars)
 
     loadingAnimation(done=True)
 
@@ -68,6 +56,34 @@ def all_calendars(data, courses_id, courses_options):
     Debug(f"Calendars w/o conflicts: {len(the_calendars)}")
     Debug(f"--- {(time.time() - start_time)} seconds ---", ignore_debug_statement=True)
     return the_calendars
+
+def remove_duplicates_of_calendars(calendars):
+    the_calendars = []
+    ln = len(calendars)
+    for i in range(ln):
+        loadingAnimation(part=2, i=i, n=ln)
+        add = True
+        for j in range(len(the_calendars)):
+            if calendars[i] == the_calendars[j]:
+                add = False
+        if add:
+            the_calendars.append(calendars[i])
+    return the_calendars
+
+def remove_calendars_with_conflict(calendars):
+    the_calendars = []
+    for i in range(len(calendars)):
+        loadingAnimation(part=3, i=i, n=len(calendars))
+        if not is_calendar_with_conflicts(calendars[i]):
+            Debug(f"Check for conflicts for calendar {i}, but didn't found any")
+            the_calendars.append(calendars[i])
+        else:
+            Debug(f"Check for conflicts for calendar {i}, found them")
+            Debug(f"-------------------------")
+    return the_calendars
+    
+def combine_NRC_for_exact_schedule(calendar):
+    return calendar
 
 # Function that check if a calendar has conflicts. It is used in all_calendars function to remove the ones with conflicts.
 def is_calendar_with_conflicts(calendar):
