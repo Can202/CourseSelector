@@ -41,8 +41,7 @@ def all_calendars(data, courses_id, courses_options):
     woconflict = len(the_calendars)
 
     # Combine calendars with the same schedule (p.4)
-    if the_calendars[0]["nrc_active"]:
-        the_calendars = combine_NRC_for_exact_schedule(the_calendars)
+    the_calendars = combine_NRC_for_exact_schedule(the_calendars, the_calendars[0]["nrc_active"])
 
     loadingAnimation(done=True)
 
@@ -84,7 +83,7 @@ def remove_calendars_with_conflict(calendars):
             Debug(f"-------------------------")
     return the_calendars
     
-def combine_NRC_for_exact_schedule(calendars):
+def combine_NRC_for_exact_schedule(calendars, NRC_active):
     n = len(calendars)
     i = 0
     while i < n:
@@ -92,7 +91,8 @@ def combine_NRC_for_exact_schedule(calendars):
         loadingAnimation(part=4, i=i, n=n)
         while j < n:
             if two_calendars_have_the_same_schedule(calendars[i], calendars[j]):
-                calendars[i]["nrc"] = combine_NRCs(calendars[i]["nrc"], calendars[j]["nrc"])
+                if NRC_active:
+                    calendars[i]["nrc"] = combine_NRCs(calendars[i]["nrc"], calendars[j]["nrc"])
                 calendars = remove_by_index(calendars, j)
                 j-=1
                 n = len(calendars)
