@@ -1,5 +1,4 @@
 from func import * 
-import numpy
 
 MONDAY = 0
 TUESDAY = 1
