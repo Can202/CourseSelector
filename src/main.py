@@ -32,8 +32,8 @@ def menu2():
     print("What do you want to do?")
     print("[1] Show all calendars")
     print("[2] Show best 3")
-    print("[2] Show best 5")
-    print("[3] Show best 10")
+    print("[3] Show best 5")
+    print("[4] Show best 10")
     print("[0] Exit")
     return input("Select: ")
 
@@ -92,39 +92,26 @@ def start():
         if ans == "0":
             break
         if ans == "1":
-            for i in range(len(the_calendars)):
-                print(f"---Calendar {i+1}---")
-                print(f"score: {points[i]}")
-                calendar_show(the_calendars[i])
+            show_n_calendars(the_calendars, points)
         if ans == "2":
-            ln=0
-            if len(the_calendars) < 3:
-                ln = len(the_calendars)
-            else:
-                ln = 3
-            for i in range(ln):
-                print(f"---Calendar {i+1}---")
-                print(f"score: {points[i]}")
-                calendar_show(the_calendars[i])
+            show_n_calendars(the_calendars, points,3)
         if ans == "3":
-            ln=0
-            if len(the_calendars) < 5:
-                ln = len(the_calendars)
-            else:
-                ln = 5
-            for i in range(ln):
-                print(f"---Calendar {i+1}---")
-                print(f"score: {points[i]}")
-                calendar_show(the_calendars[i])
+            show_n_calendars(the_calendars, points,5)
         if ans == "4":
-            ln=0
-            if len(the_calendars) < 5:
-                ln = len(the_calendars)
-            else:
-                ln = 10
-            for i in range(ln):
-                print(f"---Calendar {i+1}---")
-                calendar_show(the_calendars[i])
+            show_n_calendars(the_calendars, points,10)
+
+def show_n_calendars(calendars, points, n=0):
+    ln = 0
+    if len(calendars) < n:
+        ln = len(calendars)
+    else:
+        ln = n
+    if n == 0:
+        ln = len(calendars)
+    for i in range(ln):
+        print(f"---Calendar {i+1}---")
+        print(f"score: {points[i]}")
+        calendar_show(calendars[i])
 
 
 def reset_default():
