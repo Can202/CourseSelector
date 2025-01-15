@@ -34,8 +34,9 @@ def menu2(NRC_on):
     print("[2] Show best 3")
     print("[3] Show best 5")
     print("[4] Show best 10")
+    print("[5] Show best n")
     if NRC_on:
-        print("[5] Print NRC information of n calendar")
+        print("[6] Print NRC information of n calendar")
     print("[0] Exit")
     return input("Select: ")
 
@@ -102,7 +103,10 @@ def start():
             show_n_calendars(the_calendars, points,5)
         if ans == "4":
             show_n_calendars(the_calendars, points,10)
-        if ans == "5" and NRC_on:
+        if ans == "5":
+            n = int(input("How many? "))
+            show_n_calendars(the_calendars, points,n)
+        if ans == "6" and NRC_on:
             create_NRC_list(the_calendars, points)
 
 def create_NRC_list(calendars, points):
