@@ -4,6 +4,7 @@ COLUMN_SKIP = 1
 from func import *
 from parsing import *
 import time
+import re
 
 
 # Function that only uses the data input to get all the calendars, using all_calendars function. 
@@ -79,8 +80,9 @@ def is_calendar_with_conflicts(calendar):
 def raw_list_of_all_calendars(data, courses_id, courses_options):
     list_of_calendars = []
     n = variation(courses_options)
+    nrc_active = True
     for i in range(n):
-        new_calendar = {"calendar":[], "name":[]}
+        new_calendar = {"calendar":[], "name":[], "nrc":[], "nrc_active": True}
 
         combinations = courses_combination(courses_options, i)
 
@@ -89,11 +91,32 @@ def raw_list_of_all_calendars(data, courses_id, courses_options):
             selection = combinations[j]
             Debug(f"{id}: ---{data[id][0]}---")
 
-            new_calendar["name"].append(data[id][0])
-            new_calendar["calendar"].append(data[id][selection])
+            
+            name = data[id][0]
+            info = data[id][selection]
+            nrc = 0
+
+            if is_NRC_on(info):
+                nrc, info = get_NRC_and_course_info(info)
+            else:
+                nrc_active = False
+
+                
+            if is_customName_on(info):
+                name, info = get_customName_and_course_info(info)
+            
+            new_calendar["nrc"].append(nrc)
+            new_calendar["name"].append(name)
+            new_calendar["calendar"].append(info)
+                
+            Debug(f"--- Done ---")
 
         Debug("---NEXT---")
         list_of_calendars.append(new_calendar)
+
+    for i in range(len(list_of_calendars)):
+        list_of_calendars[i]["nrc_active"] = nrc_active
+
     return list_of_calendars
 
 # Function used to get combination of posible calendars with only one number identifier. It is used in the raw_list_of_all_calendars function.
@@ -123,6 +146,30 @@ def courses_combination(courses_options, attempt):
         attempt = attempt % divisor
     return combination
 
+
+def is_NRC_on(calendar_text):
+    if "$" in calendar_text:
+        return True
+    return False
+
+def get_NRC_and_course_info(text):
+    match = re.search(r"\$(\d+)", text)
+    if match:
+        number = match.group(1)
+        remaining_text = text.replace(match.group(0), "").strip()
+    return int(number), remaining_text
+
+def is_customName_on(calendar_text):
+    if "%" in calendar_text:
+        return True
+    return False
+
+def get_customName_and_course_info(text):
+    match = re.search(r"%([a-zA-Z0-9_]+)", text)
+    if match:
+        name = match.group(1)
+        remaining_text = text.replace(match.group(0), "").strip()
+    return str(name), remaining_text
 
 def count_options(row_data):
     count = 0
