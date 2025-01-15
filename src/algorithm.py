@@ -33,7 +33,10 @@ def all_calendars(data, courses_id, courses_options):
 
     # Remove duplicates
     raw_list_of_unique_complete_calendars = []
-    for i in range(len(raw_list_of_complete_calendars)):
+    ln = len(raw_list_of_complete_calendars)
+    for i in range(ln):
+        if i%1000 == 0:
+            Debug("Loading (p.2) " + "." * ((round(ln, -3) - i)//1000) + " " * ((i)//1000) + "\r", debug_mode=False)
         add = True
         for j in range(len(raw_list_of_unique_complete_calendars)):
             if raw_list_of_complete_calendars[i] == raw_list_of_unique_complete_calendars[j]:
@@ -44,6 +47,8 @@ def all_calendars(data, courses_id, courses_options):
     # Remove calendars that have conflict
     the_calendars = []
     for i in range(len(raw_list_of_unique_complete_calendars)):
+        if i%1000 == 0:
+            Debug("Loading (p.3) " + "." * ((round(len(raw_list_of_unique_complete_calendars), -3) - i)//1000) + " " * ((i)//1000) + "\r", debug_mode=False)
         if not is_calendar_with_conflicts(raw_list_of_unique_complete_calendars[i]):
             Debug(f"Check for conflicts for calendar {i}, but didn't found any")
             the_calendars.append(raw_list_of_unique_complete_calendars[i])
@@ -52,6 +57,7 @@ def all_calendars(data, courses_id, courses_options):
             Debug(f"-------------------------")
         
 
+    Debug("Loaded                \n", debug_mode=False)
 
     Debug("---Calendars---")
     for i in range(len(the_calendars)):
@@ -62,7 +68,7 @@ def all_calendars(data, courses_id, courses_options):
 
     Debug(f"Calendars Calculated: {n}")
     Debug(f"Calendars w/o conflicts: {len(the_calendars)}")
-    Debug(f"--- {(time.time() - start_time)} seconds ---", True)
+    Debug(f"--- {(time.time() - start_time)} seconds ---", ignore_debug_statement=True)
     return the_calendars
 
 # Function that check if a calendar has conflicts. It is used in all_calendars function to remove the ones with conflicts.
@@ -81,7 +87,10 @@ def raw_list_of_all_calendars(data, courses_id, courses_options):
     list_of_calendars = []
     n = variation(courses_options)
     nrc_active = True
+
     for i in range(n):
+        if i%1000 == 0:
+            Debug("Loading (p.1) " + "." * ((round(n, -3) - i)//1000) + " " * ((i)//1000) + "\r", debug_mode=False)
         new_calendar = {"calendar":[], "name":[], "nrc":[], "nrc_active": True}
 
         combinations = courses_combination(courses_options, i)

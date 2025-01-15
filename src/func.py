@@ -82,6 +82,10 @@ def base_n(list, alist):
             n += variation(list[i+1:]) * (alist[i] - 1 )
     return n
 
-def Debug(text, ignore_debug_statement=False):
-    if DEBUG or ignore_debug_statement:
-        print(text)
+def Debug(text, *, debug_mode = True,ignore_debug_statement=False):
+    if debug_mode:
+        if DEBUG or ignore_debug_statement:
+            print(text)
+    else:
+        if (not DEBUG) or ignore_debug_statement:
+            print(text, end="")
