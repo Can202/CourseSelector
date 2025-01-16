@@ -7,5 +7,7 @@
         "min_hours":1,
         "max_hours":2,
         "next_to": "Programación"
-    }
+    },
+    "nrc_quantity": true,
+    "nrc_alternatives":false
 }

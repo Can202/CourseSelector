@@ -66,3 +66,51 @@ def free_modules(calendar, fm_days, fm_min, fm_max, fm_next):
             
     return points
 
+
+
+def configure():
+    print("There are 9 modules")
+    print("1: from 08:20 to 09:30")
+    print("2: from 09:40 to 10:50")
+    print("3: from 11:00 to 12:10")
+    print("4: from 12:20 to 13:30")
+    print("--Lunch Time--")
+    print("5: from 14:00 to 16:00")
+    print("6: from 16:10 to 17:20")
+    print("7: from 17:30 to 18:40")
+    print("8: from 18:50 to 20:00")
+    print("9: from 20:10 to 21:20")
+    start_time = int(input("on what module you want to start? "))
+    end_time = int(input("on what module you want to end? "))
+    
+    print("Write the days that you would want to go to class (ex. L M W J V S).")
+    days = input("days: ").upper()
+
+    print("Do you want free modules in between?")
+    fm_days = int(input("How many days? "))
+    fm_min = int(input("Minimum free modules: "))
+    fm_max = int(input("Maximum free modules: "))
+    fm_next = input("next to: ")
+
+    nrc_quantity = False
+    if input("Do you want to consider nrc quantity to the point system (y/n)?").lower() == "y":
+        nrc_quantity = True
+
+    nrc_alternatives = False
+    if input("Do you want to consider nrc alternatives to the point system (y/n)?").lower() == "y":
+        nrc_alternatives = True
+
+    data = {
+        "start_time": start_time,
+        "end_time": end_time,
+        "days": days,
+        "free_module": {
+            "quantity_days": fm_days,
+            "min_hours":fm_min,
+            "max_hours":fm_max,
+            "next_to": fm_next
+        },
+        "nrc_quantity": nrc_quantity,
+        "nrc_alternatives":nrc_alternatives
+    }
+    json_writer(path_file="config.json", data=data)
