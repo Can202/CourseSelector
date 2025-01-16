@@ -120,7 +120,10 @@ def create_NRC_list(calendars, points):
         if ln < len(calendars[n]['nrc'][i]):
             ln = len(calendars[n]['nrc'][i])
     for i in range(len(calendars[n]["name"])):
-        print(f"{calendars[n]['name'][i]}: {(calendars[n]['nrc'][i]).ljust(ln+2)} ({calendars[n]['other_nrc'][i]})")
+        if calendars[n]['other_nrc'][i] != "":
+            print(f"{calendars[n]['name'][i]}: {(calendars[n]['nrc'][i]).ljust(ln+2)} ({calendars[n]['other_nrc'][i]})")
+        else:
+            print(f"{calendars[n]['name'][i]}: {(calendars[n]['nrc'][i]).ljust(ln+2)}")
 
 def show_n_calendars(calendars, points, n=0):
     ln = 0

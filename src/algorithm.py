@@ -143,13 +143,20 @@ def check_NRC_alternatives(the_calendars, data, courses_id, courses_options):
                         add = False
                 if add:
                     nrc = ""
+                    name = ""
                     if is_NRC_on(data[j][k]):
                         nrc, a = get_NRC_and_course_info(data[j][k])
+                    if is_customName_on(a):
+                        name, a = get_customName_and_course_info(a)
+
+                        
                     if not(nrc in the_calendars[index]["nrc"]):
+                        if name != "":
+                            name += ": "
                         if the_calendars[index]["other_nrc"][updater] != "":
-                            the_calendars[index]["other_nrc"][updater] += "/" + nrc
+                            the_calendars[index]["other_nrc"][updater] += "/" + name + nrc
                         else:
-                            the_calendars[index]["other_nrc"][updater] += nrc
+                            the_calendars[index]["other_nrc"][updater] += name + nrc
     return the_calendars
 
 # Function that check if a calendar has conflicts. It is used in all_calendars function to remove the ones with conflicts.
