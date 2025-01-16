@@ -74,7 +74,7 @@ def base_list(list, n):
     return level
 
 def remove_by_index(lst, index):
-    if 0 <= index < len(lst):
+    if -len(lst) <= index < len(lst):
         del lst[index]
     return lst
 

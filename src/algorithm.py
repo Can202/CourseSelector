@@ -12,7 +12,10 @@ import re
 # by quantity that it was used to save time in the old algorithm.
 def get_all_calendars(data):
     # Options
-    courses_quantity = len(data) - 1
+    if data[-1] == ['']:
+        data = remove_by_index(data, -1)
+    
+    courses_quantity = len(data)
     courses_id = []
     courses_options = []
     for i in range(courses_quantity):
@@ -28,7 +31,7 @@ def get_all_calendars(data):
 def all_calendars(data, courses_id, courses_options):
     start_time = time.time()
 
-    n = variation(courses_options)
+    debug_total = variation(courses_options)
 
     # Create list of posible calendars (p.1)
     the_calendars = raw_list_of_all_calendars(data, courses_id, courses_options)
@@ -38,7 +41,7 @@ def all_calendars(data, courses_id, courses_options):
 
     # Remove calendars that have conflict (p.3)
     the_calendars = remove_calendars_with_conflict(the_calendars)
-    woconflict = len(the_calendars)
+    debug_woconflict = len(the_calendars)
 
     # Combine calendars with the same schedule (p.4)
     the_calendars = combine_NRC_for_exact_schedule(the_calendars, the_calendars[0]["nrc_active"])
@@ -49,16 +52,17 @@ def all_calendars(data, courses_id, courses_options):
 
     loadingAnimation(done=True)
 
+    # Debug information
     Debug("---Calendars---")
     for i in range(len(the_calendars)):
         Debug(f"---Calendar {i+1}---")
         Debug(the_calendars[i])
         if DEBUG:
             calendar_show(the_calendars[i])
-
-    Debug(f"Calendars Calculated: {n}")
-    Debug(f"Calendars w/o conflicts: {woconflict}")
+    Debug(f"Calendars Calculated: {debug_total}")
+    Debug(f"Calendars w/o conflicts: {debug_woconflict}")
     Debug(f"Calendars w/o repetition nor conflicts: {len(the_calendars)}")
+
     Debug(f"--- {(time.time() - start_time)} seconds ---", ignore_debug_statement=True)
     return the_calendars
 
@@ -149,7 +153,7 @@ def check_NRC_alternatives(the_calendars, data, courses_id, courses_options):
                     if is_customName_on(a):
                         name, a = get_customName_and_course_info(a)
 
-                        
+
                     if not(nrc in the_calendars[index]["nrc"]):
                         if name != "":
                             name += ": "
