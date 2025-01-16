@@ -14,10 +14,15 @@ def point_system(the_calendars):
     free_module_max_hours = data["free_module"]["max_hours"]
     free_module_next_to = data["free_module"]["next_to"]
 
+    nrc_quantity= data["nrc_quantity"]
+    nrc_alternatives= data["nrc_alternatives"]
+
+
     for i in range(len(the_calendars)):
         points[i] += classes_in_between_hours(the_calendars[i], start_time, end_time)
         points[i] += classes_in_days(the_calendars[i], days)
         points[i] += free_modules(the_calendars[i], free_module_quantity_days, free_module_min_hours, free_module_max_hours, free_module_next_to)
+        points[i] += fn_nrc_quantity(the_calendars[i], nrc_quantity,nrc_alternatives)
 
     return points
 
@@ -66,6 +71,18 @@ def free_modules(calendar, fm_days, fm_min, fm_max, fm_next):
             
     return points
 
+def fn_nrc_quantity(calendar, nrc_quantity,nrc_alternatives):
+    ct_nrc_quantity = 0
+    ct_nrc_alternatives = 0
+    for i in range(len(calendar["nrc"])):
+        ct_nrc_quantity += 2 * (calendar["nrc"][i].count("/"))
+        ct_nrc_alternatives += calendar["other_nrc"][i].count("/")
+    
+    if not nrc_quantity:
+        ct_nrc_quantity = 0
+    if not nrc_alternatives:
+        ct_nrc_alternatives = 0
+    return ct_nrc_quantity + ct_nrc_alternatives
 
 
 def configure():
