@@ -1,0 +1,97 @@
+# Formatting
+# 
+import requests
+
+def get_html_content_from_BuscaCursos(Semestre, Sigla, Campus):
+    url = f"https://buscacursos.uc.cl/?cxml_semestre={Semestre}&cxml_sigla={Sigla}&cxml_nrc=&cxml_nombre=&cxml_categoria=TODOS&cxml_area_fg=TODOS&cxml_formato_cur=TODOS&cxml_profesor=&cxml_campus={Campus}&cxml_unidad_academica=TODOS&cxml_horario_tipo_busqueda=si_tenga&cxml_horario_tipo_busqueda_actividad=TODOS&cxml_periodo=TODOS&cxml_escuela=TODOS&cxml_nivel=TODOS#resultados"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        html_content = response.text
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred: {e}")
+        return "ERROR"
+    return html_content
+
+def get_data_from_html_content(html_content):
+    data = {"nrc":[], "schedule":[]}
+    total = html_content.count('<tr class="resultadosRowPar">') + html_content.count('<tr class="resultadosRowImpar">')
+    
+    # Get indexes
+    indexes = []
+    for i in range(total):
+        if i % 2 == 0:
+            index = find_kth_occurrence('<tr class="resultadosRowPar">', html_content,(i//2)+1)
+            indexes.append(index)
+        else:
+            index = find_kth_occurrence('<tr class="resultadosRowImpar">', html_content,((i-1)//2)+1)
+            indexes.append(index)
+    
+    # Cut
+    content_cuts = []
+    for i in range(total):
+        if i != (total-1):
+            content_cuts.append(html_content[indexes[i]:indexes[i+1]])
+        else:
+            content_cuts.append(html_content[indexes[i]:(indexes[i] + (indexes[i] - indexes[i-1]))])
+
+    nrcs = []
+    schedules = []
+    for i in range(total):
+
+        # NRCs
+        start_index, end_index = text_between_first_ocurrence_of('<td style="font-size:13px;text-align:center;">', "</td>", content_cuts[i])
+        nrcs.append(content_cuts[i][start_index:end_index])
+
+        #Schedule
+        start_index, end_index = text_between_first_ocurrence_of("<table>", "</table>", content_cuts[i])
+        table = content_cuts[i][start_index:end_index]
+        start_1_text_to_find = '<td style="padding-right:5px;width:50px">\n'
+        end_text_to_find = '\n</td>'
+        start_2_text_to_find = '<td style="padding-right:5px">\n'
+
+        options = table.count(start_1_text_to_find)
+        Complete_Schedule = ""
+        for j in range(options):
+            if j!=0:
+                Complete_Schedule+=" "
+            start_index, end_index = text_between_first_ocurrence_of(start_1_text_to_find, end_text_to_find, table)
+            Schedule = table[start_index:end_index]
+            table = table[end_index:]
+            start_index, end_index = text_between_first_ocurrence_of(start_2_text_to_find, end_text_to_find, table)
+            Type = table[start_index:end_index]
+            table = table[end_index:]
+            if "," in Schedule:
+                Schedule = Schedule.replace(",","-")
+            Complete_Schedule += Type + "/" + Schedule
+        schedules.append(Complete_Schedule)
+
+    data["nrc"] = nrcs
+    data["schedule"] = schedules
+
+    return data
+
+def formatting_get_courses(*,Semestre="2025-1", Sigla="MAT1630", Campus = "San+Joaqu%C3%ADn"):
+    html_content = get_html_content_from_BuscaCursos(Semestre, Sigla, Campus)
+    data = get_data_from_html_content(html_content)
+    print(data)
+
+def text_between_first_ocurrence_of(t1,t2, text):
+    start_index = find_kth_occurrence(t1, text, 1)+len(t1)
+    end_index = start_index + find_kth_occurrence(t2,text[start_index:],1)
+    return start_index, end_index
+
+def find_kth_occurrence(substring, string, k):
+    count = 0
+    position = -1
+
+    for i in range(len(string)):
+        if string[i:i+len(substring)] == substring:
+            count += 1
+            if count == k:
+                position = i
+                break
+
+    return position
+
+formatting_get_courses()
