@@ -43,6 +43,9 @@ def all_calendars(data, courses_id, courses_options):
     # Combine calendars with the same schedule (p.4)
     the_calendars = combine_NRC_for_exact_schedule(the_calendars, the_calendars[0]["nrc_active"])
 
+    # Add nrc alternatives to the calendars (p.5)
+    the_calendars = check_NRC_alternatives(the_calendars, data, courses_id, courses_options)
+
     loadingAnimation(done=True)
 
     Debug("---Calendars---")
@@ -122,6 +125,10 @@ def combine_NRCs(nrc1, nrc2):
             nrc1[i] += ("/" + nrc2[i])
     return nrc1
 
+def check_NRC_alternatives(the_calendars, data, courses_id, courses_options):
+    
+    return the_calendars
+
 # Function that check if a calendar has conflicts. It is used in all_calendars function to remove the ones with conflicts.
 def is_calendar_with_conflicts(calendar):
     n = len(calendar["calendar"])
@@ -141,7 +148,7 @@ def raw_list_of_all_calendars(data, courses_id, courses_options):
 
     for i in range(n):
         loadingAnimation(part=1, i=i, n=n)
-        new_calendar = {"calendar":[], "name":[], "nrc":[], "nrc_active": True}
+        new_calendar = {"calendar":[], "name":[], "nrc":[], "nrc_active": True, "other_nrc": []}
 
         combinations = courses_combination(courses_options, i)
 
@@ -165,6 +172,7 @@ def raw_list_of_all_calendars(data, courses_id, courses_options):
                 name, info = get_customName_and_course_info(info)
             
             new_calendar["nrc"].append(nrc)
+            new_calendar["other_nrc"].append("")
             new_calendar["name"].append(name)
             new_calendar["calendar"].append(info)
                 
