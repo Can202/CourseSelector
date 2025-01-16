@@ -44,7 +44,8 @@ def all_calendars(data, courses_id, courses_options):
     the_calendars = combine_NRC_for_exact_schedule(the_calendars, the_calendars[0]["nrc_active"])
 
     # Add nrc alternatives to the calendars (p.5)
-    the_calendars = check_NRC_alternatives(the_calendars, data, courses_id, courses_options)
+    if the_calendars[0]["nrc_active"]:
+        the_calendars = check_NRC_alternatives(the_calendars, data, courses_id, courses_options)
 
     loadingAnimation(done=True)
 
@@ -126,7 +127,29 @@ def combine_NRCs(nrc1, nrc2):
     return nrc1
 
 def check_NRC_alternatives(the_calendars, data, courses_id, courses_options):
-    
+    for index in range(len(the_calendars)):
+        loadingAnimation(part=5, i=index, n=len(the_calendars))
+        for j in range(len(data)):
+            for k in range(1,len(data[j])):
+                if data[j][k] == "":
+                    continue
+                add = True
+                updater = 0
+                for i in range(len(the_calendars[index]["calendar"])):
+                    if data[j][0] == the_calendars[index]["id"][i]:
+                        updater = i
+                        continue
+                    if courses_conflict(first_schedule_in_str=the_calendars[index]["calendar"][i], second_schedule_in_str=only_info_course(data[j][k])):
+                        add = False
+                if add:
+                    nrc = ""
+                    if is_NRC_on(data[j][k]):
+                        nrc, a = get_NRC_and_course_info(data[j][k])
+                    if not(nrc in the_calendars[index]["nrc"]):
+                        if the_calendars[index]["other_nrc"][updater] != "":
+                            the_calendars[index]["other_nrc"][updater] += "/" + nrc
+                        else:
+                            the_calendars[index]["other_nrc"][updater] += nrc
     return the_calendars
 
 # Function that check if a calendar has conflicts. It is used in all_calendars function to remove the ones with conflicts.
@@ -148,7 +171,7 @@ def raw_list_of_all_calendars(data, courses_id, courses_options):
 
     for i in range(n):
         loadingAnimation(part=1, i=i, n=n)
-        new_calendar = {"calendar":[], "name":[], "nrc":[], "nrc_active": True, "other_nrc": []}
+        new_calendar = {"calendar":[], "name":[], "nrc":[], "nrc_active": True, "other_nrc": [], "id":[]}
 
         combinations = courses_combination(courses_options, i)
 
@@ -174,6 +197,7 @@ def raw_list_of_all_calendars(data, courses_id, courses_options):
             new_calendar["nrc"].append(nrc)
             new_calendar["other_nrc"].append("")
             new_calendar["name"].append(name)
+            new_calendar["id"].append(data[id][0])
             new_calendar["calendar"].append(info)
                 
             Debug(f"--- Done ---")
@@ -213,6 +237,12 @@ def courses_combination(courses_options, attempt):
         attempt = attempt % divisor
     return combination
 
+def only_info_course(text):
+    if is_NRC_on(text):
+        a, text = get_NRC_and_course_info(text)
+    if is_customName_on(text):
+        a, text = get_customName_and_course_info(text)
+    return text
 
 def is_NRC_on(calendar_text):
     return "$" in calendar_text
