@@ -29,6 +29,7 @@ def create_csv_from_list(Semestre = "2025-1", courses_names=["MAT1630", "MAT1640
             csv_content += a[0]
             s=""
             for k in range(len(courses_split)):
+                s=""
                 data = formatting_get_courses(Semestre=Semestre, Sigla=courses_split[k])
                 for q in range(len(data["schedule"])):
                     s += f',%{courses_split[k]} ${data["nrc"][q]} {data["schedule"][q]}'
