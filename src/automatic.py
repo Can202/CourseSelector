@@ -145,9 +145,10 @@ def find_kth_occurrence(substring, string, k):
     return position
 
 def menu_automatic():
-    print("(e.g)")
+    print("----- EXAMPLE -----")
     print("Semester: 2025-1")
     print("Courses to look: MAT1630 MAT1640 FIS0152 FIS1523 OPT-FIL2005/VET161G IMT1001")
+    print("----- EXAMPLE -----")
     semestre = input("Semester: ")
     courses = input("Courses to look: ")
     course = courses.split(" ")
