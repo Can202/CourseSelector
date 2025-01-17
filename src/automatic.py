@@ -35,8 +35,6 @@ def create_csv_from_list(Semestre = "2025-1", courses_names=["MAT1630", "MAT1640
                 csv_content += s
             csv_content += "\n"
 
-
-    print(csv_content)
     The_file = open("data.csv", "w")
     print(csv_content, file=The_file)
         
@@ -62,7 +60,11 @@ def get_data_from_html_content(html_content):
         if i != (total-1):
             content_cuts.append(html_content[indexes[i]:indexes[i+1]])
         else:
-            content_cuts.append(html_content[indexes[i]:(indexes[i] + (indexes[i] - indexes[i-1]))])
+            if len(indexes) != 1:
+                content_cuts.append(html_content[indexes[i]:(indexes[i] + (indexes[i] - indexes[i-1]))])
+            else:
+                content_cuts.append(html_content[indexes[i]:(indexes[i] + 3000)])
+
 
     nrcs = []
     schedules = []
@@ -92,6 +94,8 @@ def get_data_from_html_content(html_content):
             table = table[end_index:]
             if "," in Schedule:
                 Schedule = Schedule.replace(",","-")
+            if not legit_Schedule(Schedule):
+                continue
             Complete_Schedule += Type + "/" + Schedule
         schedules.append(Complete_Schedule)
 
@@ -100,7 +104,18 @@ def get_data_from_html_content(html_content):
 
     return data
 
-def formatting_get_courses(*,Semestre="2025-1", Sigla="MAT1630", Campus = "San+Joaqu%C3%ADn"):
+def legit_Schedule(Schedule):
+    number = False
+    days = False
+    for i in range(9):
+        if "1 2 3 4 5 6 7 8 9".split(" ")[i] in Schedule:
+            number = True
+    for i in range(6):
+        if "L M W J V S".split(" ")[i] in Schedule:
+            days = True
+    return (number and days)
+
+def formatting_get_courses(*,Semestre="", Sigla="", Campus = "San+Joaqu%C3%ADn"):
     html_content = get_html_content_from_BuscaCursos(Semestre, Sigla, Campus)
     data = get_data_from_html_content(html_content)
     return data
@@ -123,4 +138,13 @@ def find_kth_occurrence(substring, string, k):
 
     return position
 
-create_csv_from_list()
+def menu_automatic():
+    print("(e.g)")
+    print("Semester: 2025-1")
+    print("Courses to look: MAT1630 MAT1640 FIS0152 FIS1523 OPT-FIL2005/VET161G IMT1001")
+    semestre = input("Semester: ")
+    courses = input("Courses to look: ")
+    course = courses.split(" ")
+    create_csv_from_list(Semestre=semestre, courses_names=course)
+    print("Done!")
+    print("Review the csv file! To check if everything is right.")

@@ -7,6 +7,7 @@ from parsing import *
 from algorithm import *
 from pointsys import *
 import shutil
+import automatic
 
 def main():
     while True:
@@ -19,12 +20,15 @@ def main():
             reset_default()
         if option_selected == "3":
             configure()
+        if option_selected == "4":
+            automatic.menu_automatic()
 
 def menu1():
     print("What do you want to do?")
     print("[1] Read and analyze the data")
     print("[2] Reset default")
     print("[3] Configure")
+    print("[4] Create csv file")
     print("[0] Exit")
     return input("Select: ")
 

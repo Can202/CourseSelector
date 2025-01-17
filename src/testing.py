@@ -33,8 +33,4 @@ print(parsing.get_days_array("CLAS/L-W-V:2 AYU/M-J:4") == parsing.get_days_array
 
 
 # Automatic.py
-print(automatic.formatting_get_courses(Semestre="2025-1",Sigla="MAT1640"))
-print(automatic.formatting_get_courses(Semestre="2025-1",Sigla="FIL2005"))
-print(automatic.formatting_get_courses(Semestre="2025-1",Sigla="FIS1523"))
-print(automatic.formatting_get_courses(Semestre="2025-1",Sigla="FIS0152"))
-print(automatic.formatting_get_courses(Semestre="2025-1",Sigla="IMT1001"))
+print("FIS0152",automatic.formatting_get_courses(Semestre="2025-1",Sigla="FIS0152"))
