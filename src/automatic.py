@@ -13,6 +13,35 @@ def get_html_content_from_BuscaCursos(Semestre, Sigla, Campus):
         return "ERROR"
     return html_content
 
+def create_csv_from_list(Semestre = "2025-1", courses_names=["MAT1630", "MAT1640", "OFG-FIL2005/VET161G"]):
+    csv_content = ""
+
+    for j in range(len(courses_names)):
+        if not("/" in courses_names[j]):
+            data = formatting_get_courses(Semestre=Semestre, Sigla=courses_names[j])
+            s = courses_names[j]
+            for i in range(len(data["schedule"])):
+                s += f',${data["nrc"][i]} {data["schedule"][i]}'
+            csv_content += s + "\n"
+        else:
+            a = courses_names[j].split("-")
+            courses_split = a[1].split("/")
+            csv_content += a[0]
+            s=""
+            for k in range(len(courses_split)):
+                data = formatting_get_courses(Semestre=Semestre, Sigla=courses_split[k])
+                for q in range(len(data["schedule"])):
+                    s += f',%{courses_split[k]} ${data["nrc"][q]} {data["schedule"][q]}'
+                csv_content += s
+            csv_content += "\n"
+
+
+    print(csv_content)
+    The_file = open("data.csv", "w")
+    print(csv_content, file=The_file)
+        
+
+
 def get_data_from_html_content(html_content):
     data = {"nrc":[], "schedule":[]}
     total = html_content.count('<tr class="resultadosRowPar">') + html_content.count('<tr class="resultadosRowImpar">')
@@ -74,7 +103,7 @@ def get_data_from_html_content(html_content):
 def formatting_get_courses(*,Semestre="2025-1", Sigla="MAT1630", Campus = "San+Joaqu%C3%ADn"):
     html_content = get_html_content_from_BuscaCursos(Semestre, Sigla, Campus)
     data = get_data_from_html_content(html_content)
-    print(data)
+    return data
 
 def text_between_first_ocurrence_of(t1,t2, text):
     start_index = find_kth_occurrence(t1, text, 1)+len(t1)
@@ -94,4 +123,4 @@ def find_kth_occurrence(substring, string, k):
 
     return position
 
-formatting_get_courses()
+create_csv_from_list()

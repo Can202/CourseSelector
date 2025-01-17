@@ -1,6 +1,7 @@
 import pointsys
 import parsing
 import algorithm
+import automatic
 # Testing that everything works
 
 # Point system
@@ -29,3 +30,11 @@ print(algorithm.raw_list_of_all_calendars(data, courses_id, courses_options))
 
 print("----------")
 print(parsing.get_days_array("CLAS/L-W-V:2 AYU/M-J:4") == parsing.get_days_array("CLAS/L-W:2 CLAS/V:2 AYU/M-J:4"))
+
+
+# Automatic.py
+print(automatic.formatting_get_courses(Semestre="2025-1",Sigla="MAT1640"))
+print(automatic.formatting_get_courses(Semestre="2025-1",Sigla="FIL2005"))
+print(automatic.formatting_get_courses(Semestre="2025-1",Sigla="FIS1523"))
+print(automatic.formatting_get_courses(Semestre="2025-1",Sigla="FIS0152"))
+print(automatic.formatting_get_courses(Semestre="2025-1",Sigla="IMT1001"))
