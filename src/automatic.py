@@ -22,7 +22,11 @@ def create_csv_from_list(Semestre = "2025-1", courses_names=["MAT1630", "MAT1640
             s = courses_names[j]
             for i in range(len(data["schedule"])):
                 s += f',${data["nrc"][i]} {data["schedule"][i]}'
-            csv_content += s + "\n"
+
+            if j != (len(courses_names)-1):
+                csv_content += s + "\n"
+            else:
+                csv_content += s
         else:
             a = courses_names[j].split("-")
             courses_split = a[1].split("/")
@@ -34,7 +38,8 @@ def create_csv_from_list(Semestre = "2025-1", courses_names=["MAT1630", "MAT1640
                 for q in range(len(data["schedule"])):
                     s += f',%{courses_split[k]} ${data["nrc"][q]} {data["schedule"][q]}'
                 csv_content += s
-            csv_content += "\n"
+            if j != (len(courses_names)-1):
+                csv_content += "\n"
 
     The_file = open("data.csv", "w")
     print(csv_content, file=The_file)
