@@ -1,4 +1,5 @@
 from func import * 
+import numpy as np
 
 MONDAY = 0
 TUESDAY = 1
@@ -9,10 +10,11 @@ SATURDAY = 5
 
 
 # Look between two courses and check if they have some conflict hour/day (in str).
-def courses_conflict(*,first_schedule_in_str ="", second_schedule_in_str=""):
-    dic_1 = parse_course_info(text = first_schedule_in_str)
-    dic_2 = parse_course_info(text = second_schedule_in_str)
-    return dict_courses_conflict(dict1=dic_1, dict2=dic_2)
+
+def courses_conflict(*, first_schedule_in_str="", second_schedule_in_str=""):
+    array1 = get_days_array_np(first_schedule_in_str)
+    array2 = get_days_array_np(second_schedule_in_str)
+    return arrays_have_conflicts_np(array1, array2)
 
 def parse_course_info(*,text =""):
 
@@ -61,6 +63,24 @@ def get_days_array(course_str):
                 array[int(hour[k])-1][days[j]] = course_info[i][0]
 
     return array
+
+# just to mark as occupied, not containing information, this makes 1 and 0
+def get_days_array_np(course_str):
+    array = np.zeros((9, 6), dtype=int)  # 9 hours, 6 days
+    for course in course_str.split(" "):
+        if not course:
+            continue
+        course_type, schedule = course.split("/")
+        days, hours = schedule.split(":")
+        days = [get_day_from_Letter(day) for day in days.split("-")]
+        hours = [int(hour) - 1 for hour in hours.split("-")]
+        for day in days:
+            for hour in hours:
+                array[hour, day] = 1  # Mark as occupied
+    return array
+
+def arrays_have_conflicts_np(array1, array2):
+    return np.any(array1 & array2)
 
 # Look between two courses and check if they have some conflict hour/day (in Dict format).
 def dict_courses_conflict(*, dict1, dict2):
