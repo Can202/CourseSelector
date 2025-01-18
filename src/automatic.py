@@ -1,6 +1,7 @@
 # Formatting
 # 
 import requests
+import func
 
 def get_html_content_from_BuscaCursos(Semestre, Sigla, Campus):
     url = f"https://buscacursos.uc.cl/?cxml_semestre={Semestre}&cxml_sigla={Sigla}&cxml_nrc=&cxml_nombre=&cxml_categoria=TODOS&cxml_area_fg=TODOS&cxml_formato_cur=TODOS&cxml_profesor=&cxml_campus={Campus}&cxml_unidad_academica=TODOS&cxml_horario_tipo_busqueda=si_tenga&cxml_horario_tipo_busqueda_actividad=TODOS&cxml_periodo=TODOS&cxml_escuela=TODOS&cxml_nivel=TODOS#resultados"
@@ -17,6 +18,7 @@ def create_csv_from_list(Semestre = "2025-1", courses_names=["MAT1630", "MAT1640
     csv_content = ""
 
     for j in range(len(courses_names)):
+        func.loadingAnimation(part=1, i=j, n=len(courses_names), maxPart=1)
         if not("/" in courses_names[j]):
             data = formatting_get_courses(Semestre=Semestre, Sigla=courses_names[j])
             s = courses_names[j]
@@ -40,6 +42,7 @@ def create_csv_from_list(Semestre = "2025-1", courses_names=["MAT1630", "MAT1640
                 csv_content += s
             if j != (len(courses_names)-1):
                 csv_content += "\n"
+    func.loadingAnimation(done=True)
 
     The_file = open("data.csv", "w")
     print(csv_content, file=The_file)

@@ -96,17 +96,19 @@ def Debug(text, *, debug_mode = True,ignore_debug_statement=False):
             print(text, end="")
 
 
-def loadingAnimation(*,part=1, i=0, n=100, done=False):
-    maxPart = 4
+def loadingAnimation(*,part=1, i=0, n=100, done=False, maxPart = 4):
     percentageperPart = 100//maxPart
     if done:
-        Debug(f"Loaded{' ' * 115}\n", debug_mode=False)
+        Debug(f"Loaded [{'-' * 100}] 100%  \n", debug_mode=False)
         return
     #Update percentaje
     percentage = percentageperPart * (part - 1)
     ppp = percentageperPart / n
-    
-    if i%(10 ** (len(str(n))-2)) == 0:
+    d = (len(str(n))-2)
+    if d < 0:
+        d=0
+
+    if i%(10**d) == 0:
         percentage += ppp * i
         p = int(percentage)
-        Debug(f"(p.{part}) [{'-' * p}{' ' * (100-p)}] {p}%    ""\r", debug_mode=False)
+        Debug(f"(p.{part:02}) [{'-' * (p-1)}{'/'}{' ' * (100-p)}] {p}%    ""\r", debug_mode=False)

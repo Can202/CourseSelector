@@ -40,12 +40,13 @@ def all_calendars(data, courses_id, courses_options):
     the_calendars = remove_calendars_with_conflict(the_calendars)
     debug_woconflict = len(the_calendars)
 
-    # Combine calendars with the same schedule (p.3)
-    the_calendars = combine_NRC_for_exact_schedule(the_calendars, the_calendars[0]["nrc_active"])
+    if debug_woconflict != 0:
+        # Combine calendars with the same schedule (p.3)
+        the_calendars = combine_NRC_for_exact_schedule(the_calendars, the_calendars[0]["nrc_active"])
 
-    # Add nrc alternatives to the calendars (p.4)
-    if the_calendars[0]["nrc_active"]:
-        the_calendars = check_NRC_alternatives(the_calendars, data, courses_id, courses_options)
+        # Add nrc alternatives to the calendars (p.4)
+        if the_calendars[0]["nrc_active"]:
+            the_calendars = check_NRC_alternatives(the_calendars, data, courses_id, courses_options)
 
     loadingAnimation(done=True)
 

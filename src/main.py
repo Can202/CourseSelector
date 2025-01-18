@@ -52,6 +52,9 @@ def start():
 
     # Doing the algorithm
     the_calendars = get_all_calendars(data)
+    if len(the_calendars) == 0:
+        print("There's not calendars without conflicts.")
+        return
     NRC_on = the_calendars[0]["nrc_active"]
 
     # Point system
