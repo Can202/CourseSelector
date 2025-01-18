@@ -140,6 +140,8 @@ def check_NRC_alternatives(the_calendars, data, courses_id, courses_options):
 
 
                     if not(nrc in the_calendars[index]["nrc"]):
+                        if name == the_calendars[index]["name"][updater]:
+                            name = ""
                         if name != "":
                             name += ": "
                         if the_calendars[index]["other_nrc"][updater] != "":
