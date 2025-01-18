@@ -78,7 +78,7 @@ def combine_NRC_for_exact_schedule(calendars, NRC_active):
         while j < n:
             if two_calendars_have_the_same_schedule(calendars[i], calendars[j]):
                 if NRC_active:
-                    calendars[i]["nrc"] = combine_NRCs(calendars[i]["nrc"], calendars[j]["nrc"])
+                    calendars[i]["nrc"] = combine_NRCs(calendars[i], calendars[j])
                 calendars = remove_by_index(calendars, j)
                 j-=1
                 n = len(calendars)
@@ -102,10 +102,15 @@ def two_courses_have_the_same_schedule(course1, course2):
         return True
     return False
 
-def combine_NRCs(nrc1, nrc2):
+def combine_NRCs(calendar1, calendar2):
+    nrc1 = calendar1["nrc"]
+    nrc2 = calendar2["nrc"]
     for i in range(len(nrc1)):
+        name = ""
+        if calendar2["name"][i] != calendar1["name"][i]:
+            name = calendar2["name"][i] + ": "
         if not (nrc2[i] in nrc1[i]):
-            nrc1[i] += ("/" + nrc2[i])
+            nrc1[i] += ("/" + name + nrc2[i])
     return nrc1
 
 def check_NRC_alternatives(the_calendars, data, courses_id, courses_options):
@@ -132,7 +137,7 @@ def check_NRC_alternatives(the_calendars, data, courses_id, courses_options):
                         name, a = get_customName_and_course_info(a)
 
 
-                    if not(nrc in the_calendars[index]["nrc"]):
+                    if not(nrc in the_calendars[index]["nrc"][updater]):
                         if name == the_calendars[index]["name"][updater]:
                             name = ""
                         if name != "":
