@@ -36,17 +36,14 @@ def all_calendars(data, courses_id, courses_options):
     # Create list of posible calendars (p.1)
     the_calendars = raw_list_of_all_calendars(data, courses_id, courses_options)
 
-    # Remove duplicates (p.2)
-    the_calendars = remove_duplicates_of_calendars(the_calendars)
-
-    # Remove calendars that have conflict (p.3)
+    # Remove calendars that have conflict (p.2)
     the_calendars = remove_calendars_with_conflict(the_calendars)
     debug_woconflict = len(the_calendars)
 
-    # Combine calendars with the same schedule (p.4)
+    # Combine calendars with the same schedule (p.3)
     the_calendars = combine_NRC_for_exact_schedule(the_calendars, the_calendars[0]["nrc_active"])
 
-    # Add nrc alternatives to the calendars (p.5)
+    # Add nrc alternatives to the calendars (p.4)
     if the_calendars[0]["nrc_active"]:
         the_calendars = check_NRC_alternatives(the_calendars, data, courses_id, courses_options)
 
@@ -66,23 +63,10 @@ def all_calendars(data, courses_id, courses_options):
     Debug(f"--- {(time.time() - start_time)} seconds ---", ignore_debug_statement=True)
     return the_calendars
 
-def remove_duplicates_of_calendars(calendars):
-    the_calendars = []
-    ln = len(calendars)
-    for i in range(ln):
-        loadingAnimation(part=2, i=i, n=ln)
-        add = True
-        for j in range(len(the_calendars)):
-            if calendars[i] == the_calendars[j]:
-                add = False
-        if add:
-            the_calendars.append(calendars[i])
-    return the_calendars
-
 def remove_calendars_with_conflict(calendars):
     the_calendars = []
     for i in range(len(calendars)):
-        loadingAnimation(part=3, i=i, n=len(calendars))
+        loadingAnimation(part=2, i=i, n=len(calendars))
         if not is_calendar_with_conflicts(calendars[i]):
             Debug(f"Check for conflicts for calendar {i}, but didn't found any")
             the_calendars.append(calendars[i])
@@ -96,7 +80,7 @@ def combine_NRC_for_exact_schedule(calendars, NRC_active):
     i = 0
     while i < n:
         j = i+1
-        loadingAnimation(part=4, i=i, n=n)
+        loadingAnimation(part=3, i=i, n=n)
         while j < n:
             if two_calendars_have_the_same_schedule(calendars[i], calendars[j]):
                 if NRC_active:
@@ -132,7 +116,7 @@ def combine_NRCs(nrc1, nrc2):
 
 def check_NRC_alternatives(the_calendars, data, courses_id, courses_options):
     for index in range(len(the_calendars)):
-        loadingAnimation(part=5, i=index, n=len(the_calendars))
+        loadingAnimation(part=4, i=index, n=len(the_calendars))
         for j in range(len(data)):
             for k in range(1,len(data[j])):
                 if data[j][k] == "":
