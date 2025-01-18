@@ -176,7 +176,6 @@ def raw_list_of_all_calendars(data, courses_id, courses_options):
         for j in range(len(courses_id)):
             id = courses_id[j]
             selection = combinations[j]
-            Debug(f"{id}: ---{data[id][0]}---")
 
             
             name = data[id][0]
@@ -197,10 +196,7 @@ def raw_list_of_all_calendars(data, courses_id, courses_options):
             new_calendar["name"].append(name)
             new_calendar["id"].append(data[id][0])
             new_calendar["calendar"].append(info)
-                
-            Debug(f"--- Done ---")
 
-        Debug("---NEXT---")
         list_of_calendars.append(new_calendar)
 
     for i in range(len(list_of_calendars)):
