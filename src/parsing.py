@@ -9,18 +9,15 @@ FRIDAY = 4
 SATURDAY = 5
 
 
-# Look between two courses and check if they have some conflict hour/day (in str).
-
+# Look between two sections and check if they have some conflict.
 def sections_conflict(*, section_schedule_1="", section_schedule_2=""):
     section_schedule_1_in_array = get_schedule_number_array(section_schedule_1)
     section_schedule_2_in_array = get_schedule_number_array(section_schedule_2)
     return sections_conflict_in_np_array(section_schedule_1_in_array, section_schedule_2_in_array)
 
 def parse_course_info(*,text =""):
-
     text_split_with_spaces = text.split(" ")
     text_split = [element for element in text_split_with_spaces if element]
-    
     dic = {}
 
     for i in range(len(text_split)):
@@ -44,7 +41,8 @@ def parse_course_info(*,text =""):
     dic["fail"] = False
     return dic
 
-def get_days_array(course_str):
+# Get an "schedule array"
+def get_schedule_array(course_str):
     array = [[""] * 6 for _ in range(9)]
     course_split = course_str.split(" ")
     course_info = []
@@ -64,7 +62,7 @@ def get_days_array(course_str):
 
     return array
 
-# just to mark as occupied, not containing information, this makes 1 and 0
+# Get an "schedule number array"
 def get_schedule_number_array(schedule):
     schedule_number_array = np.zeros((9, 6), dtype=int)  # 9 hours, 6 days
     for schedule_segment in schedule.split(" "):

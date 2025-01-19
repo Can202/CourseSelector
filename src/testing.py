@@ -14,8 +14,9 @@ print(algorithm.raw_list_of_all_calendars(data, courses_id, courses_options))
 
 
 print("----------")
-print(parsing.get_days_array("CLAS/L-W-V:2 AYU/M-J:4") == parsing.get_days_array("CLAS/L-W:2 CLAS/V:2 AYU/M-J:4"))
-print(parsing.get_days_array_np("CLAS/L-W:2 CLAS/V:2 AYU/M-J:4"))
+print(parsing.get_schedule_array("CLAS/L-W-V:2 AYU/M-J:4") == parsing.get_schedule_array("CLAS/L-W:2 CLAS/V:2 AYU/M-J:4"))
+print(parsing.get_schedule_number_array("CLAS/L-W:2 CLAS/V:2 AYU/M-J:4"))
+print(parsing.get_schedule_array("CLAS/L-W:2 CLAS/V:2 AYU/M-J:4"))
 
 
 

@@ -98,7 +98,7 @@ def two_courses_have_the_same_schedule(course1, course2):
     course2list = course2.split(" ")
     if sorted(course1list) == sorted(course2list):
         return True
-    if get_days_array(course1) == get_days_array(course2):
+    if get_schedule_array(course1) == get_schedule_array(course2):
         return True
     return False
 
