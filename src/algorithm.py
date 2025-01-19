@@ -126,7 +126,7 @@ def check_NRC_alternatives(the_calendars, data, courses_index, courses_options):
                     if data[j][0] == the_calendars[index]["courses_bundle_id"][i]:
                         updater = i
                         continue
-                    if courses_conflict(first_schedule_in_str=the_calendars[index]["sections_schedule"][i], second_schedule_in_str=only_info_course(data[j][k])):
+                    if sections_conflict(section_schedule_1=the_calendars[index]["sections_schedule"][i], section_schedule_2=only_info_course(data[j][k])):
                         add = False
                 if add:
                     nrc = ""
@@ -154,7 +154,7 @@ def is_calendar_with_conflicts(calendar):
     n = len(sections_schedule)
     for i in range(n):
         for j in range(i+1, n):
-            if courses_conflict(first_schedule_in_str=sections_schedule[i], second_schedule_in_str=sections_schedule[j]):
+            if sections_conflict(section_schedule_1=sections_schedule[i], section_schedule_2=sections_schedule[j]):
                 return True
     return False
 

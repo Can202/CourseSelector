@@ -11,10 +11,10 @@ SATURDAY = 5
 
 # Look between two courses and check if they have some conflict hour/day (in str).
 
-def courses_conflict(*, first_schedule_in_str="", second_schedule_in_str=""):
-    array1 = get_days_array_np(first_schedule_in_str)
-    array2 = get_days_array_np(second_schedule_in_str)
-    return arrays_have_conflicts_np(array1, array2)
+def sections_conflict(*, section_schedule_1="", section_schedule_2=""):
+    section_schedule_1_in_array = get_days_array_np(section_schedule_1)
+    section_schedule_2_in_array = get_days_array_np(section_schedule_2)
+    return sections_conflict_in_np_array(section_schedule_1_in_array, section_schedule_2_in_array)
 
 def parse_course_info(*,text =""):
 
@@ -79,7 +79,7 @@ def get_days_array_np(course_str):
                 array[hour, day] = 1  # Mark as occupied
     return array
 
-def arrays_have_conflicts_np(array1, array2):
+def sections_conflict_in_np_array(array1, array2):
     return np.any(array1 & array2)
 
 # Look between two courses and check if they have some conflict hour/day (in Dict format).
