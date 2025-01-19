@@ -9,22 +9,22 @@ from pointsys import *
 import shutil
 import automatic
 
-# ###
+# main function
 def main():
     while True:
         option_selected = menu1()
-        if option_selected == "0":
+        if option_selected == 0:
             break
-        if option_selected == "1":
+        if option_selected == 1:
             start()
-        if option_selected == "2":
+        if option_selected == 2:
             reset_default()
-        if option_selected == "3":
+        if option_selected == 3:
             configure()
-        if option_selected == "4":
+        if option_selected == 4:
             automatic.menu_automatic()
 
-# ###
+# Menu #1 display
 def menu1():
     print("What do you want to do?")
     print("[1] Read and analyze the data")
@@ -32,10 +32,11 @@ def menu1():
     print("[3] Configure")
     print("[4] Create csv file")
     print("[0] Exit")
-    return input("Select: ")
+    return input_integer(text="Select: ", min=0, max=4)
 
-# ###
+# Menu #2 display
 def menu2(NRC_on):
+    max = 5
     print("What do you want to do?")
     print("[1] Show all calendars")
     print("[2] Show best 3")
@@ -44,44 +45,45 @@ def menu2(NRC_on):
     print("[5] Show best n")
     if NRC_on:
         print("[6] Print NRC information of n calendar")
+        max = 6
     print("[0] Exit")
-    return input("Select: ")
+    return input_integer(text="Select: ", min=0, max=max)
 
 
 
-
-# ###
+# function that starts the analysis of the main data
 def start():
-    data = get_main_data()
+    main_data = get_main_data()
 
     # Doing the algorithm
-    the_calendars = get_all_calendars(data)
+    the_calendars = get_all_calendars(main_data)
+
     if len(the_calendars) == 0:
         print("There's not calendars without conflicts.")
         return
+    
     NRC_on = the_calendars[0]["nrc_active"]
 
     # Point system
     points = point_system(the_calendars)
-
     [points, [the_calendars]] = many_sorts_MAX(points, [the_calendars])
     
     while True:
         ans = menu2(NRC_on)
-        if ans == "0":
+        if ans == 0:
             break
-        if ans == "1":
+        if ans == 1:
             show_n_calendars(the_calendars, points)
-        if ans == "2":
+        if ans == 2:
             show_n_calendars(the_calendars, points,3)
-        if ans == "3":
+        if ans == 3:
             show_n_calendars(the_calendars, points,5)
-        if ans == "4":
+        if ans == 4:
             show_n_calendars(the_calendars, points,10)
-        if ans == "5":
-            n = int(input("How many? "))
+        if ans == 5:
+            n = input_integer(text="How many? ",min=1, max=len(the_calendars))
             show_n_calendars(the_calendars, points,n)
-        if ans == "6" and NRC_on:
+        if ans == 6 and NRC_on:
             create_NRC_list(the_calendars, points)
 
 # ###
