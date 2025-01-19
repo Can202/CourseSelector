@@ -91,7 +91,7 @@ def get_data():
     raw_data = csv_reader(path_file="data.csv")
     return plain_text_to_array(data=raw_data)
 
-# get "section_class_on_time" from a calendar in a specific day and hour.
+# Get "section_class_on_time" from a calendar in a specific day and hour.
 def get_section_class_on_time(*, calendar, day, hour):
     for i in range(len(calendar["sections_schedule"])):
         dic = parse_course_info(text=calendar["sections_schedule"][i])
