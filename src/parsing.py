@@ -12,8 +12,8 @@ SATURDAY = 5
 # Look between two courses and check if they have some conflict hour/day (in str).
 
 def sections_conflict(*, section_schedule_1="", section_schedule_2=""):
-    section_schedule_1_in_array = get_days_array_np(section_schedule_1)
-    section_schedule_2_in_array = get_days_array_np(section_schedule_2)
+    section_schedule_1_in_array = get_schedule_number_array(section_schedule_1)
+    section_schedule_2_in_array = get_schedule_number_array(section_schedule_2)
     return sections_conflict_in_np_array(section_schedule_1_in_array, section_schedule_2_in_array)
 
 def parse_course_info(*,text =""):
@@ -65,8 +65,8 @@ def get_days_array(course_str):
     return array
 
 # just to mark as occupied, not containing information, this makes 1 and 0
-def get_days_array_np(schedule):
-    array = np.zeros((9, 6), dtype=int)  # 9 hours, 6 days
+def get_schedule_number_array(schedule):
+    schedule_number_array = np.zeros((9, 6), dtype=int)  # 9 hours, 6 days
     for schedule_segment in schedule.split(" "):
         if not schedule_segment:
             continue
@@ -76,8 +76,8 @@ def get_days_array_np(schedule):
         hours_list = [int(hour) - 1 for hour in hours_dash.split("-")]
         for day_number in days_number_list:
             for hour in hours_list:
-                array[hour, day_number] = 1  # Mark as occupied
-    return array
+                schedule_number_array[hour, day_number] = 1  # Mark as occupied
+    return schedule_number_array
 
 def sections_conflict_in_np_array(array1, array2):
     return np.any(array1 & array2)

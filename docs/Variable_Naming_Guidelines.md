@@ -51,6 +51,10 @@ schedule_segment_type = "CLAS"
 ```
 schedule_segment_detail = "L-M:2-3"
 ```
+#### schedule_number_array
+```
+schedule_number_array = [[0,0,1,0,0,0],[0,1,1,1,0,0],[0,0,0,0,0,0], ....]
+```
 
 #### Days
 ```
