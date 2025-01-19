@@ -161,7 +161,7 @@ def is_calendar_with_conflicts(calendar):
 
 # Function that return all the posible calendar combinations, ignoring repetition, conflicts, etc. It is used in all_calendars, where the calendar list is cleaned with other functions
 def raw_list_of_all_calendars(data, courses_index, courses_options):
-    list_of_calendars = []
+    calendars = []
     n = variation(courses_options)
     nrc_active = True
 
@@ -195,12 +195,12 @@ def raw_list_of_all_calendars(data, courses_index, courses_options):
             new_calendar["courses_bundle_id"].append(data[id][0])
             new_calendar["sections_schedule"].append(info)
 
-        list_of_calendars.append(new_calendar)
+        calendars.append(new_calendar)
 
-    for i in range(len(list_of_calendars)):
-        list_of_calendars[i]["nrc_active"] = nrc_active
+    for i in range(len(calendars)):
+        calendars[i]["nrc_active"] = nrc_active
 
-    return list_of_calendars
+    return calendars
 
 # Function used to get combination of posible calendars with only one number identifier. It is used in the raw_list_of_all_calendars function.
 # For example, the identifier 55 makes the selection of courses [5,3,5,2,6,3]. So that means that the first course is going to be the section 5, and so on.
