@@ -61,7 +61,7 @@ def get_schedule_array(schedule):
         hours_list = detail_splitted[HOURS].split("-")
         days_number_list = []
         for j in range(len(days_list)):
-            days_number_list.append(get_day_from_Letter(days_list[j]))
+            days_number_list.append(get_day_number(days_list[j]))
         for j in range(len(days_number_list)):
             for k in range(len(hours_list)):
                 array[int(hours_list[k])-1][days_number_list[j]] = schedule_segment_list_splitted[i][TYPE]
@@ -75,7 +75,7 @@ def get_schedule_number_array(schedule):
             continue
         schedule_segment_type, schedule_segment_detail = schedule_segment.split("/")
         days_dash, hours_dash = schedule_segment_detail.split(":")
-        days_number_list = [get_day_from_Letter(day) for day in days_dash.split("-")]
+        days_number_list = [get_day_number(day) for day in days_dash.split("-")]
         hours_list = [int(hour) - 1 for hour in hours_dash.split("-")]
         for day_number in days_number_list:
             for hour in hours_list:
@@ -121,9 +121,9 @@ def what_is(day, hour, calendar):
                 return f"{dic[f'{j}_type']} {calendar['courses_id'][i]}"
     return ""
     
-# ### This prints the calendar in a readable way. 
+# This prints the calendar in a readable way.
 def calendar_show(calendar, PRINT = True):
-    len_between_columns = 19
+    len_between_columns = 17
     hour_options = 10
     day_options = 6
     start_hour_counter = 0
@@ -134,21 +134,21 @@ def calendar_show(calendar, PRINT = True):
         print()
     text += "\n"
     for hour in range(start_hour_counter, hour_options):
-        for day in range(start_day_counter, day_options):
-            if day == start_day_counter:
+        for day_number in range(start_day_counter, day_options):
+            if day_number == start_day_counter:
                 if PRINT:
                     print(f"{hour} ", end="")
                 text += f"{hour} "
             elif hour == start_hour_counter:
-                str_day = get_day(day)
+                day = get_day(day_number)
                 if PRINT:
-                    print(str_day.center(len_between_columns), end="")
-                text += str_day.center(len_between_columns)
+                    print(day.center(len_between_columns), end="")
+                text += day.center(len_between_columns)
             else:
-                str_class = what_is(get_day(day),hour,calendar)
+                section_class_on_time = what_is(get_day(day_number),hour,calendar)
                 if PRINT:
-                    print(str_class.center(len_between_columns), end="")
-                text += str_class.center(len_between_columns)
+                    print(section_class_on_time.center(len_between_columns), end="")
+                text += section_class_on_time.center(len_between_columns)
             if PRINT:
                 print("|", end="")
             text += "|"
@@ -158,24 +158,25 @@ def calendar_show(calendar, PRINT = True):
     if PRINT:
         print()
     text += "\n"
+    return text
 
-# ###
-def get_day(day):
-    if day==MONDAY:
+# Get day from day number
+def get_day(day_number):
+    if day_number==MONDAY:
         return 'L'
-    if day==TUESDAY:
+    if day_number==TUESDAY:
         return 'M'
-    if day==WEDNESDAY:
+    if day_number==WEDNESDAY:
         return 'W'
-    if day==THURSDAY:
+    if day_number==THURSDAY:
         return 'J'
-    if day==FRIDAY:
+    if day_number==FRIDAY:
         return 'V'
-    if day==SATURDAY:
+    if day_number==SATURDAY:
         return 'S'
 
-# ###
-def get_day_from_Letter(day):
+# Get day number from day
+def get_day_number(day):
     if day=='L':
         return MONDAY
     if day=='M':

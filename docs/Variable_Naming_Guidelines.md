@@ -18,6 +18,10 @@ course_bundle_id = "OPT"
 ```
 
 ### Sections
+#### section_id
+```
+section_id = "FIL2005"
+```
 #### section_nrc
 ```
 section_nrc = 14843
@@ -33,6 +37,10 @@ section_nrc_alternative_bundle = "14848/14868/14841"
 #### section_schedule
 ```
 section_schedule = "CLAS/L-M:2-3 AYU/W:2"
+```
+#### section_class_on_time
+```
+section_class_on_time = "CLAS FIL2005"
 ```
 
 ### Schedule
