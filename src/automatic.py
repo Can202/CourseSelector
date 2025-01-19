@@ -3,6 +3,7 @@
 import requests
 import func
 
+# ###
 def get_html_content_from_BuscaCursos(Semestre, Sigla, Campus):
     url = f"https://buscacursos.uc.cl/?cxml_semestre={Semestre}&cxml_sigla={Sigla}&cxml_nrc=&cxml_nombre=&cxml_categoria=TODOS&cxml_area_fg=TODOS&cxml_formato_cur=TODOS&cxml_profesor=&cxml_campus={Campus}&cxml_unidad_academica=TODOS&cxml_horario_tipo_busqueda=si_tenga&cxml_horario_tipo_busqueda_actividad=TODOS&cxml_periodo=TODOS&cxml_escuela=TODOS&cxml_nivel=TODOS#resultados"
     try:
@@ -14,6 +15,7 @@ def get_html_content_from_BuscaCursos(Semestre, Sigla, Campus):
         return "ERROR"
     return html_content
 
+# ###
 def create_csv_from_list(Semestre = "2025-1", courses_names=["MAT1630", "MAT1640", "OFG-FIL2005/VET161G"]):
     csv_content = ""
 
@@ -49,6 +51,7 @@ def create_csv_from_list(Semestre = "2025-1", courses_names=["MAT1630", "MAT1640
         
 
 
+# ###
 def get_data_from_html_content(html_content):
     data = {"nrc":[], "schedule":[]}
     total = html_content.count('<tr class="resultadosRowPar">') + html_content.count('<tr class="resultadosRowImpar">')
@@ -113,6 +116,7 @@ def get_data_from_html_content(html_content):
 
     return data
 
+# ###
 def legit_Schedule(Schedule):
     number = False
     days = False
@@ -124,16 +128,19 @@ def legit_Schedule(Schedule):
             days = True
     return (number and days)
 
+# ###
 def formatting_get_courses(*,Semestre="", Sigla="", Campus = "San+Joaqu%C3%ADn"):
     html_content = get_html_content_from_BuscaCursos(Semestre, Sigla, Campus)
     data = get_data_from_html_content(html_content)
     return data
 
+# ###
 def text_between_first_ocurrence_of(t1,t2, text):
     start_index = find_kth_occurrence(t1, text, 1)+len(t1)
     end_index = start_index + find_kth_occurrence(t2,text[start_index:],1)
     return start_index, end_index
 
+# ###
 def find_kth_occurrence(substring, string, k):
     count = 0
     position = -1
@@ -147,6 +154,7 @@ def find_kth_occurrence(substring, string, k):
 
     return position
 
+# ###
 def menu_automatic():
 
     if not func.check_website_connection("https://buscacursos.uc.cl"):

@@ -9,6 +9,7 @@ from pointsys import *
 import shutil
 import automatic
 
+# ###
 def main():
     while True:
         option_selected = menu1()
@@ -23,6 +24,7 @@ def main():
         if option_selected == "4":
             automatic.menu_automatic()
 
+# ###
 def menu1():
     print("What do you want to do?")
     print("[1] Read and analyze the data")
@@ -32,6 +34,7 @@ def menu1():
     print("[0] Exit")
     return input("Select: ")
 
+# ###
 def menu2(NRC_on):
     print("What do you want to do?")
     print("[1] Show all calendars")
@@ -47,6 +50,7 @@ def menu2(NRC_on):
 
 
 
+# ###
 def start():
     data = get_data()
 
@@ -80,6 +84,7 @@ def start():
         if ans == "6" and NRC_on:
             create_NRC_list(the_calendars, points)
 
+# ###
 def create_NRC_list(calendars, points):
     n = int(input("Number of the calendar: ")) - 1
     print(f"---Calendar {n+1}---")
@@ -96,6 +101,7 @@ def create_NRC_list(calendars, points):
         else:
             print(f"{calendars[n]['courses_id'][i]}: {(calendars[n]['sections_nrc_bundle'][i]).ljust(ln+2)}")
 
+# ###
 def show_n_calendars(calendars, points, n=0):
     ln = 0
     if len(calendars) < n:
@@ -110,6 +116,7 @@ def show_n_calendars(calendars, points, n=0):
         calendar_show(calendars[i])
 
 
+# ###
 def reset_default():
     code = "Pi is equal to 4. Change my mind."
     print(code)

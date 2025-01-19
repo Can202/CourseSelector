@@ -4,25 +4,30 @@ import requests
 DEBUG = False
 # Here will be functions to make some specific functionality
 
+# ###
 def save_file(*, path,text):
     file = open(path, "w", encoding="utf-8")
     file.write(text)
     file.close()
 
+# ###
 def csv_reader(*, path_file = ""):
     file = open(path_file, "r", encoding="utf-8")
     data = file.read()
     file.close()
     return data
 
+# ###
 def json_reader(*, path_file = ""):
     with open(path_file, 'r') as file:
         return json.load(file)
 
+# ###
 def json_writer(*, path_file = "", data):
     with open(path_file, 'w') as file:
         json.dump(data, file, indent=4)
 
+# ###
 def plain_text_to_array(*, data = ""):
     data_lines = data.split("\n")
     data_splitted = []
@@ -30,6 +35,7 @@ def plain_text_to_array(*, data = ""):
         data_splitted.append(data_lines[i].split(","))
     return data_splitted
 
+# ###
 def many_sorts(principal, others):
     n = len(principal)
     for i in range(n):
@@ -45,6 +51,7 @@ def many_sorts(principal, others):
     return [principal, others]
 
 
+# ###
 def many_sorts_MAX(principal, others):
     n = len(principal)
     for i in range(n):
@@ -59,12 +66,14 @@ def many_sorts_MAX(principal, others):
             break
     return [principal, others]
 
+# ###
 def variation(some_list):
     multiplication = 1
     for element in some_list:
         multiplication *= element
     return multiplication
 
+# ###
 def base_list(list, n):
     level = [0] * len(list)
     for i in range(len(list)):
@@ -73,11 +82,13 @@ def base_list(list, n):
         n = n // list[j]
     return level
 
+# ###
 def remove_by_index(lst, index):
     if -len(lst) <= index < len(lst):
         del lst[index]
     return lst
 
+# ###
 def base_n(list, alist):
     n = 0
     for i in range(len(list)):
@@ -87,6 +98,7 @@ def base_n(list, alist):
             n += variation(list[i+1:]) * (alist[i] - 1 )
     return n
 
+# ###
 def Debug(text, *, debug_mode = True,ignore_debug_statement=False):
     if debug_mode:
         if DEBUG or ignore_debug_statement:
@@ -96,6 +108,7 @@ def Debug(text, *, debug_mode = True,ignore_debug_statement=False):
             print(text, end="")
 
 
+# ###
 def loadingAnimation(*,part=1, i=0, n=100, done=False, maxPart = 4):
     percentageperPart = 100//maxPart
     if done:
@@ -113,6 +126,7 @@ def loadingAnimation(*,part=1, i=0, n=100, done=False, maxPart = 4):
         p = int(percentage)
         Debug(f"(p.{part:02}) [{'-' * (p-1)}{'/'}{' ' * (100-p)}] {p}%    ""\r", debug_mode=False)
 
+# ###
 def input_integer(*,text="",min=1, max=2):
     while True:
         try:
@@ -126,6 +140,7 @@ def input_integer(*,text="",min=1, max=2):
         except ValueError:
             print("Error: Please enter a valid integer.")
 
+# ###
 def input_days(text=""):
     valid_days = {"L", "M", "W", "J", "V", "S"}
     while True:
@@ -138,6 +153,7 @@ def input_days(text=""):
             print("Error: Please enter valid days using abbreviations (e.g., L M W J V S).")
 
 
+# ###
 def check_website_connection(url, timeout=5):
     try:
         response = requests.get(url, timeout=timeout)

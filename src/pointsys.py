@@ -1,5 +1,6 @@
 from parsing import *
 
+# ###
 def point_system(the_calendars):
     points = [100] * len(the_calendars)
 
@@ -29,6 +30,7 @@ def point_system(the_calendars):
 
     return points
 
+# ###
 def classes_in_between_hours(calendar, a, b, weight):
     points = 0
     for i in range(9):
@@ -43,6 +45,7 @@ def classes_in_between_hours(calendar, a, b, weight):
                 points -= pnt
     return points * weight
                 
+# ###
 def classes_in_days(calendar, days, weight):
     points = 0
     for i in range(9):
@@ -52,6 +55,7 @@ def classes_in_days(calendar, days, weight):
                 points -= 1
     return points * weight
 
+# ###
 def free_modules(calendar, fm_days, fm_min, fm_max, fm_next, free_module_weight):
     days = 0
     points = 0
@@ -74,6 +78,7 @@ def free_modules(calendar, fm_days, fm_min, fm_max, fm_next, free_module_weight)
             
     return points * free_module_weight
 
+# ###
 def fn_nrc_quantity(calendar, nrc_quantity,nrc_alternatives):
     ct_nrc_quantity = 0
     ct_nrc_alternatives = 0
@@ -84,6 +89,7 @@ def fn_nrc_quantity(calendar, nrc_quantity,nrc_alternatives):
     return ct_nrc_quantity*nrc_quantity + ct_nrc_alternatives*nrc_alternatives
 
 
+# ###
 def configure():
     print("There are 9 modules")
     print("1: from 08:20 to 09:30")
