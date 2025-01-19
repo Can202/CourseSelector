@@ -65,13 +65,13 @@ def get_days_array(course_str):
     return array
 
 # just to mark as occupied, not containing information, this makes 1 and 0
-def get_days_array_np(course_str):
+def get_days_array_np(schedule):
     array = np.zeros((9, 6), dtype=int)  # 9 hours, 6 days
-    for course in course_str.split(" "):
-        if not course:
+    for schedule_segment in schedule.split(" "):
+        if not schedule_segment:
             continue
-        course_type, schedule = course.split("/")
-        days, hours = schedule.split(":")
+        schedule_segment_type, schedule_segment_detail = schedule_segment.split("/")
+        days, hours = schedule_segment_detail.split(":")
         days = [get_day_from_Letter(day) for day in days.split("-")]
         hours = [int(hour) - 1 for hour in hours.split("-")]
         for day in days:

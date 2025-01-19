@@ -34,6 +34,32 @@ section_nrc_alternative_bundle = "14848/14868/14841"
 ```
 section_schedule = "CLAS/L-M:2-3 AYU/W:2"
 ```
+
+### Schedule
+```
+schedule = "CLAS/L-M:2-3 AYU/W:2"
+```
+#### schedule_segment
+```
+schedule_segment = "CLAS/L-M:2-3"
+```
+#### schedule_segment_type
+```
+schedule_segment_type = "CLAS"
+```
+#### schedule_segment_detail
+```
+schedule_segment_detail = "L-M:2-3"
+```
+#### schedule_segment_days
+```
+schedule_segment_days = "L-M"
+```
+#### schedule_segment_hours
+```
+schedule_segment_hours = "2-3"
+```
+
 ### Calendars
 #### calendar
 ```
