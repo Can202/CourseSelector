@@ -86,10 +86,10 @@ def get_schedule_number_array(schedule):
 def schedule_number_array_conflict(array1, array2):
     return np.any(array1 & array2)
 
-# ###
-def get_data():
-    raw_data = csv_reader(path_file="data.csv")
-    return plain_text_to_array(data=raw_data)
+# Get main_data
+def get_main_data():
+    raw_main_data = csv_reader(path_file="data.csv")
+    return get_data_from_raw_data(raw_data=raw_main_data)
 
 # Get "section_class_on_time" from a calendar in a specific day and hour.
 def get_section_class_on_time(*, calendar, day, hour):

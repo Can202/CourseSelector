@@ -117,6 +117,11 @@ calendar = {
 }
 ```
 
+### Data
+#### data: array of a file
+#### raw_data: data of a file in str
+#### main_data and raw_main_data: the file is data.csv
+
 
 # Notes
 if a function has the comment ###, that means that it hasn't been check yet for VNG following

@@ -22,3 +22,6 @@ print(parsing.get_schedule_array("CLAS/L-W:2 CLAS/V:2 AYU/M-J:4"))
 
 # Automatic.py
 print("FIS0152",automatic.formatting_get_courses(Semestre="2025-1",Sigla="FIS0152"))
+
+print("AAA")
+print(parsing.get_data())

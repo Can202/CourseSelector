@@ -28,12 +28,12 @@ def json_writer(*, path_file = "", data):
         json.dump(data, file, indent=4)
 
 # ###
-def plain_text_to_array(*, data = ""):
-    data_lines = data.split("\n")
-    data_splitted = []
-    for i in range(len(data_lines)):
-        data_splitted.append(data_lines[i].split(","))
-    return data_splitted
+def get_data_from_raw_data(*, raw_data = ""):
+    raw_data_lines = raw_data.split("\n")
+    data = []
+    for i in range(len(raw_data_lines)):
+        data.append(raw_data_lines[i].split(","))
+    return data
 
 # ###
 def many_sorts(principal, others):

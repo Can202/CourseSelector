@@ -52,7 +52,7 @@ def menu2(NRC_on):
 
 # ###
 def start():
-    data = get_data()
+    data = get_main_data()
 
     # Doing the algorithm
     the_calendars = get_all_calendars(data)
