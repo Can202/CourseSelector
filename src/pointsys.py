@@ -98,9 +98,13 @@ def configure():
     print("9: from 20:10 to 21:20")
     start_time = input_integer(text="on what module you want to start? ", min=1, max=9)
     end_time = input_integer(text="on what module you want to end? ", min=start_time, max=9)
+
+    hours_weight = input_integer(text="How much weight do you want to be considered on the hours of your classes? ", min=0, max=10)
     
     print("Write the days that you would want to go to class (e.g. L M W J V S)")
     days = input_days("days: ")
+    
+    days_weight = input_integer(text="How much weight do you want to be considered on the days of your classes? ", min=0, max=10)
     
 
     print("Do you want free modules in between?")
@@ -108,6 +112,8 @@ def configure():
     fm_min = input_integer(text="Minimum free modules: ", min=0, max=9)
     fm_max = input_integer(text="Maximum free modules: ", min=fm_min, max=9)
     fm_next = input("next to: ")
+    fm_weight = input_integer(text="How much weight do you want to be considered on the free modules of your schedule? ", min=0, max=10)
+
 
     nrc_quantity = input_integer(text="How much weight do you want to be considered on the quantity of nrc? ", min=0, max=10)
     nrc_alternatives = input_integer(text="How much weight do you want to be considered on the quantity of nrc alternatives? ", min=0, max=10)
@@ -116,14 +122,14 @@ def configure():
         "start_time": start_time,
         "end_time": end_time,
         "days": days,
-        "weight_in_preferred_hours":4,
-        "weight_in_preferred_days":6,
+        "weight_in_preferred_hours":hours_weight,
+        "weight_in_preferred_days":days_weight,
         "free_module": {
             "quantity_days": fm_days,
             "min_hours":fm_min,
             "max_hours":fm_max,
             "next_to": fm_next,
-            "weight":2
+            "weight":fm_weight
         },
         "nrc":{
             "nrc_quantity_weight": nrc_quantity,
