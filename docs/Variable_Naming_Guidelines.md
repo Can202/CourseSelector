@@ -51,13 +51,23 @@ schedule_segment_type = "CLAS"
 ```
 schedule_segment_detail = "L-M:2-3"
 ```
-#### schedule_segment_days
+
+#### Days
 ```
-schedule_segment_days = "L-M"
+day = "L"
+days = "L M W J V S"
+days_dash = "L-M-W-J-V-S"
+days_list = ["L", "M", "W", "J", "V", "S"]
+
+day_number = 0 # Monday
+days_number_list = [0, 1, 2, 3, 4, 5]
 ```
-#### schedule_segment_hours
+#### Hours
 ```
-schedule_segment_hours = "2-3"
+hour = 1
+hours = "1 2 3 4 5 6 7 8 9"
+hours_dash = "1-2"
+hours_list = [1, 2]
 ```
 
 ### Calendars

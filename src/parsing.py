@@ -71,12 +71,12 @@ def get_days_array_np(schedule):
         if not schedule_segment:
             continue
         schedule_segment_type, schedule_segment_detail = schedule_segment.split("/")
-        days, hours = schedule_segment_detail.split(":")
-        days = [get_day_from_Letter(day) for day in days.split("-")]
-        hours = [int(hour) - 1 for hour in hours.split("-")]
-        for day in days:
-            for hour in hours:
-                array[hour, day] = 1  # Mark as occupied
+        days_dash, hours_dash = schedule_segment_detail.split(":")
+        days_number_list = [get_day_from_Letter(day) for day in days_dash.split("-")]
+        hours_list = [int(hour) - 1 for hour in hours_dash.split("-")]
+        for day_number in days_number_list:
+            for hour in hours_list:
+                array[hour, day_number] = 1  # Mark as occupied
     return array
 
 def sections_conflict_in_np_array(array1, array2):
