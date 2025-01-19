@@ -1,4 +1,4 @@
-# Variable Naming Guidelines
+# Variable Naming Guidelines (VNG)
 
 We have calendars, courses and sections.
 
