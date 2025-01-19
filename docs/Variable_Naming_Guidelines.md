@@ -38,6 +38,22 @@ section_nrc_alternative_bundle = "14848/14868/14841"
 ```
 section_schedule = "CLAS/L-M:2-3 AYU/W:2"
 ```
+#### section_schedule_dict: Saves in a dict the schedule information
+```
+section_schedule_dict = {
+    '0_type': 'CLAS',
+    '0_days': ['L', 'W'],
+    '0_hours': ['2'],
+    '1_type': 'CLAS',
+    '1_days': ['V'],
+    '1_hours': ['2'],
+    '2_type': 'AYU',
+    '2_days': ['M', 'J'],
+    '2_hours': ['4'],
+    'len': 3,
+    'fail': False
+}
+```
 #### section_class_on_time
 ```
 section_class_on_time = "CLAS FIL2005"

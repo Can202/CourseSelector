@@ -16,8 +16,8 @@ def sections_conflict(*, section_schedule_1="", section_schedule_2=""):
     return schedule_number_array_conflict(section_schedule_1_in_array, section_schedule_2_in_array)
 
 # ###
-def parse_course_info(*,text =""):
-    text_split_with_spaces = text.split(" ")
+def get_section_schedule_dict(*,section_schedule =""):
+    text_split_with_spaces = section_schedule.split(" ")
     text_split = [element for element in text_split_with_spaces if element]
     dic = {}
 
@@ -94,10 +94,10 @@ def get_main_data():
 # Get "section_class_on_time" from a calendar in a specific day and hour.
 def get_section_class_on_time(*, calendar, day, hour):
     for i in range(len(calendar["sections_schedule"])):
-        dic = parse_course_info(text=calendar["sections_schedule"][i])
-        for j in range(dic["len"]):
-            if (day in dic[f"{j}_days"]) and (str(hour) in dic[f"{j}_hours"]):
-                return f"{dic[f'{j}_type']} {calendar['courses_id'][i]}"
+        section_schedule_dict = get_section_schedule_dict(section_schedule=calendar["sections_schedule"][i])
+        for j in range(section_schedule_dict["len"]):
+            if (day in section_schedule_dict[f"{j}_days"]) and (str(hour) in section_schedule_dict[f"{j}_hours"]):
+                return f"{section_schedule_dict[f'{j}_type']} {calendar['courses_id'][i]}"
     return ""
     
 # This prints the calendar in a readable way.

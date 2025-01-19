@@ -24,4 +24,7 @@ print(parsing.get_schedule_array("CLAS/L-W:2 CLAS/V:2 AYU/M-J:4"))
 print("FIS0152",automatic.formatting_get_courses(Semestre="2025-1",Sigla="FIS0152"))
 
 print("AAA")
-print(parsing.get_data())
+print("AAA")
+print("AAA")
+print("AAA")
+print(parsing.get_section_schedule_dict(section_schedule="CLAS/L-W:2 CLAS/V:2 AYU/M-J:4"))
