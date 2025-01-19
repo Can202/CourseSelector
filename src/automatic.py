@@ -148,6 +148,12 @@ def find_kth_occurrence(substring, string, k):
     return position
 
 def menu_automatic():
+
+    if not func.check_website_connection("https://buscacursos.uc.cl"):
+        print("No connection to BuscaCursos.")
+        print("Check your connection to the internet or check if the BuscaCursos web is working")
+        return -1
+
     print("----- EXAMPLE -----")
     print("Semester: 2025-1")
     print("Courses to look: MAT1630 MAT1640 FIS0152 FIS1523 OPT-FIL2005/VET161G IMT1001")

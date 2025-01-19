@@ -1,6 +1,6 @@
 
 import json
-
+import requests
 DEBUG = False
 # Here will be functions to make some specific functionality
 
@@ -112,3 +112,16 @@ def loadingAnimation(*,part=1, i=0, n=100, done=False, maxPart = 4):
         percentage += ppp * i
         p = int(percentage)
         Debug(f"(p.{part:02}) [{'-' * (p-1)}{'/'}{' ' * (100-p)}] {p}%    ""\r", debug_mode=False)
+
+
+
+def check_website_connection(url, timeout=5):
+    try:
+        response = requests.get(url, timeout=timeout)
+        # Check if the response code indicates success (200-299)
+        if 200 <= response.status_code < 300:
+            return True
+        else:
+            return False
+    except requests.RequestException as e:
+        return False
