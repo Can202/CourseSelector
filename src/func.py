@@ -113,6 +113,29 @@ def loadingAnimation(*,part=1, i=0, n=100, done=False, maxPart = 4):
         p = int(percentage)
         Debug(f"(p.{part:02}) [{'-' * (p-1)}{'/'}{' ' * (100-p)}] {p}%    ""\r", debug_mode=False)
 
+def input_integer(*,text="",min=1, max=2):
+    while True:
+        try:
+            user_input = input(text).strip()
+            number = int(user_input)
+            
+            if min <= number <= max:
+                return number
+            else:
+                print(f"Error: Enter a number between {min} and {max}.")
+        except ValueError:
+            print("Error: Please enter a valid integer.")
+
+def input_days(text=""):
+    valid_days = {"L", "M", "W", "J", "V", "S"}
+    while True:
+        user_input = input(text).upper().strip()
+        days = user_input.split()
+        
+        if all(day in valid_days for day in days):
+            return days
+        else:
+            print("Error: Please enter valid days using abbreviations (e.g., L M W J V S).")
 
 
 def check_website_connection(url, timeout=5):

@@ -96,25 +96,21 @@ def configure():
     print("7: from 17:30 to 18:40")
     print("8: from 18:50 to 20:00")
     print("9: from 20:10 to 21:20")
-    start_time = int(input("on what module you want to start? "))
-    end_time = int(input("on what module you want to end? "))
+    start_time = input_integer(text="on what module you want to start? ", min=1, max=9)
+    end_time = input_integer(text="on what module you want to end? ", min=start_time, max=9)
     
-    print("Write the days that you would want to go to class (ex. L M W J V S).")
-    days = input("days: ").upper()
+    print("Write the days that you would want to go to class (e.g. L M W J V S)")
+    days = input_days("days: ")
+    
 
     print("Do you want free modules in between?")
-    fm_days = int(input("How many days? "))
-    fm_min = int(input("Minimum free modules: "))
-    fm_max = int(input("Maximum free modules: "))
+    fm_days = input_integer(text="How many days? ", min=0, max=6)
+    fm_min = input_integer(text="Minimum free modules: ", min=0, max=9)
+    fm_max = input_integer(text="Maximum free modules: ", min=fm_min, max=9)
     fm_next = input("next to: ")
 
-    nrc_quantity = 0
-    if input("Do you want to consider nrc quantity to the point system (y/n)?").lower() == "y":
-        nrc_quantity = 1
-
-    nrc_alternatives = 0
-    if input("Do you want to consider nrc alternatives to the point system (y/n)?").lower() == "y":
-        nrc_alternatives = 1
+    nrc_quantity = input_integer(text="How much weight do you want to be considered on the quantity of nrc? ", min=0, max=10)
+    nrc_alternatives = input_integer(text="How much weight do you want to be considered on the quantity of nrc alternatives? ", min=0, max=10)
 
     data = {
         "start_time": start_time,
