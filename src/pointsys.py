@@ -35,7 +35,7 @@ def classes_in_between_hours(calendar, a, b, weight):
     points = 0
     for i in range(9):
         for j in range(6):
-            s = what_is(get_day(j),i,calendar)
+            s = get_section_class_on_time(get_day(j),i,calendar)
             if s != "" and not((a <= i) and (i <= b)):
                 pnt = 0
                 if (a <= i): 
@@ -50,7 +50,7 @@ def classes_in_days(calendar, days, weight):
     points = 0
     for i in range(9):
         for j in range(6):
-            s = what_is(get_day(j),i,calendar)
+            s = get_section_class_on_time(get_day(j),i,calendar)
             if s != "" and not(get_day(j) in days):
                 points -= 1
     return points * weight
@@ -64,7 +64,7 @@ def free_modules(calendar, fm_days, fm_min, fm_max, fm_next, free_module_weight)
         this_day = False
         for k in range(9):
             i = k+1
-            if what_is(get_day(j),i,calendar) == "":
+            if get_section_class_on_time(get_day(j),i,calendar) == "":
                 len += 1
                 this_day = True
             else:
