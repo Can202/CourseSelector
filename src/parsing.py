@@ -9,12 +9,13 @@ FRIDAY = 4
 SATURDAY = 5
 
 
-# Look between two sections and check if they have some conflict.
+# Look between two "section"s and check if they have some conflict.
 def sections_conflict(*, section_schedule_1="", section_schedule_2=""):
     section_schedule_1_in_array = get_schedule_number_array(section_schedule_1)
     section_schedule_2_in_array = get_schedule_number_array(section_schedule_2)
-    return sections_conflict_in_np_array(section_schedule_1_in_array, section_schedule_2_in_array)
+    return schedule_number_array_conflict(section_schedule_1_in_array, section_schedule_2_in_array)
 
+# ###
 def parse_course_info(*,text =""):
     text_split_with_spaces = text.split(" ")
     text_split = [element for element in text_split_with_spaces if element]
@@ -42,24 +43,28 @@ def parse_course_info(*,text =""):
     return dic
 
 # Get an "schedule array"
-def get_schedule_array(course_str):
+def get_schedule_array(schedule):
+
     array = [[""] * 6 for _ in range(9)]
-    course_split = course_str.split(" ")
-    course_info = []
-    for i in range(len(course_split)):
-        course_info.append(course_split[i].split("/"))
+    schedule_segment = schedule.split(" ")
+    schedule_segment_list_splitted = []
+    DETAIL = 1
+    TYPE = 0
+    DAYS = 0
+    HOURS = 1
+    for i in range(len(schedule_segment)):
+        schedule_segment_list_splitted.append(schedule_segment[i].split("/"))
 
-    for i in range(len(course_info)):
-        info = (course_info[i][1]).split(":")
-        days_not = info[0].split("-")
-        hour = info[1].split("-")
-        days = []
-        for j in range(len(days_not)):
-            days.append(get_day_from_Letter(days_not[j]))
-        for j in range(len(days)):
-            for k in range(len(hour)):
-                array[int(hour[k])-1][days[j]] = course_info[i][0]
-
+    for i in range(len(schedule_segment_list_splitted)):
+        detail_splitted = (schedule_segment_list_splitted[i][DETAIL]).split(":")
+        days_list = detail_splitted[DAYS].split("-")
+        hours_list = detail_splitted[HOURS].split("-")
+        days_number_list = []
+        for j in range(len(days_list)):
+            days_number_list.append(get_day_from_Letter(days_list[j]))
+        for j in range(len(days_number_list)):
+            for k in range(len(hours_list)):
+                array[int(hours_list[k])-1][days_number_list[j]] = schedule_segment_list_splitted[i][TYPE]
     return array
 
 # Get an "schedule number array"
@@ -77,10 +82,11 @@ def get_schedule_number_array(schedule):
                 schedule_number_array[hour, day_number] = 1  # Mark as occupied
     return schedule_number_array
 
-def sections_conflict_in_np_array(array1, array2):
+# Look between "schedule number array"s of two sections and check if they have some conflict.
+def schedule_number_array_conflict(array1, array2):
     return np.any(array1 & array2)
 
-# Look between two courses and check if they have some conflict hour/day (in Dict format).
+# ### Look between two courses and check if they have some conflict hour/day (in Dict format). 
 def dict_courses_conflict(*, dict1, dict2):
 
     conflict_in_days, conflict_in_hours = False, False
@@ -94,18 +100,19 @@ def dict_courses_conflict(*, dict1, dict2):
                 return True
     return False
 
-# Check if two lists of the dict have something in common.
+# ### Check if two lists of the dict have something in common. 
 def dicts_have_same(dict1_list, dict2_list):
     for i in range(len(dict1_list)):
         if dict1_list[i] in ''.join(map(str, dict2_list)):
             return True
     return False
 
+# ###
 def get_data():
     raw_data = csv_reader(path_file="data.csv")
     return plain_text_to_array(data=raw_data)
 
-# from a calendar in a specific day and hour, get the class.
+# ### from a calendar in a specific day and hour, get the class. 
 def what_is(day, hour, calendar):
     for i in range(len(calendar["sections_schedule"])):
         dic = parse_course_info(text=calendar["sections_schedule"][i])
@@ -114,7 +121,7 @@ def what_is(day, hour, calendar):
                 return f"{dic[f'{j}_type']} {calendar['courses_id'][i]}"
     return ""
     
-# This prints the calendar in a readable way.
+# ### This prints the calendar in a readable way. 
 def calendar_show(calendar, PRINT = True):
     len_between_columns = 19
     hour_options = 10
@@ -152,6 +159,7 @@ def calendar_show(calendar, PRINT = True):
         print()
     text += "\n"
 
+# ###
 def get_day(day):
     if day==MONDAY:
         return 'L'
@@ -165,7 +173,8 @@ def get_day(day):
         return 'V'
     if day==SATURDAY:
         return 'S'
-    
+
+# ###
 def get_day_from_Letter(day):
     if day=='L':
         return MONDAY

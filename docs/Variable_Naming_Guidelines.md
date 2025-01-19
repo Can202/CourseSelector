@@ -108,3 +108,7 @@ calendar = {
     "courses_bundle_id": ["MAT1630", "OPT"]
 }
 ```
+
+
+# Notes
+if a function has the comment ###, that means that it hasn't been check yet for VNG following
