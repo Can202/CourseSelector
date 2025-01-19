@@ -150,11 +150,11 @@ def check_NRC_alternatives(the_calendars, data, courses_index, courses_options):
 
 # Function that check if a calendar has conflicts. It is used in all_calendars function to remove the ones with conflicts.
 def is_calendar_with_conflicts(calendar):
-    courses = sorted(calendar["sections_schedule"], key=len, reverse=True)
-    n = len(courses)
+    sections_schedule = sorted(calendar["sections_schedule"], key=len, reverse=True)
+    n = len(sections_schedule)
     for i in range(n):
         for j in range(i+1, n):
-            if courses_conflict(first_schedule_in_str=courses[i], second_schedule_in_str=courses[j]):
+            if courses_conflict(first_schedule_in_str=sections_schedule[i], second_schedule_in_str=sections_schedule[j]):
                 return True
     return False
 
