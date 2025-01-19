@@ -109,11 +109,11 @@ def get_data():
 
 # from a calendar in a specific day and hour, get the class.
 def what_is(day, hour, calendar):
-    for i in range(len(calendar["calendar"])):
-        dic = parse_course_info(text=calendar["calendar"][i])
+    for i in range(len(calendar["sections_schedule"])):
+        dic = parse_course_info(text=calendar["sections_schedule"][i])
         for j in range(dic["len"]):
             if (day in dic[f"{j}_days"]) and (str(hour) in dic[f"{j}_hours"]):
-                return f"{dic[f'{j}_type']} {calendar['name'][i]}"
+                return f"{dic[f'{j}_type']} {calendar['courses_id'][i]}"
     return ""
     
 # This prints the calendar in a readable way.

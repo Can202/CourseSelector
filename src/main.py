@@ -87,14 +87,14 @@ def create_NRC_list(calendars, points):
     print(f"score: {points[n]}")
     print("NRCs:")
     ln = 0
-    for i in range(len(calendars[n]["name"])):
-        if ln < len(calendars[n]['nrc'][i]):
-            ln = len(calendars[n]['nrc'][i])
-    for i in range(len(calendars[n]["name"])):
-        if calendars[n]['other_nrc'][i] != "":
-            print(f"{calendars[n]['name'][i]}: {(calendars[n]['nrc'][i]).ljust(ln+2)} ({calendars[n]['other_nrc'][i]})")
+    for i in range(len(calendars[n]["courses_id"])):
+        if ln < len(calendars[n]['sections_nrc_bundle'][i]):
+            ln = len(calendars[n]['sections_nrc_bundle'][i])
+    for i in range(len(calendars[n]["courses_id"])):
+        if calendars[n]['sections_nrc_alternative_bundle'][i] != "":
+            print(f"{calendars[n]['courses_id'][i]}: {(calendars[n]['sections_nrc_bundle'][i]).ljust(ln+2)} ({calendars[n]['sections_nrc_alternative_bundle'][i]})")
         else:
-            print(f"{calendars[n]['name'][i]}: {(calendars[n]['nrc'][i]).ljust(ln+2)}")
+            print(f"{calendars[n]['courses_id'][i]}: {(calendars[n]['sections_nrc_bundle'][i]).ljust(ln+2)}")
 
 def show_n_calendars(calendars, points, n=0):
     ln = 0

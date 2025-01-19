@@ -77,9 +77,9 @@ def free_modules(calendar, fm_days, fm_min, fm_max, fm_next, free_module_weight)
 def fn_nrc_quantity(calendar, nrc_quantity,nrc_alternatives):
     ct_nrc_quantity = 0
     ct_nrc_alternatives = 0
-    for i in range(len(calendar["nrc"])):
-        ct_nrc_quantity += 2 * (calendar["nrc"][i].count("/"))
-        ct_nrc_alternatives += calendar["other_nrc"][i].count("/")
+    for i in range(len(calendar["sections_nrc_bundle"])):
+        ct_nrc_quantity += 2 * (calendar["sections_nrc_bundle"][i].count("/"))
+        ct_nrc_alternatives += calendar["sections_nrc_alternative_bundle"][i].count("/")
     
     return ct_nrc_quantity*nrc_quantity + ct_nrc_alternatives*nrc_alternatives
 

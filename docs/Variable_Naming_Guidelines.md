@@ -30,12 +30,16 @@ section_nrc_bundle = "14843/14863"
 ```
 section_nrc_alternative_bundle = "14848/14868/14841"
 ```
-
+#### section_schedule
+```
+section_schedule = "CLAS/L-M:2-3 AYU/W:2"
+```
 ### Calendars
 #### calendar
 ```
 calendar = {
     "courses_id": ["MAT1630", "FIL2005"],
+    "sections_schedule": ["CLAS/L-M:2-3 AYU/W:2", "CLAS/W:1"],
     "sections_nrc_bundle": ["14843/14863", "28764"],
     "sections_nrc_alternative_bundle": ["14848/14868/14841", ""],
     "nrc_active": True,

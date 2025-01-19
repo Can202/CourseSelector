@@ -16,25 +16,25 @@ def get_all_calendars(data):
         data = remove_by_index(data, -1)
     
     courses_quantity = len(data)
-    courses_id = []
+    courses_index = []
     courses_options = []
     for i in range(courses_quantity):
         courses_options.append(count_options(data[i]))
-        courses_id.append(i)
-    courses_quantity, [courses_id] = many_sorts(courses_options, [courses_id])
+        courses_index.append(i)
+    courses_quantity, [courses_index] = many_sorts(courses_options, [courses_index])
 
-    the_calendars = all_calendars(data, courses_id, courses_options)
+    the_calendars = all_calendars(data, courses_index, courses_options)
     return the_calendars
 
 
 # Function that returns the calendars without conflicts
-def all_calendars(data, courses_id, courses_options):
+def all_calendars(data, courses_index, courses_options):
     start_time = time.time()
 
     debug_total = variation(courses_options)
 
     # Create list of posible calendars (p.1)
-    the_calendars = raw_list_of_all_calendars(data, courses_id, courses_options)
+    the_calendars = raw_list_of_all_calendars(data, courses_index, courses_options)
 
     # Remove calendars that have conflict (p.2)
     the_calendars = remove_calendars_with_conflict(the_calendars)
@@ -46,7 +46,7 @@ def all_calendars(data, courses_id, courses_options):
 
         # Add nrc alternatives to the calendars (p.4)
         if the_calendars[0]["nrc_active"]:
-            the_calendars = check_NRC_alternatives(the_calendars, data, courses_id, courses_options)
+            the_calendars = check_NRC_alternatives(the_calendars, data, courses_index, courses_options)
 
     loadingAnimation(done=True)
 
@@ -78,7 +78,7 @@ def combine_NRC_for_exact_schedule(calendars, NRC_active):
         while j < n:
             if two_calendars_have_the_same_schedule(calendars[i], calendars[j]):
                 if NRC_active:
-                    calendars[i]["nrc"] = combine_NRCs(calendars[i], calendars[j])
+                    calendars[i]["sections_nrc_bundle"] = combine_NRCs(calendars[i], calendars[j])
                 calendars = remove_by_index(calendars, j)
                 j-=1
                 n = len(calendars)
@@ -87,8 +87,8 @@ def combine_NRC_for_exact_schedule(calendars, NRC_active):
     return calendars
 
 def two_calendars_have_the_same_schedule(calendar1, calendar2):
-    for i in range(len(calendar1["calendar"])):
-        if not two_courses_have_the_same_schedule(calendar1["calendar"][i], calendar2["calendar"][i]):
+    for i in range(len(calendar1["sections_schedule"])):
+        if not two_courses_have_the_same_schedule(calendar1["sections_schedule"][i], calendar2["sections_schedule"][i]):
             return False
     return True
 def two_courses_have_the_same_schedule(course1, course2):
@@ -103,17 +103,17 @@ def two_courses_have_the_same_schedule(course1, course2):
     return False
 
 def combine_NRCs(calendar1, calendar2):
-    nrc1 = calendar1["nrc"]
-    nrc2 = calendar2["nrc"]
+    nrc1 = calendar1["sections_nrc_bundle"]
+    nrc2 = calendar2["sections_nrc_bundle"]
     for i in range(len(nrc1)):
         name = ""
-        if calendar2["name"][i] != calendar1["name"][i]:
-            name = calendar2["name"][i] + ": "
+        if calendar2["courses_id"][i] != calendar1["courses_id"][i]:
+            name = calendar2["courses_id"][i] + ": "
         if not (nrc2[i] in nrc1[i]):
             nrc1[i] += ("/" + name + nrc2[i])
     return nrc1
 
-def check_NRC_alternatives(the_calendars, data, courses_id, courses_options):
+def check_NRC_alternatives(the_calendars, data, courses_index, courses_options):
     for index in range(len(the_calendars)):
         loadingAnimation(part=4, i=index, n=len(the_calendars))
         for j in range(len(data)):
@@ -122,11 +122,11 @@ def check_NRC_alternatives(the_calendars, data, courses_id, courses_options):
                     continue
                 add = True
                 updater = 0
-                for i in range(len(the_calendars[index]["calendar"])):
-                    if data[j][0] == the_calendars[index]["id"][i]:
+                for i in range(len(the_calendars[index]["sections_schedule"])):
+                    if data[j][0] == the_calendars[index]["courses_bundle_id"][i]:
                         updater = i
                         continue
-                    if courses_conflict(first_schedule_in_str=the_calendars[index]["calendar"][i], second_schedule_in_str=only_info_course(data[j][k])):
+                    if courses_conflict(first_schedule_in_str=the_calendars[index]["sections_schedule"][i], second_schedule_in_str=only_info_course(data[j][k])):
                         add = False
                 if add:
                     nrc = ""
@@ -137,20 +137,20 @@ def check_NRC_alternatives(the_calendars, data, courses_id, courses_options):
                         name, a = get_customName_and_course_info(a)
 
 
-                    if not(nrc in the_calendars[index]["nrc"][updater]):
-                        if name == the_calendars[index]["name"][updater]:
+                    if not(nrc in the_calendars[index]["sections_nrc_bundle"][updater]):
+                        if name == the_calendars[index]["courses_id"][updater]:
                             name = ""
                         if name != "":
                             name += ": "
-                        if the_calendars[index]["other_nrc"][updater] != "":
-                            the_calendars[index]["other_nrc"][updater] += "/" + name + nrc
+                        if the_calendars[index]["sections_nrc_alternative_bundle"][updater] != "":
+                            the_calendars[index]["sections_nrc_alternative_bundle"][updater] += "/" + name + nrc
                         else:
-                            the_calendars[index]["other_nrc"][updater] += name + nrc
+                            the_calendars[index]["sections_nrc_alternative_bundle"][updater] += name + nrc
     return the_calendars
 
 # Function that check if a calendar has conflicts. It is used in all_calendars function to remove the ones with conflicts.
 def is_calendar_with_conflicts(calendar):
-    courses = sorted(calendar["calendar"], key=len, reverse=True)
+    courses = sorted(calendar["sections_schedule"], key=len, reverse=True)
     n = len(courses)
     for i in range(n):
         for j in range(i+1, n):
@@ -160,19 +160,19 @@ def is_calendar_with_conflicts(calendar):
 
 
 # Function that return all the posible calendar combinations, ignoring repetition, conflicts, etc. It is used in all_calendars, where the calendar list is cleaned with other functions
-def raw_list_of_all_calendars(data, courses_id, courses_options):
+def raw_list_of_all_calendars(data, courses_index, courses_options):
     list_of_calendars = []
     n = variation(courses_options)
     nrc_active = True
 
     for i in range(n):
         loadingAnimation(part=1, i=i, n=n)
-        new_calendar = {"calendar":[], "name":[], "nrc":[], "nrc_active": True, "other_nrc": [], "id":[]}
+        new_calendar = {"sections_schedule":[], "courses_id":[], "sections_nrc_bundle":[], "nrc_active": True, "sections_nrc_alternative_bundle": [], "courses_bundle_id":[]}
 
         combinations = courses_combination(courses_options, i)
 
-        for j in range(len(courses_id)):
-            id = courses_id[j]
+        for j in range(len(courses_index)):
+            id = courses_index[j]
             selection = combinations[j]
 
             
@@ -189,11 +189,11 @@ def raw_list_of_all_calendars(data, courses_id, courses_options):
             if is_customName_on(info):
                 name, info = get_customName_and_course_info(info)
             
-            new_calendar["nrc"].append(nrc)
-            new_calendar["other_nrc"].append("")
-            new_calendar["name"].append(name)
-            new_calendar["id"].append(data[id][0])
-            new_calendar["calendar"].append(info)
+            new_calendar["sections_nrc_bundle"].append(nrc)
+            new_calendar["sections_nrc_alternative_bundle"].append("")
+            new_calendar["courses_id"].append(name)
+            new_calendar["courses_bundle_id"].append(data[id][0])
+            new_calendar["sections_schedule"].append(info)
 
         list_of_calendars.append(new_calendar)
 
