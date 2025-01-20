@@ -41,6 +41,27 @@ def check_website_connection(url, timeout=5):
     except requests.RequestException as e:
         return False
     
+# Find the kth ocurrence of a string in another
+def find_kth_occurrence(substring, string, k):
+    count = 0
+    position = -1
+
+    for i in range(len(string)):
+        if string[i:i+len(substring)] == substring:
+            count += 1
+            if count == k:
+                position = i
+                break
+
+    return position
+
+# Find the string in between the first ocurrence of two substrings.
+# e.g. "abcdefg" the substrings are "ab" and "fg", so this returns "cde"
+def string_between_two_substrings(substring_1,substring_2, string):
+    start_index = find_kth_occurrence(substring_1, string, 1)+len(substring_1)
+    end_index = start_index + find_kth_occurrence(substring_2,string[start_index:],1)
+    return start_index, end_index
+
 # Remove an element of a list by index
 def remove_by_index(lst, index):
     if -len(lst) <= index < len(lst):

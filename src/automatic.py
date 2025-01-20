@@ -1,7 +1,7 @@
 # Formatting
 # 
 import requests
-import func
+from func import *
 
 # ###
 def get_html_content_from_BuscaCursos(Semestre, Sigla, Campus):
@@ -20,7 +20,7 @@ def create_csv_from_list(Semestre = "2025-1", courses_names=["MAT1630", "MAT1640
     csv_content = ""
 
     for j in range(len(courses_names)):
-        func.loadingAnimation(part=1, i=j, n=len(courses_names), maxPart=1)
+        loadingAnimation(part=1, i=j, n=len(courses_names), maxPart=1)
         if not("/" in courses_names[j]):
             data = formatting_get_courses(Semestre=Semestre, Sigla=courses_names[j])
             s = courses_names[j]
@@ -44,7 +44,7 @@ def create_csv_from_list(Semestre = "2025-1", courses_names=["MAT1630", "MAT1640
                 csv_content += s
             if j != (len(courses_names)-1):
                 csv_content += "\n"
-    func.loadingAnimation(done=True)
+    loadingAnimation(done=True)
 
     The_file = open("data.csv", "w")
     print(csv_content, file=The_file)
@@ -83,11 +83,11 @@ def get_data_from_html_content(html_content):
     for i in range(total):
 
         # NRCs
-        start_index, end_index = text_between_first_ocurrence_of('<td style="font-size:13px;text-align:center;">', "</td>", content_cuts[i])
+        start_index, end_index = string_between_two_substrings('<td style="font-size:13px;text-align:center;">', "</td>", content_cuts[i])
         nrcs.append(content_cuts[i][start_index:end_index])
 
         #Schedule
-        start_index, end_index = text_between_first_ocurrence_of("<table>", "</table>", content_cuts[i])
+        start_index, end_index = string_between_two_substrings("<table>", "</table>", content_cuts[i])
         table = content_cuts[i][start_index:end_index]
         start_1_text_to_find = '<td style="padding-right:5px;width:50px">\n'
         end_text_to_find = '\n</td>'
@@ -98,10 +98,10 @@ def get_data_from_html_content(html_content):
         for j in range(options):
             if j!=0:
                 Complete_Schedule+=" "
-            start_index, end_index = text_between_first_ocurrence_of(start_1_text_to_find, end_text_to_find, table)
+            start_index, end_index = string_between_two_substrings(start_1_text_to_find, end_text_to_find, table)
             Schedule = table[start_index:end_index]
             table = table[end_index:]
-            start_index, end_index = text_between_first_ocurrence_of(start_2_text_to_find, end_text_to_find, table)
+            start_index, end_index = string_between_two_substrings(start_2_text_to_find, end_text_to_find, table)
             Type = table[start_index:end_index]
             table = table[end_index:]
             if "," in Schedule:
@@ -135,29 +135,9 @@ def formatting_get_courses(*,Semestre="", Sigla="", Campus = "San+Joaqu%C3%ADn")
     return data
 
 # ###
-def text_between_first_ocurrence_of(t1,t2, text):
-    start_index = find_kth_occurrence(t1, text, 1)+len(t1)
-    end_index = start_index + find_kth_occurrence(t2,text[start_index:],1)
-    return start_index, end_index
-
-# ###
-def find_kth_occurrence(substring, string, k):
-    count = 0
-    position = -1
-
-    for i in range(len(string)):
-        if string[i:i+len(substring)] == substring:
-            count += 1
-            if count == k:
-                position = i
-                break
-
-    return position
-
-# ###
 def menu_automatic():
 
-    if not func.check_website_connection("https://buscacursos.uc.cl"):
+    if not check_website_connection("https://buscacursos.uc.cl"):
         print("No connection to BuscaCursos.")
         print("Check your connection to the internet or check if the BuscaCursos web is working")
         return -1
