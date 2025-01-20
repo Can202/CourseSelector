@@ -58,6 +58,10 @@ section_schedule_dict = {
 ```
 section_class_on_time = "CLAS FIL2005"
 ```
+#### section_info
+```
+section_info = "$12312 %FIL2005 CLAS/L-M:2-3 AYU/W:2"
+```
 
 ### Schedule
 ```

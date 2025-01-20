@@ -112,7 +112,6 @@ def combine_NRCs(calendar1, calendar2):
             nrc1[i] += ("/" + name + nrc2[i])
     return nrc1
 
-
 def check_NRC_alternatives(calendars, main_data):
     for index in range(len(calendars)):
         loadingAnimation(part=4, i=index, n=len(calendars))
@@ -126,7 +125,7 @@ def check_NRC_alternatives(calendars, main_data):
                     if main_data[j][0] == calendars[index]["courses_bundle_id"][i]:
                         updater = i
                         continue
-                    if sections_conflict(section_schedule_1=calendars[index]["sections_schedule"][i], section_schedule_2=only_info_course(main_data[j][k])):
+                    if sections_conflict(section_schedule_1=calendars[index]["sections_schedule"][i], section_schedule_2=get_schedule_from_section_info(main_data[j][k])):
                         add = False
                 if add:
                     nrc = ""
@@ -148,8 +147,6 @@ def check_NRC_alternatives(calendars, main_data):
     return calendars
 
 # Function that check if a calendar has conflicts. It is used in all_calendars function to remove the ones with conflicts.
-
-# ###
 def is_calendar_with_conflicts(calendar):
     sections_schedule = sorted(calendar["sections_schedule"], key=len, reverse=True)
     n = len(sections_schedule)
@@ -161,8 +158,6 @@ def is_calendar_with_conflicts(calendar):
 
 
 # Function that return all the posible calendar combinations, ignoring repetition, conflicts, etc. It is used in all_calendars, where the calendar list is cleaned with other functions
-
-# ###
 def raw_list_of_all_calendars(main_data, courses_index, courses_sections_quantity):
     calendars = []
     n = multiplication_of_each_element(courses_sections_quantity)
@@ -180,23 +175,23 @@ def raw_list_of_all_calendars(main_data, courses_index, courses_sections_quantit
 
             
             name = main_data[id][0]
-            info = main_data[id][selection]
+            section_info = main_data[id][selection]
             nrc = "###"
 
-            if is_NRC_on(info):
-                nrc, info = get_NRC_and_course_info(info)
+            if is_NRC_on(section_info):
+                nrc, section_info = get_NRC_and_remaining_info_from_section_info(section_info)
             else:
                 nrc_active = False
 
                 
-            if is_customName_on(info):
-                name, info = get_customName_and_course_info(info)
+            if is_customName_on(section_info):
+                name, section_info = get_customName_and_remaining_info_from_section_info(section_info)
             
             new_calendar["sections_nrc_bundle"].append(nrc)
             new_calendar["sections_nrc_alternative_bundle"].append("")
             new_calendar["courses_id"].append(name)
             new_calendar["courses_bundle_id"].append(main_data[id][0])
-            new_calendar["sections_schedule"].append(info)
+            new_calendar["sections_schedule"].append(section_info)
 
         calendars.append(new_calendar)
 
@@ -208,8 +203,6 @@ def raw_list_of_all_calendars(main_data, courses_index, courses_sections_quantit
 # Function used to get combination of posible calendars with only one number identifier. It is used in the raw_list_of_all_calendars function.
 # For example, the identifier 55 makes the selection of courses [5,3,5,2,6,3]. So that means that the first course is going to be the section 5, and so on.
 # The identifier 56 makes [5,3,5,2,6,4] and maybe the identifier 57 makes [5,3,5,2,7,1], etc.
-
-# ###
 def courses_combination(courses_sections_quantity, attempt):
     n = len(courses_sections_quantity)
     combination = [1] * n
@@ -234,43 +227,32 @@ def courses_combination(courses_sections_quantity, attempt):
         attempt = attempt % divisor
     return combination
 
+def get_schedule_from_section_info(section_info):
+    if is_NRC_on(section_info):
+        a, section_info = get_NRC_and_remaining_info_from_section_info(section_info)
+    if is_customName_on(section_info):
+        a, section_info = get_customName_and_remaining_info_from_section_info(section_info)
+    return section_info
 
-# ###
-def only_info_course(text):
-    if is_NRC_on(text):
-        a, text = get_NRC_and_course_info(text)
-    if is_customName_on(text):
-        a, text = get_customName_and_course_info(text)
-    return text
+def is_NRC_on(section_info):
+    return "$" in section_info
 
-
-# ###
-def is_NRC_on(calendar_text):
-    return "$" in calendar_text
-
-
-# ###
-def get_NRC_and_course_info(text):
-    match = re.search(r"\$(\d+)", text)
+def get_NRC_and_remaining_info_from_section_info(section_info):
+    match = re.search(r"\$(\d+)", section_info)
     if match:
         number = match.group(1)
-        remaining_text = text.replace(match.group(0), "").strip()
+        remaining_text = section_info.replace(match.group(0), "").strip()
     return str(number), remaining_text
 
+def is_customName_on(section_info):
+    return "%" in section_info
 
-# ###
-def is_customName_on(calendar_text):
-    return "%" in calendar_text
-
-
-# ###
-def get_customName_and_course_info(text):
-    match = re.search(r"%([a-zA-Z0-9_]+)", text)
+def get_customName_and_remaining_info_from_section_info(section_info):
+    match = re.search(r"%([a-zA-Z0-9_]+)", section_info)
     if match:
         name = match.group(1)
-        remaining_text = text.replace(match.group(0), "").strip()
+        remaining_text = section_info.replace(match.group(0), "").strip()
     return str(name), remaining_text
-
 
 # ###
 def count_options(row_data):
