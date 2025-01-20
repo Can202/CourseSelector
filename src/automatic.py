@@ -81,7 +81,7 @@ def get_courses_data_from_html_content(html_content):
         start_index, end_index = string_between_two_substrings('<td style="font-size:13px;text-align:center;">', "</td>", content_cuts[i])
         nrcs.append(content_cuts[i][start_index:end_index])
 
-        #Schedule
+        # schedule
         start_index, end_index = string_between_two_substrings("<table>", "</table>", content_cuts[i])
         table = content_cuts[i][start_index:end_index]
         start_1_text_to_find = '<td style="padding-right:5px;width:50px">\n'
@@ -89,39 +89,50 @@ def get_courses_data_from_html_content(html_content):
         start_2_text_to_find = '<td style="padding-right:5px">\n'
 
         options = table.count(start_1_text_to_find)
-        Complete_Schedule = ""
+        schedule = ""
+
+        # For loop that add schedule_segments to the schedule
         for j in range(options):
             if j!=0:
-                Complete_Schedule+=" "
+                schedule+=" "
+            
+            # Get schedule_segment_detail
             start_index, end_index = string_between_two_substrings(start_1_text_to_find, end_text_to_find, table)
-            Schedule = table[start_index:end_index]
+            schedule_segment_detail = table[start_index:end_index]
             table = table[end_index:]
+
+            # Get schedule_segment_type
             start_index, end_index = string_between_two_substrings(start_2_text_to_find, end_text_to_find, table)
-            Type = table[start_index:end_index]
+            schedule_segment_type = table[start_index:end_index]
             table = table[end_index:]
-            if "," in Schedule:
-                Schedule = Schedule.replace(",","-")
-            if not legit_Schedule(Schedule):
+
+            # Checking
+            if "," in schedule_segment_detail:
+                schedule_segment_detail = schedule_segment_detail.replace(",","-")
+            if not legit_schedule_segment(schedule_segment_detail):
                 continue
-            Complete_Schedule += Type + "/" + Schedule
-        schedules.append(Complete_Schedule)
+
+            # Adding
+            schedule_segment = schedule_segment_type + "/" + schedule_segment_detail
+            schedule += schedule_segment
+        schedules.append(schedule)
 
     courses_data["nrc"] = nrcs
     courses_data["schedule"] = schedules
 
     return courses_data
 
-# ###
-def legit_Schedule(Schedule):
-    number = False
-    days = False
+# checks if the schedule segment given has information of a schedule segment, this because sometimes BuscaCursos gives schedules_segments with empty information.
+def legit_schedule_segment(schedule_segment):
+    number_check = False
+    days_check = False
     for i in range(9):
-        if "1 2 3 4 5 6 7 8 9".split(" ")[i] in Schedule:
-            number = True
+        if "1 2 3 4 5 6 7 8 9".split(" ")[i] in schedule_segment:
+            number_check = True
     for i in range(6):
-        if "L M W J V S".split(" ")[i] in Schedule:
-            days = True
-    return (number and days)
+        if "L M W J V S".split(" ")[i] in schedule_segment:
+            days_check = True
+    return (number_check and days_check)
 
 def get_courses_data(*,Semestre="", Sigla="", Campus = "San+Joaqu%C3%ADn"):
     html_content = get_html_content_from_BuscaCursos(Semestre, Sigla, Campus)
