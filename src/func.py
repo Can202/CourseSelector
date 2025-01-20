@@ -1,6 +1,7 @@
 
 import json
 import requests
+import os
 DEBUG = False
 
 # Here will be functions to make some specific functionality
@@ -121,7 +122,7 @@ def Debug(text, *, debug_mode = True,ignore_debug_statement=False):
 # You have to put it in a for loop, giving the total length and i variable,
 # If the part has a lot of for loops, you can create Parts, the function will divide the percentages
 # for each part.
-def loadingAnimation(*,part=1, i=0, n=100, done=False, maxPart = 4):
+def loadingAnimation(*,part=1, i=0, n=100, done=False, maxPart = 5):
     percentageperPart = 100//maxPart
     if done:
         Debug(f"Loaded [{'-' * 100}] 100%  \n", debug_mode=False)
@@ -163,3 +164,11 @@ def input_days(text=""):
             return days
         else:
             print("Error: Please enter valid days using abbreviations (e.g., L M W J V S).")
+
+
+def create_folder(path="cache"):
+    if os.path.exists(path):
+        if os.path.isfile(path):
+            raise FileExistsError(f"Error: A file already exists at the specified path: '{path}'")
+    else:
+        os.makedirs(path)

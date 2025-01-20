@@ -23,6 +23,7 @@ def point_system(calendars):
 
 
     for i in range(len(calendars)):
+        loadingAnimation(part=5, i=i, n=len(calendars))
         points[i] += classes_in_between_hours(calendars[i], start_time, end_time, hours_weight)
         points[i] += classes_in_days(calendars[i], days, days_weight)
         points[i] += free_modules(calendars[i], free_module_quantity_days, free_module_min_hours, free_module_max_hours, free_module_next_to, free_module_weight)

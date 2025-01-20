@@ -173,7 +173,8 @@ config_data = {
 ```
 calendar_data: {
     "calendars":[...]
-    "raw_main_data":"..."
+    "points":[...]
+    "main_data":"..."
 }
 ```
 

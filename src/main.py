@@ -53,10 +53,15 @@ def menu2(NRC_on):
 
 # Function that starts the analysis of the main data
 def start():
+    create_folder("cache")
+    if not os.path.isfile("data.csv"):
+        print("There is not data.csv file")
+        return 
+
     main_data = get_main_data()
 
     # Doing the algorithm
-    calendars = get_calendars_from_data(main_data)
+    calendars, points = get_calendars_from_data(main_data)
 
     if len(calendars) == 0:
         print("There's not calendars without conflicts.")
@@ -64,9 +69,6 @@ def start():
     
     NRC_on = calendars[0]["nrc_active"]
 
-    # Point system
-    points = point_system(calendars)
-    [points, [calendars]] = sort_many_lists_by_descending_order_of_one_list(points, [calendars])
     
     while True:
         ans = menu2(NRC_on)

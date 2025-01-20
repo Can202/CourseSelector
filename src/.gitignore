@@ -2,3 +2,5 @@ data.csv
 data - Copy.csv
 .~lock*
 *.csv#
+
+cache/

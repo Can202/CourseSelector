@@ -3,11 +3,26 @@ ROW_SKIP = 0
 COLUMN_SKIP = 1
 from func import *
 from parsing import *
+import pointsys
+import cache
 import time
 import re
 
 # Main functions
 def get_calendars_from_data(main_data):
+
+    # Check if main_data is in cache
+    saving = False
+    cache_number = cache.in_cache(main_data)
+    if cache_number != 0:
+        print("[----------------------------------------------------]")
+        print("Found the calendars in your cache. Loaded from there.")
+        print("[----------------------------------------------------]")
+        calendars, points = cache.load_cache(number=cache_number)
+        return calendars, points
+    else:
+        saving = True
+
     # Options
     if main_data[-1] == ['']:
         main_data = remove_by_index(main_data, -1)
@@ -21,8 +36,12 @@ def get_calendars_from_data(main_data):
     
     courses_quantity, [courses_index] = sort_many_lists_by_ascending_order_of_one_list(courses_sections_quantity, [courses_index])
 
-    calendars = all_calendars_with_courses_extra_info(main_data, courses_index, courses_sections_quantity)
-    return calendars
+    calendars, points = all_calendars_with_courses_extra_info(main_data, courses_index, courses_sections_quantity)
+
+    if saving:
+        cache.save_cache(main_data, calendars, points)
+
+    return calendars, points
 
 
 def all_calendars_with_courses_extra_info(main_data, courses_index, courses_sections_quantity):
@@ -45,6 +64,12 @@ def all_calendars_with_courses_extra_info(main_data, courses_index, courses_sect
         if calendars[0]["nrc_active"]:
             calendars = check_NRC_alternatives(calendars, main_data)
 
+    # Point system
+    if len(calendars) == 0:
+        return calendars, []
+    points = pointsys.point_system(calendars)
+    [points, [calendars]] = sort_many_lists_by_descending_order_of_one_list(points, [calendars])
+
     loadingAnimation(done=True)
 
     Debug(f"Calendars Calculated: {debug_total}")
@@ -52,7 +77,7 @@ def all_calendars_with_courses_extra_info(main_data, courses_index, courses_sect
     Debug(f"Calendars w/o repetition nor conflicts: {len(calendars)}")
 
     Debug(f"--- {(time.time() - start_time)} seconds ---", ignore_debug_statement=True)
-    return calendars
+    return calendars, points
 
 def remove_calendars_with_conflict(calendars):
     new_calendars = []
