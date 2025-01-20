@@ -24,6 +24,29 @@ def json_writer(*, path_file = "", data):
     with open(path_file, 'w') as file:
         json.dump(data, file, indent=4)
 
+def multiplication_of_each_element(some_list):
+    multiplication = 1
+    for element in some_list:
+        multiplication *= element
+    return multiplication
+
+def check_website_connection(url, timeout=5):
+    try:
+        response = requests.get(url, timeout=timeout)
+        # Check if the response code indicates success (200-299)
+        if 200 <= response.status_code < 300:
+            return True
+        else:
+            return False
+    except requests.RequestException as e:
+        return False
+    
+# Remove an element of a list by index
+def remove_by_index(lst, index):
+    if -len(lst) <= index < len(lst):
+        del lst[index]
+    return lst
+
 # get data (array) from the raw data (str)
 def get_data_from_raw_data(*, raw_data = ""):
     raw_data_lines = raw_data.split("\n")
@@ -62,18 +85,6 @@ def sort_many_lists_by_descending_order_of_one_list(principal, others):
         if not swapped:
             break
     return [principal, others]
-
-def multiplication_of_each_element(some_list):
-    multiplication = 1
-    for element in some_list:
-        multiplication *= element
-    return multiplication
-
-# Remove an element of a list by index
-def remove_by_index(lst, index):
-    if -len(lst) <= index < len(lst):
-        del lst[index]
-    return lst
 
 # Debug function, used to print information if DEBUG constant is set True.
 def Debug(text, *, debug_mode = True,ignore_debug_statement=False):
@@ -131,14 +142,3 @@ def input_days(text=""):
             return days
         else:
             print("Error: Please enter valid days using abbreviations (e.g., L M W J V S).")
-
-def check_website_connection(url, timeout=5):
-    try:
-        response = requests.get(url, timeout=timeout)
-        # Check if the response code indicates success (200-299)
-        if 200 <= response.status_code < 300:
-            return True
-        else:
-            return False
-    except requests.RequestException as e:
-        return False
