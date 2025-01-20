@@ -36,7 +36,7 @@ def get_all_calendars(data):
 def all_calendars(data, courses_index, courses_options):
     start_time = time.time()
 
-    debug_total = variation(courses_options)
+    debug_total = multiplication_of_each_element(courses_options)
 
     # Create list of posible calendars (p.1)
     the_calendars = raw_list_of_all_calendars(data, courses_index, courses_options)
@@ -183,7 +183,7 @@ def is_calendar_with_conflicts(calendar):
 # ###
 def raw_list_of_all_calendars(data, courses_index, courses_options):
     calendars = []
-    n = variation(courses_options)
+    n = multiplication_of_each_element(courses_options)
     nrc_active = True
 
     for i in range(n):

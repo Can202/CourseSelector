@@ -63,31 +63,11 @@ def sort_many_lists_by_descending_order_of_one_list(principal, others):
             break
     return [principal, others]
 
-# ###
-def variation(some_list):
+def multiplication_of_each_element(some_list):
     multiplication = 1
     for element in some_list:
         multiplication *= element
     return multiplication
-
-# ###
-def base_list(list, n):
-    level = [0] * len(list)
-    for i in range(len(list)):
-        j = len(list) - i-1
-        level[j] = n % list[j] + 1
-        n = n // list[j]
-    return level
-
-# ###
-def base_n(list, alist):
-    n = 0
-    for i in range(len(list)):
-        if i == len(list)-1:
-            n += (alist[i] - 1)
-        else:
-            n += variation(list[i+1:]) * (alist[i] - 1 )
-    return n
 
 # Remove an element of a list by index
 def remove_by_index(lst, index):

@@ -56,35 +56,35 @@ def start():
     main_data = get_main_data()
 
     # Doing the algorithm
-    the_calendars = get_all_calendars(main_data)
+    calendars = get_all_calendars(main_data)
 
-    if len(the_calendars) == 0:
+    if len(calendars) == 0:
         print("There's not calendars without conflicts.")
         return
     
-    NRC_on = the_calendars[0]["nrc_active"]
+    NRC_on = calendars[0]["nrc_active"]
 
     # Point system
-    points = point_system(the_calendars)
-    [points, [the_calendars]] = sort_many_lists_by_descending_order_of_one_list(points, [the_calendars])
+    points = point_system(calendars)
+    [points, [calendars]] = sort_many_lists_by_descending_order_of_one_list(points, [calendars])
     
     while True:
         ans = menu2(NRC_on)
         if ans == 0:
             break
         if ans == 1:
-            show_n_calendars(the_calendars, points)
+            show_n_calendars(calendars, points)
         if ans == 2:
-            show_n_calendars(the_calendars, points,3)
+            show_n_calendars(calendars, points,3)
         if ans == 3:
-            show_n_calendars(the_calendars, points,5)
+            show_n_calendars(calendars, points,5)
         if ans == 4:
-            show_n_calendars(the_calendars, points,10)
+            show_n_calendars(calendars, points,10)
         if ans == 5:
-            n = input_integer(text="How many? ",min=1, max=len(the_calendars))
-            show_n_calendars(the_calendars, points,n)
+            n = input_integer(text="How many? ",min=1, max=len(calendars))
+            show_n_calendars(calendars, points,n)
         if ans == 6 and NRC_on:
-            show_nth_calendar_with_NRC_information(the_calendars, points)
+            show_nth_calendar_with_NRC_information(calendars, points)
 
 def show_nth_calendar_with_NRC_information(calendars, points):
     n = int(input("Number of the calendar: ")) - 1
