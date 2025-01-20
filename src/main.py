@@ -66,7 +66,7 @@ def start():
 
     # Point system
     points = point_system(the_calendars)
-    [points, [the_calendars]] = many_sorts_MAX(points, [the_calendars])
+    [points, [the_calendars]] = sort_many_lists_by_descending_order_of_one_list(points, [the_calendars])
     
     while True:
         ans = menu2(NRC_on)

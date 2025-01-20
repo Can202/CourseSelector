@@ -32,8 +32,8 @@ def get_data_from_raw_data(*, raw_data = ""):
         data.append(raw_data_lines[i].split(","))
     return data
 
-# ###
-def many_sorts(principal, others):
+# Takes one list as a principal list, then sorts every list in others (list of list) and the principal list, by ascending order of the principal list 
+def sort_many_lists_by_ascending_order_of_one_list(principal, others):
     n = len(principal)
     for i in range(n):
         swapped = False
@@ -48,8 +48,8 @@ def many_sorts(principal, others):
     return [principal, others]
 
 
-# ###
-def many_sorts_MAX(principal, others):
+# Takes one list as a principal list, then sorts every list in others (list of list) and the principal list, by descending order of the principal list 
+def sort_many_lists_by_descending_order_of_one_list(principal, others):
     n = len(principal)
     for i in range(n):
         swapped = False

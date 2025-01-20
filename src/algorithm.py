@@ -19,14 +19,15 @@ def get_all_calendars(data):
     
     courses_quantity = len(data)
     courses_index = []
-    courses_options = []
+    courses_sections_quantity = []
     for i in range(courses_quantity):
-        courses_options.append(count_options(data[i]))
+        courses_sections_quantity.append(count_options(data[i]))
         courses_index.append(i)
-    courses_quantity, [courses_index] = many_sorts(courses_options, [courses_index])
+    
+    courses_quantity, [courses_index] = sort_many_lists_by_ascending_order_of_one_list(courses_sections_quantity, [courses_index])
 
-    the_calendars = all_calendars(data, courses_index, courses_options)
-    return the_calendars
+    calendars = all_calendars(data, courses_index, courses_sections_quantity)
+    return calendars
 
 
 # Function that returns the calendars without conflicts
