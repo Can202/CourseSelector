@@ -9,7 +9,7 @@ from pointsys import *
 import shutil
 import automatic
 
-# main function
+# Main function
 def main():
     while True:
         option_selected = menu1()
@@ -51,7 +51,7 @@ def menu2(NRC_on):
 
 
 
-# function that starts the analysis of the main data
+# Function that starts the analysis of the main data
 def start():
     main_data = get_main_data()
 
@@ -84,41 +84,39 @@ def start():
             n = input_integer(text="How many? ",min=1, max=len(the_calendars))
             show_n_calendars(the_calendars, points,n)
         if ans == 6 and NRC_on:
-            create_NRC_list(the_calendars, points)
+            show_nth_calendar_with_NRC_information(the_calendars, points)
 
-# ###
-def create_NRC_list(calendars, points):
+def show_nth_calendar_with_NRC_information(calendars, points):
     n = int(input("Number of the calendar: ")) - 1
     print(f"---Calendar {n+1}---")
     calendar_show(calendars[n])
     print(f"score: {points[n]}")
     print("NRCs:")
-    ln = 0
+    
+    max_len = 0
     for i in range(len(calendars[n]["courses_id"])):
-        if ln < len(calendars[n]['sections_nrc_bundle'][i]):
-            ln = len(calendars[n]['sections_nrc_bundle'][i])
+        if max_len < len(calendars[n]['sections_nrc_bundle'][i]):
+            max_len = len(calendars[n]['sections_nrc_bundle'][i])
     for i in range(len(calendars[n]["courses_id"])):
         if calendars[n]['sections_nrc_alternative_bundle'][i] != "":
-            print(f"{calendars[n]['courses_id'][i]}: {(calendars[n]['sections_nrc_bundle'][i]).ljust(ln+2)} ({calendars[n]['sections_nrc_alternative_bundle'][i]})")
+            print(f"{calendars[n]['courses_id'][i]}: {(calendars[n]['sections_nrc_bundle'][i]).ljust(max_len+2)} ({calendars[n]['sections_nrc_alternative_bundle'][i]})")
         else:
-            print(f"{calendars[n]['courses_id'][i]}: {(calendars[n]['sections_nrc_bundle'][i]).ljust(ln+2)}")
+            print(f"{calendars[n]['courses_id'][i]}: {(calendars[n]['sections_nrc_bundle'][i]).ljust(max_len+2)}")
 
-# ###
 def show_n_calendars(calendars, points, n=0):
-    ln = 0
+    real_len = 0
     if len(calendars) < n:
-        ln = len(calendars)
+        real_len = len(calendars)
     else:
-        ln = n
+        real_len = n
     if n == 0:
-        ln = len(calendars)
-    for i in range(ln):
+        real_len = len(calendars)
+    for i in range(real_len):
         print(f"---Calendar {i+1}---")
         print(f"score: {points[i]}")
         calendar_show(calendars[i])
 
 
-# ###
 def reset_default():
     code = "Pi is equal to 4. Change my mind."
     print(code)
