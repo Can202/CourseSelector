@@ -85,19 +85,18 @@ def combine_NRC_for_exact_schedule(calendars, NRC_active):
 
 def two_calendars_have_the_same_schedule(calendar1, calendar2):
     for i in range(len(calendar1["sections_schedule"])):
-        if not two_courses_have_the_same_schedule(calendar1["sections_schedule"][i], calendar2["sections_schedule"][i]):
+        if not two_sections_have_the_same_schedule(calendar1["sections_schedule"][i], calendar2["sections_schedule"][i]):
             return False
     return True
 
-# ###
-def two_courses_have_the_same_schedule(course1, course2):
-    if course1 == course2:
+def two_sections_have_the_same_schedule(section1, section2):
+    if section1 == section2:
         return True
-    course1list = course1.split(" ")
-    course2list = course2.split(" ")
+    course1list = section1.split(" ")
+    course2list = section2.split(" ")
     if sorted(course1list) == sorted(course2list):
         return True
-    if get_schedule_array(course1) == get_schedule_array(course2):
+    if get_schedule_array(section1) == get_schedule_array(section2):
         return True
     return False
 
@@ -254,7 +253,6 @@ def get_customName_and_remaining_info_from_section_info(section_info):
         remaining_text = section_info.replace(match.group(0), "").strip()
     return str(name), remaining_text
 
-# ###
 def count_options(row_data):
     count = 0
     for temp in range(len(row_data) - COLUMN_SKIP):
