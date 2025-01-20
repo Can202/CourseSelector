@@ -134,17 +134,44 @@ calendar = {
 ```
 
 ### Data
-#### data: array of a file
+#### data: A lot of information of a file, arrays or dicts.
 #### raw_data: data of a file in str
 #### main_data and raw_main_data: the file is data.csv
-#### courses_data: the array with the courses information, used to create the data.csv
+#### courses_data: the dict with the courses information, used to create the data.csv
 ```
 courses_data = {
     "nrc": [12323,...],
     "schedule": ["CLAS/M:1 AYU/W:1",...]
 }
 ```
-
+#### config_data: the dict with config information, used to configure the point system.
+```
+config_data = {
+    "start_time": 1,
+    "end_time": 4,
+    "days": "L M W J V",
+    "weight_in_preferred_hours":4,
+    "weight_in_preferred_days":6,
+    "free_module": {
+        "quantity_days": 2,
+        "min_hours":1,
+        "max_hours":2,
+        "next_to": "MAT1640 MAT1630",
+        "weight":2
+    },
+    "nrc": {
+        "nrc_quantity_weight": 3,
+        "nrc_alternatives_weight":1
+    }
+}
+```
+#### calendar_data: the calendar list saved for cache uses.
+```
+calendar_data: {
+    "calendars":[...]
+    "raw_main_data":"..."
+}
+```
 
 # Notes
 if a function has the comment ###, that means that it hasn't been check yet for VNG following
