@@ -25,13 +25,13 @@ def get_calendars_from_data(main_data):
     return calendars
 
 
-def all_calendars_with_courses_extra_info(main_data, courses_index, courses_options):
+def all_calendars_with_courses_extra_info(main_data, courses_index, courses_sections_quantity):
     start_time = time.time()
 
-    debug_total = multiplication_of_each_element(courses_options)
+    debug_total = multiplication_of_each_element(courses_sections_quantity)
 
     # Create list of posible calendars (p.1)
-    calendars = raw_list_of_all_calendars(main_data, courses_index, courses_options)
+    calendars = raw_list_of_all_calendars(main_data, courses_index, courses_sections_quantity)
 
     # Remove calendars that have conflict (p.2)
     calendars = remove_calendars_with_conflict(calendars)
@@ -43,7 +43,7 @@ def all_calendars_with_courses_extra_info(main_data, courses_index, courses_opti
 
         # Add nrc alternatives to the calendars (p.4)
         if calendars[0]["nrc_active"]:
-            calendars = check_NRC_alternatives(calendars, main_data, courses_index, courses_options)
+            calendars = check_NRC_alternatives(calendars, main_data)
 
     loadingAnimation(done=True)
 
@@ -113,7 +113,7 @@ def combine_NRCs(calendar1, calendar2):
     return nrc1
 
 
-def check_NRC_alternatives(calendars, main_data, courses_index, courses_options):
+def check_NRC_alternatives(calendars, main_data):
     for index in range(len(calendars)):
         loadingAnimation(part=4, i=index, n=len(calendars))
         for j in range(len(main_data)):
@@ -163,16 +163,16 @@ def is_calendar_with_conflicts(calendar):
 # Function that return all the posible calendar combinations, ignoring repetition, conflicts, etc. It is used in all_calendars, where the calendar list is cleaned with other functions
 
 # ###
-def raw_list_of_all_calendars(main_data, courses_index, courses_options):
+def raw_list_of_all_calendars(main_data, courses_index, courses_sections_quantity):
     calendars = []
-    n = multiplication_of_each_element(courses_options)
+    n = multiplication_of_each_element(courses_sections_quantity)
     nrc_active = True
 
     for i in range(n):
         loadingAnimation(part=1, i=i, n=n)
         new_calendar = {"sections_schedule":[], "courses_id":[], "sections_nrc_bundle":[], "nrc_active": True, "sections_nrc_alternative_bundle": [], "courses_bundle_id":[]}
 
-        combinations = courses_combination(courses_options, i)
+        combinations = courses_combination(courses_sections_quantity, i)
 
         for j in range(len(courses_index)):
             id = courses_index[j]
@@ -210,8 +210,8 @@ def raw_list_of_all_calendars(main_data, courses_index, courses_options):
 # The identifier 56 makes [5,3,5,2,6,4] and maybe the identifier 57 makes [5,3,5,2,7,1], etc.
 
 # ###
-def courses_combination(courses_options, attempt):
-    n = len(courses_options)
+def courses_combination(courses_sections_quantity, attempt):
+    n = len(courses_sections_quantity)
     combination = [1] * n
     if attempt == 0:
         return combination  
@@ -227,7 +227,7 @@ def courses_combination(courses_options, attempt):
             level -= 1
             divisor=1
             for i in range(1, level+1):
-                divisor *= courses_options[-i]
+                divisor *= courses_sections_quantity[-i]
         
         division = attempt // divisor
         combination[-(level+1)] += division
