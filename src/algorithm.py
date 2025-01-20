@@ -131,9 +131,9 @@ def check_NRC_alternatives(calendars, main_data):
                     nrc = ""
                     name = ""
                     if is_NRC_on(main_data[j][k]):
-                        nrc, a = get_NRC_and_course_info(main_data[j][k])
+                        nrc, a = get_NRC_and_remaining_info_from_section_info(main_data[j][k])
                     if is_customName_on(a):
-                        name, a = get_customName_and_course_info(a)
+                        name, a = get_customName_and_remaining_info_from_section_info(a)
 
                     if not(nrc in calendars[index]["sections_nrc_bundle"][updater]):
                         if name == calendars[index]["courses_id"][updater]:
