@@ -2,32 +2,29 @@
 import json
 import requests
 DEBUG = False
+
 # Here will be functions to make some specific functionality
 
-# ###
 def save_file(*, path,text):
     file = open(path, "w", encoding="utf-8")
     file.write(text)
     file.close()
 
-# ###
 def csv_reader(*, path_file = ""):
     file = open(path_file, "r", encoding="utf-8")
     data = file.read()
     file.close()
     return data
 
-# ###
 def json_reader(*, path_file = ""):
     with open(path_file, 'r') as file:
         return json.load(file)
 
-# ###
 def json_writer(*, path_file = "", data):
     with open(path_file, 'w') as file:
         json.dump(data, file, indent=4)
 
-# ###
+# get data (array) from the raw data (str)
 def get_data_from_raw_data(*, raw_data = ""):
     raw_data_lines = raw_data.split("\n")
     data = []
