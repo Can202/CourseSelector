@@ -80,12 +80,6 @@ def base_list(list, n):
     return level
 
 # ###
-def remove_by_index(lst, index):
-    if -len(lst) <= index < len(lst):
-        del lst[index]
-    return lst
-
-# ###
 def base_n(list, alist):
     n = 0
     for i in range(len(list)):
@@ -95,7 +89,13 @@ def base_n(list, alist):
             n += variation(list[i+1:]) * (alist[i] - 1 )
     return n
 
-# ###
+# Remove an element of a list by index
+def remove_by_index(lst, index):
+    if -len(lst) <= index < len(lst):
+        del lst[index]
+    return lst
+
+# Debug function, used to print information if DEBUG constant is set True.
 def Debug(text, *, debug_mode = True,ignore_debug_statement=False):
     if debug_mode:
         if DEBUG or ignore_debug_statement:
@@ -105,7 +105,10 @@ def Debug(text, *, debug_mode = True,ignore_debug_statement=False):
             print(text, end="")
 
 
-# ###
+# This function is used to display a loading animation.
+# You have to put it in a for loop, giving the total length and i variable,
+# If the part has a lot of for loops, you can create Parts, the function will divide the percentages
+# for each part.
 def loadingAnimation(*,part=1, i=0, n=100, done=False, maxPart = 4):
     percentageperPart = 100//maxPart
     if done:
@@ -123,7 +126,7 @@ def loadingAnimation(*,part=1, i=0, n=100, done=False, maxPart = 4):
         p = int(percentage)
         Debug(f"(p.{part:02}) [{'-' * (p-1)}{'/'}{' ' * (100-p)}] {p}%    ""\r", debug_mode=False)
 
-# ###
+# Input integer manager, with error messages and repetition
 def input_integer(*,text="",min=1, max=2):
     while True:
         try:
@@ -137,7 +140,7 @@ def input_integer(*,text="",min=1, max=2):
         except ValueError:
             print("Error: Please enter a valid integer.")
 
-# ###
+# Input days manager, with error messages and repetition
 def input_days(text=""):
     valid_days = {"L", "M", "W", "J", "V", "S"}
     while True:
@@ -149,8 +152,6 @@ def input_days(text=""):
         else:
             print("Error: Please enter valid days using abbreviations (e.g., L M W J V S).")
 
-
-# ###
 def check_website_connection(url, timeout=5):
     try:
         response = requests.get(url, timeout=timeout)
