@@ -137,6 +137,13 @@ calendar = {
 #### data: array of a file
 #### raw_data: data of a file in str
 #### main_data and raw_main_data: the file is data.csv
+#### courses_data: the array with the courses information, used to create the data.csv
+```
+courses_data = {
+    "nrc": [12323,...],
+    "schedule": ["CLAS/M:1 AYU/W:1",...]
+}
+```
 
 
 # Notes

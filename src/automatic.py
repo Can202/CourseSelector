@@ -1,9 +1,8 @@
 # Formatting
-# 
+
 import requests
 from func import *
 
-# ###
 def get_html_content_from_BuscaCursos(Semestre, Sigla, Campus):
     url = f"https://buscacursos.uc.cl/?cxml_semestre={Semestre}&cxml_sigla={Sigla}&cxml_nrc=&cxml_nombre=&cxml_categoria=TODOS&cxml_area_fg=TODOS&cxml_formato_cur=TODOS&cxml_profesor=&cxml_campus={Campus}&cxml_unidad_academica=TODOS&cxml_horario_tipo_busqueda=si_tenga&cxml_horario_tipo_busqueda_actividad=TODOS&cxml_periodo=TODOS&cxml_escuela=TODOS&cxml_nivel=TODOS#resultados"
     try:
@@ -15,45 +14,41 @@ def get_html_content_from_BuscaCursos(Semestre, Sigla, Campus):
         return "ERROR"
     return html_content
 
-# ###
-def create_csv_from_list(Semestre = "2025-1", courses_names=["MAT1630", "MAT1640", "OFG-FIL2005/VET161G"]):
+
+def create_csv_from_list(Semestre = "2025-1", courses_id_bundle=["MAT1630", "MAT1640", "OFG-FIL2005/VET161G"]):
     csv_content = ""
 
-    for j in range(len(courses_names)):
-        loadingAnimation(part=1, i=j, n=len(courses_names), maxPart=1)
-        if not("/" in courses_names[j]):
-            data = formatting_get_courses(Semestre=Semestre, Sigla=courses_names[j])
-            s = courses_names[j]
-            for i in range(len(data["schedule"])):
-                s += f',${data["nrc"][i]} {data["schedule"][i]}'
+    for j in range(len(courses_id_bundle)):
+        loadingAnimation(part=1, i=j, n=len(courses_id_bundle), maxPart=1)
+        if not("/" in courses_id_bundle[j]):
+            courses_data = get_courses_data(Semestre=Semestre, Sigla=courses_id_bundle[j])
+            temp_str = courses_id_bundle[j]
+            for i in range(len(courses_data["schedule"])):
+                temp_str += f',${courses_data["nrc"][i]} {courses_data["schedule"][i]}'
 
-            if j != (len(courses_names)-1):
-                csv_content += s + "\n"
+            if j != (len(courses_id_bundle)-1):
+                csv_content += temp_str + "\n"
             else:
-                csv_content += s
+                csv_content += temp_str
         else:
-            a = courses_names[j].split("-")
-            courses_split = a[1].split("/")
-            csv_content += a[0]
-            s=""
-            for k in range(len(courses_split)):
-                s=""
-                data = formatting_get_courses(Semestre=Semestre, Sigla=courses_split[k])
-                for q in range(len(data["schedule"])):
-                    s += f',%{courses_split[k]} ${data["nrc"][q]} {data["schedule"][q]}'
-                csv_content += s
-            if j != (len(courses_names)-1):
+            split = courses_id_bundle[j].split("-")
+            courses_id = split[1].split("/")
+            csv_content += split[0]
+            temp_str=""
+            for k in range(len(courses_id)):
+                temp_str=""
+                courses_data = get_courses_data(Semestre=Semestre, Sigla=courses_id[k])
+                for q in range(len(courses_data["schedule"])):
+                    temp_str += f',%{courses_id[k]} ${courses_data["nrc"][q]} {courses_data["schedule"][q]}'
+                csv_content += temp_str
+            if j != (len(courses_id_bundle)-1):
                 csv_content += "\n"
     loadingAnimation(done=True)
 
-    The_file = open("data.csv", "w")
-    print(csv_content, file=The_file)
+    save_file(path="data.csv", text=csv_content)
         
-
-
-# ###
-def get_data_from_html_content(html_content):
-    data = {"nrc":[], "schedule":[]}
+def get_courses_data_from_html_content(html_content):
+    courses_data = {"nrc":[], "schedule":[]}
     total = html_content.count('<tr class="resultadosRowPar">') + html_content.count('<tr class="resultadosRowImpar">')
     
     # Get indexes
@@ -111,10 +106,10 @@ def get_data_from_html_content(html_content):
             Complete_Schedule += Type + "/" + Schedule
         schedules.append(Complete_Schedule)
 
-    data["nrc"] = nrcs
-    data["schedule"] = schedules
+    courses_data["nrc"] = nrcs
+    courses_data["schedule"] = schedules
 
-    return data
+    return courses_data
 
 # ###
 def legit_Schedule(Schedule):
@@ -128,13 +123,11 @@ def legit_Schedule(Schedule):
             days = True
     return (number and days)
 
-# ###
-def formatting_get_courses(*,Semestre="", Sigla="", Campus = "San+Joaqu%C3%ADn"):
+def get_courses_data(*,Semestre="", Sigla="", Campus = "San+Joaqu%C3%ADn"):
     html_content = get_html_content_from_BuscaCursos(Semestre, Sigla, Campus)
-    data = get_data_from_html_content(html_content)
-    return data
+    courses_data = get_courses_data_from_html_content(html_content)
+    return courses_data
 
-# ###
 def menu_automatic():
 
     if not check_website_connection("https://buscacursos.uc.cl"):
@@ -149,6 +142,6 @@ def menu_automatic():
     semestre = input("Semester: ")
     courses = input("Courses to look: ")
     course = courses.split(" ")
-    create_csv_from_list(Semestre=semestre, courses_names=course)
+    create_csv_from_list(Semestre=semestre, courses_id_bundle=course)
     print("Done!")
     print("Review the csv file! To check if everything is right.")
