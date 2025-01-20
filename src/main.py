@@ -56,7 +56,7 @@ def start():
     main_data = get_main_data()
 
     # Doing the algorithm
-    calendars = get_all_calendars(main_data)
+    calendars = get_calendars_from_data(main_data)
 
     if len(calendars) == 0:
         print("There's not calendars without conflicts.")
