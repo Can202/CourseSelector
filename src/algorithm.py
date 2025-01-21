@@ -15,9 +15,7 @@ def get_calendars_from_data(main_data, progress_callback=None):
     saving = False
     cache_number = cache.in_cache(main_data)
     if cache_number != 0:
-        print("[----------------------------------------------------]")
         print("Found the calendars in your cache. Loaded from there.")
-        print("[----------------------------------------------------]")
         calendars, points = cache.load_cache(number=cache_number)
         loadingAnimation(done=True,progress_callback=progress_callback)
         return calendars, points, True
