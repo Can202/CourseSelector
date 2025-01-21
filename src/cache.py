@@ -1,5 +1,6 @@
 from func import *
 import os
+import shutil
 
 MAX_CACHE = 5
 
@@ -42,3 +43,18 @@ def in_cache_from_number(main_data, number=1):
 def load_cache(number=1):
     calendar_data = json_reader(path_file=f"cache/{number}")
     return calendar_data["calendars"], calendar_data["points"]
+
+def clear():
+    path = "cache"
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"The folder '{path}' does not exist.")
+    
+    if not os.path.isdir(path):
+        raise NotADirectoryError(f"The path '{path}' is not a folder.")
+    
+    for item in os.listdir(path):
+        item_path = os.path.join(path, item)
+        if os.path.isfile(item_path) or os.path.islink(item_path):
+            os.remove(item_path)
+        elif os.path.isdir(item_path):
+            shutil.rmtree(item_path)

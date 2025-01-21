@@ -8,6 +8,7 @@ from algorithm import *
 from pointsys import *
 import shutil
 import automatic
+import cache
 
 # Main function
 def main():
@@ -23,6 +24,8 @@ def main():
             configure()
         if option_selected == 4:
             automatic.menu_automatic()
+        if option_selected == 5:
+            cache.clear()
 
 # Menu #1 display
 def menu1():
@@ -31,8 +34,9 @@ def menu1():
     print("[2] Reset default")
     print("[3] Configure")
     print("[4] Create csv file")
+    print("[5] Clear cache")
     print("[0] Exit")
-    return input_integer(text="Select: ", min=0, max=4)
+    return input_integer(text="Select: ", min=0, max=45)
 
 # Menu #2 display
 def menu2(NRC_on):
