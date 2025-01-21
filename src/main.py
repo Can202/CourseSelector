@@ -155,10 +155,14 @@ def load_custom_cache_menu():
                 max = i
                 doing_max = False
     if happen == False:
-        max = 0
-    loading = input_integer(text="Which cache do you want to load? ", min=1,max=max)
+        max = -1
+    else:
+        print("[0] None")
+    loading = input_integer(text="Which cache do you want to load? ", min=0,max=max)
     if loading == -1:
         print("There is no cache.")
+        return
+    if loading == 0:
         return
     cache.save_csv_cache(number=loading)
     calendars, points = cache.load_cache(number=loading)
