@@ -1,11 +1,13 @@
 from func import *
 import algorithm
 import parsing
+import cache
 
 import tkinter as tk
 from ttkbootstrap import ttk
 import threading
 import time
+
 
 
 class MainApp(tk.Tk):
@@ -19,11 +21,17 @@ class MainApp(tk.Tk):
     def create_start_widgets(self):
         self.main_frame = MainFrame(master=self)
         self.calendars_frame = getCalendarsFrame(master=self)
+        self.clear_cache_frame = clearCacheFrame(master=self)
 
         self.main_frame.get_calendars_btn.config(command=self.change_to_calendars_frame)
+        self.main_frame.clear_cache_btn.config(command=lambda: self.change_frames(actual=self.main_frame, new=self.clear_cache_frame))
+
         self.calendars_frame.back_btn.config(command=self.change_back_from_calendars_frame)
         self.calendars_frame.see_calendars_btn.config(command=self.open_showCalendars)
         self.calendars_frame.obtain_calendar_information_btn.config(command=self.obtain_calendar_information_btn_pressed)
+
+        self.clear_cache_frame.yesbtn.config(command=lambda:self.clear_and_back(True))
+        self.clear_cache_frame.nobtn.config(command=lambda:self.clear_and_back(False))
 
         self.main_frame.pack()
     
@@ -50,6 +58,11 @@ class MainApp(tk.Tk):
             self.more_calendar_information.back_btn.config(command=lambda: self.change_frames(actual=self.more_calendar_information, new=self.calendars_frame))
             self.change_frames(actual=self.calendars_frame, new=self.more_calendar_information)
 
+    def clear_and_back(self, clear):
+        if clear:
+            cache.clear()
+        self.change_frames(actual=self.clear_cache_frame,new=self.main_frame)
+
     def change_frames(self, *, actual, new):
         actual.pack_forget()
         new.pack()
@@ -61,9 +74,19 @@ class MainFrame(tk.Frame):
         self.configure(padx=10, pady=10)
 
         self.title_label = ttk.Label(master=self, text="CourseSelector")
-        self.title_label.pack()
+        self.title_label.pack(pady=5)
         self.get_calendars_btn = ttk.Button(master=self, text="Obtener horarios")
-        self.get_calendars_btn.pack()
+        self.get_calendars_btn.pack(pady=5)
+        self.select_courses_btn = ttk.Button(master=self, text="Seleccionar cursos")
+        self.select_courses_btn.pack(pady=5)
+        self.configure_btn = ttk.Button(master=self, text="Configurar")
+        self.configure_btn.pack(pady=5)
+        self.reset_default_btn = ttk.Button(master=self, text="Reiniciar configuración")
+        self.reset_default_btn.pack(pady=5)
+        self.load_cache_btn = ttk.Button(master=self, text="Cargar horarios desde tu caché")
+        self.load_cache_btn.pack(pady=5)
+        self.clear_cache_btn = ttk.Button(master=self, text="Limpiar caché")
+        self.clear_cache_btn.pack(pady=5)
         
 class getCalendarsFrame(tk.Frame):
     def __init__(self, master, *args, **kwargs):
@@ -83,8 +106,6 @@ class getCalendarsFrame(tk.Frame):
         self.obtain_calendar_information_entry_var.set(1)
         self.obtain_calendar_information_entry = ttk.Entry(master=self,textvariable=self.obtain_calendar_information_entry_var)
         self.obtain_calendar_information_btn = ttk.Button(master=self,text="Obtener información extra")
-
-        
 
     def start(self):
         threading.Thread(target=self.start_task).start()
@@ -188,8 +209,6 @@ class moreCalendarInformation(tk.Frame):
         self.text.config(state="disabled")
         self.text.pack(padx=10, pady=10)
 
-
-
 class Table(tk.Frame):
     def __init__(self, master, data, height=40, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
@@ -221,7 +240,17 @@ class Table(tk.Frame):
         for row in self.rows:
             self.table.insert("", tk.END, values=row)
 
-    
+class clearCacheFrame(tk.Frame):
+    def __init__(self, master, *args, **kwargs):
+        super().__init__(master, *args, **kwargs)
+        self.configure(padx=10, pady=10)
+        self.label = ttk.Label(self,text="Quieres limpiar el caché?")
+        self.yesbtn = ttk.Button(self,text="Sí")
+        self.nobtn = ttk.Button(self,text="No")
+        self.label.pack(pady=5)
+        self.yesbtn.pack(side=tk.LEFT, padx=5)
+        self.nobtn.pack()
+
 
 
 if __name__ == "__main__":
