@@ -2,7 +2,7 @@ from func import *
 import os
 import shutil
 
-MAX_CACHE = 5
+MAX_CACHE = 20
 
 def save_cache(main_data, calendars,points):
     if MAX_CACHE == 0:
