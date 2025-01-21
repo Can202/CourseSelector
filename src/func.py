@@ -127,7 +127,7 @@ def Debug(text, *, debug_mode = True,ignore_debug_statement=False):
 def loadingAnimation(*,part=1, i=0, n=100, done=False, maxPart = 5, progress_callback = None):
     percentageperPart = 100//maxPart
     if done:
-        Debug(f"Loaded [{'-' * 100}] 100%  \n", debug_mode=False)
+        print(f"Loaded [{'-' * 100}] 100%  \n", end="")
         if progress_callback:
             progress_callback(100,100)
         return
@@ -141,7 +141,7 @@ def loadingAnimation(*,part=1, i=0, n=100, done=False, maxPart = 5, progress_cal
     if i%(10**d) == 0:
         percentage += ppp * i
         p = int(percentage)
-        Debug(f"(p.{part:02}) [{'-' * (p-1)}{'/'}{' ' * (100-p)}] {p}%    ""\r", debug_mode=False)
+        print(f"(p.{part:02}) [{'-' * (p-1)}{'/'}{' ' * (100-p)}] {p}%    \r", end="")
         if progress_callback:
             progress_callback(p,100)
 
