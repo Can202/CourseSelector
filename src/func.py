@@ -143,6 +143,8 @@ def loadingAnimation(*,part=1, i=0, n=100, done=False, maxPart = 5):
 
 # Input integer manager, with error messages and repetition
 def input_integer(*,text="",min=1, max=2):
+    if min > max:
+        return -1
     while True:
         try:
             user_input = input(text).strip()

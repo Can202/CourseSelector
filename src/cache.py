@@ -1,6 +1,7 @@
 from func import *
 import os
 import shutil
+import main
 
 MAX_CACHE = 20
 
@@ -12,18 +13,21 @@ def get_date_and_list_of_courses():
             date = d[find_kth_occurrence("!", d, 1)+1:]
         if "#" in d:
             courses = d[find_kth_occurrence("#", d, 1)+1:]
-    return date, courses
+        if "&" in d:
+            semester = d[find_kth_occurrence("&", d, 1)+1:]
+    return date, courses, semester
 
 def save_cache(main_data, calendars,points):
     if MAX_CACHE == 0:
         return
-    date, courses = get_date_and_list_of_courses()
+    date, courses, semester = get_date_and_list_of_courses()
     calendar_data = {
         "calendars": calendars,
         "main_data":main_data,
         "points":points,
         "date":date,
-        "courses":courses
+        "courses":courses,
+        "semester":semester
     }
     for i in range(0,MAX_CACHE):
         t = MAX_CACHE-i
@@ -59,6 +63,13 @@ def in_cache_from_number(main_data, number=1):
 def load_cache(number=1):
     calendar_data = json_reader(path_file=f"cache/{number}")
     return calendar_data["calendars"], calendar_data["points"]
+
+def load_cache_info(number=1):
+    
+    if not os.path.isfile(f"cache/{number}"):
+        return "", "", ""
+    calendar_data = json_reader(path_file=f"cache/{number}")
+    return calendar_data["courses"], calendar_data["date"], calendar_data["semester"]
 
 def clear():
     path = "cache"

@@ -21,7 +21,7 @@ def create_csv_from_list(Semestre = "2025-1", courses_id_bundle=["MAT1630", "MAT
     for course_id_bundle in courses_id_bundle:
         a += course_id_bundle + " "
     a = a[:-1]
-    csv_content = f"!{time.strftime('%Y-%m-%d %H:%M:%S')},#{a},\n"
+    csv_content = f"!{time.strftime('%Y-%m-%d %H:%M:%S')},#{a},&{Semestre}\n"
 
     for j in range(len(courses_id_bundle)):
         loadingAnimation(part=1, i=j, n=len(courses_id_bundle), maxPart=1)

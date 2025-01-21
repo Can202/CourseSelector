@@ -26,6 +26,8 @@ def main():
             automatic.menu_automatic()
         if option_selected == 5:
             cache.clear()
+        if option_selected == 6:
+            load_custom_cache_menu()
 
 # Menu #1 display
 def menu1():
@@ -35,6 +37,7 @@ def menu1():
     print("[3] Configure")
     print("[4] Create csv file")
     print("[5] Clear cache")
+    print("[6] Load from your cache")
     print("[0] Exit")
     return input_integer(text="Select: ", min=0, max=45)
 
@@ -56,7 +59,7 @@ def menu2(NRC_on):
 
 
 # Function that starts the analysis of the main data
-def start():
+def start(calendars=[], points=[]):
     create_folder("cache")
     if not os.path.isfile("data.csv"):
         print("There is not data.csv file")
@@ -65,7 +68,8 @@ def start():
     main_data = get_main_data()
 
     # Doing the algorithm
-    calendars, points = get_calendars_from_data(main_data)
+    if len(calendars) == 0:
+        calendars, points = get_calendars_from_data(main_data)
 
     if len(calendars) == 0:
         print("There's not calendars without conflicts.")
@@ -136,6 +140,30 @@ def reset_default():
     print("Changed")
     return 0
 
+def load_custom_cache_menu():
+    print("Your cache:")
+    max = cache.MAX_CACHE
+    doing_max = True
+    happen = False
+    for i in range(1,cache.MAX_CACHE+1):
+        courses, date, semester = cache.load_cache_info(number=i)
+        if date != "":
+            print(f"[{i}] ({date}): {semester} / {courses}")
+            happen = True
+        else:
+            if doing_max:
+                max = i
+                doing_max = False
+    if happen == False:
+        max = 0
+    loading = input_integer(text="Which cache you want to load? ", min=1,max=max)
+    if loading == -1:
+        print("There is no cache.")
+        return
+    calendars, points = cache.load_cache(number=loading)
+    start(calendars=calendars, points=points)
+
 
 if __name__ == "__main__":
     main()
+
