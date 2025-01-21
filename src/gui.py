@@ -7,6 +7,7 @@ import tkinter as tk
 from ttkbootstrap import ttk
 import threading
 import time
+import shutil
 
 
 
@@ -21,14 +22,19 @@ class MainApp(tk.Tk):
     def create_start_widgets(self):
         self.main_frame = MainFrame(master=self)
         self.calendars_frame = getCalendarsFrame(master=self)
+        self.reset_default_frame = resetDefault(master=self)
         self.clear_cache_frame = clearCacheFrame(master=self)
 
         self.main_frame.get_calendars_btn.config(command=self.change_to_calendars_frame)
+        self.main_frame.reset_default_btn.config(command=lambda: self.change_frames(actual=self.main_frame, new=self.reset_default_frame))
         self.main_frame.clear_cache_btn.config(command=lambda: self.change_frames(actual=self.main_frame, new=self.clear_cache_frame))
 
         self.calendars_frame.back_btn.config(command=self.change_back_from_calendars_frame)
         self.calendars_frame.see_calendars_btn.config(command=self.open_showCalendars)
         self.calendars_frame.obtain_calendar_information_btn.config(command=self.obtain_calendar_information_btn_pressed)
+
+        self.reset_default_frame.yesbtn.config(command=lambda:self.reset_and_back(True))
+        self.reset_default_frame.nobtn.config(command=lambda:self.reset_and_back(False))
 
         self.clear_cache_frame.yesbtn.config(command=lambda:self.clear_and_back(True))
         self.clear_cache_frame.nobtn.config(command=lambda:self.clear_and_back(False))
@@ -62,6 +68,10 @@ class MainApp(tk.Tk):
         if clear:
             cache.clear()
         self.change_frames(actual=self.clear_cache_frame,new=self.main_frame)
+    def reset_and_back(self, reset):
+        if reset:
+            shutil.copyfile("default/config","config.json")
+        self.change_frames(actual=self.reset_default_frame,new=self.main_frame)
 
     def change_frames(self, *, actual, new):
         actual.pack_forget()
@@ -245,6 +255,17 @@ class clearCacheFrame(tk.Frame):
         super().__init__(master, *args, **kwargs)
         self.configure(padx=10, pady=10)
         self.label = ttk.Label(self,text="Quieres limpiar el caché?")
+        self.yesbtn = ttk.Button(self,text="Sí")
+        self.nobtn = ttk.Button(self,text="No")
+        self.label.pack(pady=5)
+        self.yesbtn.pack(side=tk.LEFT, padx=5)
+        self.nobtn.pack()
+
+class resetDefault(tk.Frame):
+    def __init__(self, master, *args, **kwargs):
+        super().__init__(master, *args, **kwargs)
+        self.configure(padx=10, pady=10)
+        self.label = ttk.Label(self,text="Quieres reiniciar la configuración a la predeterminada?")
         self.yesbtn = ttk.Button(self,text="Sí")
         self.nobtn = ttk.Button(self,text="No")
         self.label.pack(pady=5)

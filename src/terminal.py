@@ -137,7 +137,6 @@ def reset_default():
         print("Not going to reset")
         return 0
 
-    shutil.copyfile("default/data","data.csv")
     shutil.copyfile("default/config","config.json")
     print("Changed")
     return 0
