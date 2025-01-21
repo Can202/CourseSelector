@@ -5,6 +5,8 @@ import shutil
 MAX_CACHE = 5
 
 def save_cache(main_data, calendars,points):
+    if MAX_CACHE == 0:
+        return
     calendar_data = {
         "calendars": calendars,
         "main_data":main_data,
@@ -24,6 +26,8 @@ def rename_caches(number=1):
         os.rename(f"cache/{number}",f"cache/{number+1}")
 
 def in_cache(main_data):
+    if MAX_CACHE == 0:
+        return 0
     for i in range(MAX_CACHE):
         if in_cache_from_number(main_data, number=i):
             return i
@@ -31,7 +35,6 @@ def in_cache(main_data):
     return 0
 
 def in_cache_from_number(main_data, number=1):
-
     if not os.path.isfile(f"cache/{number}"):
         return False
 
