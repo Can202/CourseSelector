@@ -16,7 +16,7 @@ def get_html_content_from_BuscaCursos(Semestre, Sigla, Campus):
     return html_content
 
 
-def create_csv_from_list(Semestre = "2025-1", courses_id_bundle=["MAT1630", "MAT1640", "OFG-FIL2005/VET161G"]):
+def create_csv_from_list(Semestre = "2025-1", courses_id_bundle=["MAT1630", "MAT1640", "OFG-FIL2005/VET161G"], progress_callback=None):
     a = ""
     for course_id_bundle in courses_id_bundle:
         a += course_id_bundle + " "
@@ -24,7 +24,7 @@ def create_csv_from_list(Semestre = "2025-1", courses_id_bundle=["MAT1630", "MAT
     csv_content = f"!{time.strftime('%Y-%m-%d %H:%M:%S')},#{a},&{Semestre}\n"
 
     for j in range(len(courses_id_bundle)):
-        loadingAnimation(part=1, i=j, n=len(courses_id_bundle), maxPart=1)
+        loadingAnimation(part=1, i=j, n=len(courses_id_bundle), maxPart=1, progress_callback=progress_callback)
         if not("/" in courses_id_bundle[j]):
             courses_data = get_courses_data(Semestre=Semestre, Sigla=courses_id_bundle[j])
             temp_str = courses_id_bundle[j]
@@ -144,20 +144,3 @@ def get_courses_data(*,Semestre="", Sigla="", Campus = "San+Joaqu%C3%ADn"):
     courses_data = get_courses_data_from_html_content(html_content)
     return courses_data
 
-def menu_automatic():
-
-    if not check_website_connection("https://buscacursos.uc.cl"):
-        print("No connection to BuscaCursos.")
-        print("Check your connection to the internet or check if the BuscaCursos web is working")
-        return -1
-
-    print("----- EXAMPLE -----")
-    print("Semester: 2025-1")
-    print("Courses to look: MAT1630 MAT1640 FIS0152 FIS1523 OPT-FIL2005/VET161G IMT1001")
-    print("----- EXAMPLE -----")
-    semestre = input("Semester: ")
-    courses = input("Courses to look: ")
-    course = courses.split(" ")
-    create_csv_from_list(Semestre=semestre, courses_id_bundle=course)
-    print("Done!")
-    print("Review the csv file! To check if everything is right.")

@@ -1,7 +1,7 @@
 from parsing import *
 
 # Main functions, returns a point list where the index matches the calendar index in calendars list
-def point_system(calendars):
+def point_system(calendars,progress_callback=None):
     points = [100] * len(calendars)
 
     config_data = json_reader(path_file="config.json")
@@ -23,7 +23,7 @@ def point_system(calendars):
 
 
     for i in range(len(calendars)):
-        loadingAnimation(part=5, i=i, n=len(calendars))
+        loadingAnimation(part=5, i=i, n=len(calendars),progress_callback=progress_callback)
         points[i] += classes_in_between_hours(calendars[i], start_time, end_time, hours_weight)
         points[i] += classes_in_days(calendars[i], days, days_weight)
         points[i] += free_modules(calendars[i], free_module_quantity_days, free_module_min_hours, free_module_max_hours, free_module_next_to, free_module_weight)
@@ -88,57 +88,3 @@ def fn_nrc_quantity(calendar, nrc_quantity,nrc_alternatives):
     
     return ct_nrc_quantity*nrc_quantity + ct_nrc_alternatives*nrc_alternatives
 
-
-def configure():
-    print("There are 9 modules")
-    print("1: from 08:20 to 09:30")
-    print("2: from 09:40 to 10:50")
-    print("3: from 11:00 to 12:10")
-    print("4: from 12:20 to 13:30")
-    print("--Lunch Time--")
-    print("5: from 14:00 to 16:00")
-    print("6: from 16:10 to 17:20")
-    print("7: from 17:30 to 18:40")
-    print("8: from 18:50 to 20:00")
-    print("9: from 20:10 to 21:20")
-    start_time = input_integer(text="on what module you want to start? ", min=1, max=9)
-    end_time = input_integer(text="on what module you want to end? ", min=start_time, max=9)
-
-    hours_weight = input_integer(text="How much weight do you want to be considered on the hours of your classes? ", min=0, max=10)
-    
-    print("Write the days that you would want to go to class (e.g. L M W J V S)")
-    days = input_days("days: ")
-    
-    days_weight = input_integer(text="How much weight do you want to be considered on the days of your classes? ", min=0, max=10)
-    
-
-    print("Do you want free modules in between?")
-    fm_days = input_integer(text="How many days? ", min=0, max=6)
-    fm_min = input_integer(text="Minimum free modules: ", min=0, max=9)
-    fm_max = input_integer(text="Maximum free modules: ", min=fm_min, max=9)
-    fm_next = input("next to: ")
-    fm_weight = input_integer(text="How much weight do you want to be considered on the free modules of your schedule? ", min=0, max=10)
-
-
-    nrc_quantity = input_integer(text="How much weight do you want to be considered on the quantity of nrc? ", min=0, max=10)
-    nrc_alternatives = input_integer(text="How much weight do you want to be considered on the quantity of nrc alternatives? ", min=0, max=10)
-
-    config_data = {
-        "start_time": start_time,
-        "end_time": end_time,
-        "days": days,
-        "weight_in_preferred_hours":hours_weight,
-        "weight_in_preferred_days":days_weight,
-        "free_module": {
-            "quantity_days": fm_days,
-            "min_hours":fm_min,
-            "max_hours":fm_max,
-            "next_to": fm_next,
-            "weight":fm_weight
-        },
-        "nrc":{
-            "nrc_quantity_weight": nrc_quantity,
-            "nrc_alternatives_weight":nrc_alternatives
-        }
-    }
-    json_writer(path_file="config.json", data=config_data)

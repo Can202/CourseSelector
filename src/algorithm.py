@@ -9,7 +9,7 @@ import time
 import re
 
 # Main functions
-def get_calendars_from_data(main_data):
+def get_calendars_from_data(main_data, progress_callback=None):
 
     # Check if main_data is in cache
     saving = False
@@ -36,7 +36,7 @@ def get_calendars_from_data(main_data):
     
     courses_quantity, [courses_index] = sort_many_lists_by_ascending_order_of_one_list(courses_sections_quantity, [courses_index])
 
-    calendars, points = all_calendars_with_courses_extra_info(main_data, courses_index, courses_sections_quantity)
+    calendars, points = all_calendars_with_courses_extra_info(main_data, courses_index, courses_sections_quantity, progress_callback)
 
     if saving:
         cache.save_cache(main_data, calendars, points)
@@ -44,30 +44,30 @@ def get_calendars_from_data(main_data):
     return calendars, points
 
 
-def all_calendars_with_courses_extra_info(main_data, courses_index, courses_sections_quantity):
+def all_calendars_with_courses_extra_info(main_data, courses_index, courses_sections_quantity, progress_callback=None):
     start_time = time.time()
 
     debug_total = multiplication_of_each_element(courses_sections_quantity)
 
     # Create list of posible calendars (p.1)
-    calendars = raw_list_of_all_calendars(main_data, courses_index, courses_sections_quantity)
+    calendars = raw_list_of_all_calendars(main_data, courses_index, courses_sections_quantity, progress_callback)
 
     # Remove calendars that have conflict (p.2)
-    calendars = remove_calendars_with_conflict(calendars)
+    calendars = remove_calendars_with_conflict(calendars,progress_callback)
     debug_woconflict = len(calendars)
 
     if debug_woconflict != 0:
         # Combine calendars with the same schedule (p.3)
-        calendars = combine_NRC_for_exact_schedule(calendars, calendars[0]["nrc_active"])
+        calendars = combine_NRC_for_exact_schedule(calendars, calendars[0]["nrc_active"],progress_callback)
 
         # Add nrc alternatives to the calendars (p.4)
         if calendars[0]["nrc_active"]:
-            calendars = check_NRC_alternatives(calendars, main_data)
+            calendars = check_NRC_alternatives(calendars, main_data,progress_callback)
 
     # Point system
     if len(calendars) == 0:
         return calendars, []
-    points = pointsys.point_system(calendars)
+    points = pointsys.point_system(calendars,progress_callback)
     [points, [calendars]] = sort_many_lists_by_descending_order_of_one_list(points, [calendars])
 
     loadingAnimation(done=True)
@@ -79,10 +79,10 @@ def all_calendars_with_courses_extra_info(main_data, courses_index, courses_sect
     Debug(f"--- {(time.time() - start_time)} seconds ---", ignore_debug_statement=True)
     return calendars, points
 
-def remove_calendars_with_conflict(calendars):
+def remove_calendars_with_conflict(calendars,progress_callback=None):
     new_calendars = []
     for i in range(len(calendars)):
-        loadingAnimation(part=2, i=i, n=len(calendars))
+        loadingAnimation(part=2, i=i, n=len(calendars),progress_callback=progress_callback)
         if not is_calendar_with_conflicts(calendars[i]):
             Debug(f"Check for conflicts for calendar {i}, but didn't found any")
             new_calendars.append(calendars[i])
@@ -91,12 +91,12 @@ def remove_calendars_with_conflict(calendars):
             Debug(f"-------------------------")
     return new_calendars
     
-def combine_NRC_for_exact_schedule(calendars, NRC_active):
+def combine_NRC_for_exact_schedule(calendars, NRC_active,progress_callback=None):
     n = len(calendars)
     i = 0
     while i < n:
         j = i+1
-        loadingAnimation(part=3, i=i, n=n)
+        loadingAnimation(part=3, i=i, n=n,progress_callback=progress_callback)
         while j < n:
             if two_calendars_have_the_same_schedule(calendars[i], calendars[j]):
                 if NRC_active:
@@ -136,9 +136,9 @@ def combine_NRCs(calendar1, calendar2):
             nrc1[i] += ("/" + name + nrc2[i])
     return nrc1
 
-def check_NRC_alternatives(calendars, main_data):
+def check_NRC_alternatives(calendars, main_data,progress_callback=None):
     for index in range(len(calendars)):
-        loadingAnimation(part=4, i=index, n=len(calendars))
+        loadingAnimation(part=4, i=index, n=len(calendars),progress_callback=progress_callback)
         for j in range(len(main_data)):
             for k in range(1,len(main_data[j])):
                 if main_data[j][k] == "":
@@ -182,13 +182,13 @@ def is_calendar_with_conflicts(calendar):
 
 
 # Function that return all the posible calendar combinations, ignoring repetition, conflicts, etc. It is used in all_calendars, where the calendar list is cleaned with other functions
-def raw_list_of_all_calendars(main_data, courses_index, courses_sections_quantity):
+def raw_list_of_all_calendars(main_data, courses_index, courses_sections_quantity, progress_callback=None):
     calendars = []
     n = multiplication_of_each_element(courses_sections_quantity)
     nrc_active = True
 
     for i in range(n):
-        loadingAnimation(part=1, i=i, n=n)
+        loadingAnimation(part=1, i=i, n=n, progress_callback=progress_callback)
         new_calendar = {"sections_schedule":[], "courses_id":[], "sections_nrc_bundle":[], "nrc_active": True, "sections_nrc_alternative_bundle": [], "courses_bundle_id":[]}
 
         combinations = courses_combination(courses_sections_quantity, i)

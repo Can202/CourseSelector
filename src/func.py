@@ -124,10 +124,12 @@ def Debug(text, *, debug_mode = True,ignore_debug_statement=False):
 # You have to put it in a for loop, giving the total length and i variable,
 # If the part has a lot of for loops, you can create Parts, the function will divide the percentages
 # for each part.
-def loadingAnimation(*,part=1, i=0, n=100, done=False, maxPart = 5):
+def loadingAnimation(*,part=1, i=0, n=100, done=False, maxPart = 5, progress_callback = None):
     percentageperPart = 100//maxPart
     if done:
         Debug(f"Loaded [{'-' * 100}] 100%  \n", debug_mode=False)
+        if progress_callback:
+            progress_callback(100,100)
         return
     #Update percentaje
     percentage = percentageperPart * (part - 1)
@@ -140,6 +142,8 @@ def loadingAnimation(*,part=1, i=0, n=100, done=False, maxPart = 5):
         percentage += ppp * i
         p = int(percentage)
         Debug(f"(p.{part:02}) [{'-' * (p-1)}{'/'}{' ' * (100-p)}] {p}%    ""\r", debug_mode=False)
+        if progress_callback:
+            progress_callback(p,100)
 
 # Input integer manager, with error messages and repetition
 def input_integer(*,text="",min=1, max=2):
