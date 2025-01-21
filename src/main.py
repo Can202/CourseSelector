@@ -156,7 +156,7 @@ def load_custom_cache_menu():
                 doing_max = False
     if happen == False:
         max = 0
-    loading = input_integer(text="Which cache you want to load? ", min=1,max=max)
+    loading = input_integer(text="Which cache do you want to load? ", min=1,max=max)
     if loading == -1:
         print("There is no cache.")
         return
