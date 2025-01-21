@@ -4,13 +4,26 @@ import shutil
 
 MAX_CACHE = 20
 
+def get_date_and_list_of_courses():
+    raw_main_data = csv_reader(path_file="data.csv")
+    raw_main_data = raw_main_data[:find_kth_occurrence("\n", raw_main_data, 1)]
+    for d in raw_main_data.split(","):
+        if "!" in d:
+            date = d[find_kth_occurrence("!", d, 1)+1:]
+        if "#" in d:
+            courses = d[find_kth_occurrence("#", d, 1)+1:]
+    return date, courses
+
 def save_cache(main_data, calendars,points):
     if MAX_CACHE == 0:
         return
+    date, courses = get_date_and_list_of_courses()
     calendar_data = {
         "calendars": calendars,
         "main_data":main_data,
-        "points":points
+        "points":points,
+        "date":date,
+        "courses":courses
     }
     for i in range(0,MAX_CACHE):
         t = MAX_CACHE-i

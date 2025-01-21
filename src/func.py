@@ -74,7 +74,9 @@ def get_data_from_raw_data(*, raw_data = ""):
     raw_data_lines = raw_data.split("\n")
     data = []
     for i in range(len(raw_data_lines)):
-        data.append(raw_data_lines[i].split(","))
+        if not ("!" in raw_data_lines[i]):
+            data.append(raw_data_lines[i].split(","))
+        
     return data
 
 # Takes one list as a principal list, then sorts every list in others (list of list) and the principal list, by ascending order of the principal list 

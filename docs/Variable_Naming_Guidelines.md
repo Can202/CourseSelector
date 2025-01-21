@@ -172,9 +172,11 @@ config_data = {
 #### calendar_data: the calendar list saved for cache uses.
 ```
 calendar_data: {
-    "calendars":[...]
-    "points":[...]
-    "main_data":"..."
+    "calendars":[...],
+    "points":[...],
+    "main_data":"...",
+    "date": "2025-01-21 12:51:20",
+    "courses": "MAT1630 MAT1640 FIS0152 FIS1523 OPT-FIL2005/VET161G IMT1001"
 }
 ```
 
