@@ -160,6 +160,7 @@ def load_custom_cache_menu():
     if loading == -1:
         print("There is no cache.")
         return
+    cache.save_csv_cache(number=loading)
     calendars, points = cache.load_cache(number=loading)
     start(calendars=calendars, points=points)
 

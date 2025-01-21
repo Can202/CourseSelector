@@ -20,10 +20,12 @@ def get_date_and_list_of_courses():
 def save_cache(main_data, calendars,points):
     if MAX_CACHE == 0:
         return
+    main_raw_data = csv_reader(path_file="data.csv")
     date, courses, semester = get_date_and_list_of_courses()
     calendar_data = {
         "calendars": calendars,
         "main_data":main_data,
+        "main_raw_data":main_raw_data,
         "points":points,
         "date":date,
         "courses":courses,
@@ -63,6 +65,10 @@ def in_cache_from_number(main_data, number=1):
 def load_cache(number=1):
     calendar_data = json_reader(path_file=f"cache/{number}")
     return calendar_data["calendars"], calendar_data["points"]
+
+def save_csv_cache(number=1):
+    calendar_data = json_reader(path_file=f"cache/{number}")
+    save_file(path="data.csv", text=calendar_data["main_raw_data"])
 
 def load_cache_info(number=1):
     
