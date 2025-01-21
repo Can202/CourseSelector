@@ -71,7 +71,7 @@ def start(calendars=[], points=[]):
 
     # Doing the algorithm
     if len(calendars) == 0:
-        calendars, points = algorithm.get_calendars_from_data(main_data)
+        calendars, points, cache_used = algorithm.get_calendars_from_data(main_data)
 
     if len(calendars) == 0:
         print("There's not calendars without conflicts.")

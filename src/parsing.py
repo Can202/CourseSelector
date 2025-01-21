@@ -82,6 +82,26 @@ def get_schedule_number_array(schedule):
                 schedule_number_array[hour, day_number] = 1  # Mark as occupied
     return schedule_number_array
 
+def get_schedule_array_for_all(calendars, points, customNumberstart=0):
+    hour_options = 9
+    days_options = 6
+    print("was asked")
+    array = []
+    for i in range(len(calendars)):
+        array.append(["","calendar:",str(i+1+customNumberstart),"points:", str(points[i]),"",""])
+        array.append(["", "L", "M", "W", "J", "V", "S"])
+        for hour in range(1,hour_options+1):
+            temp_list = []
+            for day_number in range(0,days_options):
+                if day_number == 0:
+                    temp_list.append(str(hour))
+                temp_list.append(get_section_class_on_time(calendar=calendars[i], day=get_day(day_number), hour=hour))
+            array.append(temp_list)
+        if i != (len(calendars)-1):
+            array.append(["----","----------------","----------------","----------------", "----------------","----------------","----------------"])
+
+    return array
+
 # Look between "schedule number array"s of two sections and check if they have some conflict.
 def schedule_number_array_conflict(array1, array2):
     return np.any(array1 & array2)
@@ -101,8 +121,7 @@ def get_section_class_on_time(*, calendar, day, hour):
     return ""
     
 # This prints the calendar in a readable way.
-def calendar_show(calendar, PRINT = True):
-    len_between_columns = 17
+def calendar_show(calendar, PRINT = True,len_between_columns=17):
     hour_options = 10
     day_options = 6
     start_hour_counter = 0
