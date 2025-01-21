@@ -19,7 +19,8 @@ def get_calendars_from_data(main_data, progress_callback=None):
         print("Found the calendars in your cache. Loaded from there.")
         print("[----------------------------------------------------]")
         calendars, points = cache.load_cache(number=cache_number)
-        return calendars, points
+        loadingAnimation(done=True,progress_callback=progress_callback)
+        return calendars, points, True
     else:
         saving = True
 
@@ -41,7 +42,7 @@ def get_calendars_from_data(main_data, progress_callback=None):
     if saving:
         cache.save_cache(main_data, calendars, points)
 
-    return calendars, points
+    return calendars, points, False
 
 
 def all_calendars_with_courses_extra_info(main_data, courses_index, courses_sections_quantity, progress_callback=None):
@@ -70,7 +71,7 @@ def all_calendars_with_courses_extra_info(main_data, courses_index, courses_sect
     points = pointsys.point_system(calendars,progress_callback)
     [points, [calendars]] = sort_many_lists_by_descending_order_of_one_list(points, [calendars])
 
-    loadingAnimation(done=True)
+    loadingAnimation(done=True,progress_callback=progress_callback)
 
     Debug(f"Calendars Calculated: {debug_total}")
     Debug(f"Calendars w/o conflicts: {debug_woconflict}")
