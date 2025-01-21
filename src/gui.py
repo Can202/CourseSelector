@@ -129,7 +129,7 @@ class getCalendarsFrame(tk.Frame):
         try:
             create_folder("cache")
             if not os.path.isfile("data.csv"):
-                self.update_status("Error: Archivo data.csv no encontrado!")
+                self.update_status("Error: No has seleccionado cursos!")
                 self.progress_bar.pack_forget()
                 self.add_back_button()
                 return 
@@ -141,9 +141,9 @@ class getCalendarsFrame(tk.Frame):
             if len(self.calendars) == 0:
                 self.calendars, self.points, cache_loaded = algorithm.get_calendars_from_data(self.main_data, progress_callback=self.update_progress)
                 if cache_loaded:
-                    self.update_status("Encontramos los horarios en tu caché. Los cargamos desde ahí")
+                    self.update_status("Encontramos los horarios en tu caché.")
                 else:
-                    self.update_status("Encontrados!")
+                    self.update_status("Encontrados todos!")
 
             if len(self.calendars) == 0:
                 self.update_status("No hay horarios sin conflicto.")
