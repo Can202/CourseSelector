@@ -241,3 +241,6 @@ def menu_automatic():
     automatic.create_csv_from_list(Semestre=semestre, courses_id_bundle=course)
     print("Done!")
     print("Review the csv file! To check if everything is right.")
+
+if __name__=="__main__":
+    run_terminal()
