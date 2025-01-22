@@ -16,6 +16,31 @@ def get_html_content_from_BuscaCursos(Semestre, Sigla, Campus):
     return html_content
 
 
+def check_if_only_type_enabled_and_get_type(course_id_bundle):
+    only_type_list = []
+    course_id = course_id_bundle
+    if "(" in course_id_bundle:
+        start_index, end_index = string_between_two_substrings("(",")",course_id_bundle)
+        course_id = course_id_bundle[:(start_index-1)] + course_id_bundle[(end_index+1):]
+        types = course_id_bundle[start_index:end_index]
+        only_type_list = types.split("*")
+    
+    return course_id, only_type_list
+
+def get_only_type_schedule(schedule, only_type_list):
+    if len(only_type_list) == 0:
+        return schedule
+    
+    schedule_segments = schedule.split(" ")
+
+    schedule = ""
+    for type in only_type_list:
+        for schedule_segment in schedule_segments:
+            if type in schedule_segment:
+                schedule += schedule_segment + " "
+    schedule = schedule[:-1]
+    return schedule
+
 def create_csv_from_list(Semestre = "2025-1", courses_id_bundle=["MAT1630", "MAT1640", "OFG-FIL2005/VET161G"], progress_callback=None):
     a = ""
     for course_id_bundle in courses_id_bundle:
@@ -26,14 +51,18 @@ def create_csv_from_list(Semestre = "2025-1", courses_id_bundle=["MAT1630", "MAT
     for j in range(len(courses_id_bundle)):
         loadingAnimation(part=1, i=j, n=len(courses_id_bundle), maxPart=1, progress_callback=progress_callback)
         if not("/" in courses_id_bundle[j]):
-            courses_data = get_courses_data(Semestre=Semestre, Sigla=courses_id_bundle[j])
-            temp_str = courses_id_bundle[j]
+            course_id_bundle = courses_id_bundle[j]
+            course_id_bundle, only_type_list = check_if_only_type_enabled_and_get_type(course_id_bundle) 
+
+            courses_data = get_courses_data(Semestre=Semestre, Sigla=course_id_bundle)
+            temp_str = course_id_bundle
             for i in range(len(courses_data["schedule"])):
+                schedule = get_only_type_schedule(courses_data["schedule"][i], only_type_list)
                 profs = ""
                 for p in range(len(courses_data["profs"][i])):
                     profs += courses_data["profs"][i][p] + "/"
                 profs = profs[:-1]
-                temp_str += f',${courses_data["nrc"][i]} {courses_data["schedule"][i]} ({profs})'
+                temp_str += f',${courses_data["nrc"][i]} {schedule} ({profs})'
 
             if j != (len(courses_id_bundle)-1):
                 csv_content += temp_str + "\n"
@@ -46,14 +75,18 @@ def create_csv_from_list(Semestre = "2025-1", courses_id_bundle=["MAT1630", "MAT
             temp_str=""
             for k in range(len(courses_id)):
                 temp_str=""
-                courses_data = get_courses_data(Semestre=Semestre, Sigla=courses_id[k])
+                
+                course_id = courses_id[k]
+                course_id, only_type_list = check_if_only_type_enabled_and_get_type(course_id) 
+                courses_data = get_courses_data(Semestre=Semestre, Sigla=course_id)
                 for q in range(len(courses_data["schedule"])):
+                    schedule = get_only_type_schedule(courses_data["schedule"][q], only_type_list)
                     profs = ""
                     for p in range(len(courses_data["profs"][q])):
                         profs += courses_data["profs"][q][p] + "/"
                     if len(profs) != 0:
                         profs = profs[:-1]
-                    temp_str += f',%{courses_id[k]} ${courses_data["nrc"][q]} {courses_data["schedule"][q]} ({profs})'
+                    temp_str += f',%{course_id} ${courses_data["nrc"][q]} {schedule} ({profs})'
                 csv_content += temp_str
             if j != (len(courses_id_bundle)-1):
                 csv_content += "\n"
