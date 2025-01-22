@@ -44,21 +44,23 @@ def rename_caches(number=1):
     else:
         os.rename(f"cache/{number}",f"cache/{number+1}")
 
-def in_cache(main_data):
+def in_cache():
+    main_raw_data = csv_reader(path_file="data.csv")
     if MAX_CACHE == 0:
         return 0
     for i in range(MAX_CACHE):
-        if in_cache_from_number(main_data, number=i):
+        if in_cache_from_number(main_raw_data, number=i):
             return i
         
     return 0
 
-def in_cache_from_number(main_data, number=1):
+def in_cache_from_number(main_raw_data, number=1):
     if not os.path.isfile(f"cache/{number}"):
         return False
 
     calendar_data = json_reader(path_file=f"cache/{number}")
-    if calendar_data["main_data"] == main_data:
+    
+    if calendar_data["main_raw_data"] == main_raw_data:
         return True
     return False
 

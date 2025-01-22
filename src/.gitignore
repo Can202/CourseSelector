@@ -4,3 +4,4 @@ data - Copy.csv
 *.csv#
 
 cache/
+professors_banned.txt

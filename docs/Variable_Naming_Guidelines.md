@@ -146,6 +146,7 @@ calendar = {
 courses_data = {
     "nrc": [12323,...],
     "schedule": ["CLAS/M:1 AYU/W:1",...]
+    "profs": [["Coronel Álvaro", "Cortes Victor"],...]
 }
 ```
 #### config_data: the dict with config information, used to configure the point system.

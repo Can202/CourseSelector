@@ -13,7 +13,7 @@ def get_calendars_from_data(main_data, progress_callback=None):
 
     # Check if main_data is in cache
     saving = False
-    cache_number = cache.in_cache(main_data)
+    cache_number = cache.in_cache()
     if cache_number != 0:
         print("Found the calendars in your cache. Loaded from there.")
         calendars, points = cache.load_cache(number=cache_number)
@@ -56,14 +56,17 @@ def all_calendars_with_courses_extra_info(main_data, courses_index, courses_sect
     debug_woconflict = len(calendars)
 
     if debug_woconflict != 0:
-        # Combine calendars with the same schedule (p.3)
+        # Mark NRC with professors banned (p.3)
+        if calendars[0]["nrc_active"]:
+            calendars = mark_NRC_with_professors_banned(calendars,progress_callback)
+        # Combine calendars with the same schedule (p.4)
         calendars = combine_NRC_for_exact_schedule(calendars, calendars[0]["nrc_active"],progress_callback)
 
-        # Add nrc alternatives to the calendars (p.4)
+        # Add nrc alternatives to the calendars (p.5)
         if calendars[0]["nrc_active"]:
             calendars = check_NRC_alternatives(calendars, main_data,progress_callback)
 
-    # Point system
+    # Point system (p.6)
     if len(calendars) == 0:
         return calendars, []
     points = pointsys.point_system(calendars,progress_callback)
@@ -77,6 +80,34 @@ def all_calendars_with_courses_extra_info(main_data, courses_index, courses_sect
 
     Debug(f"--- {(time.time() - start_time)} seconds ---", ignore_debug_statement=True)
     return calendars, points
+
+
+def get_list_of_banned_profs():
+    if not os.path.exists("professors_banned.txt"):
+        return [""]
+    raw_list = csv_reader(path_file="professors_banned.txt")
+    a = raw_list.split("\n")
+    list_of_banned_profs = []
+    for i in range(len(a)):
+        if a[i] !="":
+            list_of_banned_profs.append(a[i])
+
+    return list_of_banned_profs
+
+def mark_NRC_with_professors_banned(calendars, progress_callback=None):
+    list_of_banned_profs = get_list_of_banned_profs()
+    for i in range(len(calendars)):
+        loadingAnimation(part=3, i=i, n=len(calendars),progress_callback=progress_callback)
+        for k in range(len(calendars[i]["profs"])):
+            banned = False
+            for q in range(len(calendars[i]["profs"][k])):
+                if calendars[i]["profs"][k][q] in list_of_banned_profs:
+                    banned = True
+            if banned:
+                calendars[i]["sections_nrc_bundle"][k] = "!" + calendars[i]["sections_nrc_bundle"][k] + "!"
+    return calendars
+
+
 
 def remove_calendars_with_conflict(calendars,progress_callback=None):
     new_calendars = []
@@ -95,7 +126,7 @@ def combine_NRC_for_exact_schedule(calendars, NRC_active,progress_callback=None)
     i = 0
     while i < n:
         j = i+1
-        loadingAnimation(part=3, i=i, n=n,progress_callback=progress_callback)
+        loadingAnimation(part=4, i=i, n=n,progress_callback=progress_callback)
         while j < n:
             if two_calendars_have_the_same_schedule(calendars[i], calendars[j]):
                 if NRC_active:
@@ -137,7 +168,7 @@ def combine_NRCs(calendar1, calendar2):
 
 def check_NRC_alternatives(calendars, main_data,progress_callback=None):
     for index in range(len(calendars)):
-        loadingAnimation(part=4, i=index, n=len(calendars),progress_callback=progress_callback)
+        loadingAnimation(part=5, i=index, n=len(calendars),progress_callback=progress_callback)
         for j in range(len(main_data)):
             for k in range(1,len(main_data[j])):
                 if main_data[j][k] == "":
@@ -153,7 +184,12 @@ def check_NRC_alternatives(calendars, main_data,progress_callback=None):
                 if add:
                     nrc = ""
                     name = ""
-                    if is_NRC_on(main_data[j][k]):
+                    profs_str = ""
+                    if is_Prof_on(main_data[j][k]):
+                        profs_str, a = get_profs_and_remaining_info_from_section_info(main_data[j][k])
+                    else:
+                        a = main_data[j][k]
+                    if is_NRC_on(a):
                         nrc, a = get_NRC_and_remaining_info_from_section_info(main_data[j][k])
                     if is_customName_on(a):
                         name, a = get_customName_and_remaining_info_from_section_info(a)
@@ -188,7 +224,7 @@ def raw_list_of_all_calendars(main_data, courses_index, courses_sections_quantit
 
     for i in range(n):
         loadingAnimation(part=1, i=i, n=n, progress_callback=progress_callback)
-        new_calendar = {"sections_schedule":[], "courses_id":[], "sections_nrc_bundle":[], "nrc_active": True, "sections_nrc_alternative_bundle": [], "courses_bundle_id":[]}
+        new_calendar = {"sections_schedule":[], "courses_id":[], "sections_nrc_bundle":[], "nrc_active": True, "sections_nrc_alternative_bundle": [], "courses_bundle_id":[], "profs":[]}
 
         combinations = courses_combination(courses_sections_quantity, i)
 
@@ -200,7 +236,10 @@ def raw_list_of_all_calendars(main_data, courses_index, courses_sections_quantit
             name = main_data[id][0]
             section_info = main_data[id][selection]
             nrc = "###"
+            profs_str = ""
 
+            if is_Prof_on(section_info):
+                profs_str, section_info = get_profs_and_remaining_info_from_section_info(section_info)
             if is_NRC_on(section_info):
                 nrc, section_info = get_NRC_and_remaining_info_from_section_info(section_info)
             else:
@@ -215,6 +254,7 @@ def raw_list_of_all_calendars(main_data, courses_index, courses_sections_quantit
             new_calendar["courses_id"].append(name)
             new_calendar["courses_bundle_id"].append(main_data[id][0])
             new_calendar["sections_schedule"].append(section_info)
+            new_calendar["profs"].append(profs_str.split("/"))
 
         calendars.append(new_calendar)
 
@@ -251,11 +291,21 @@ def courses_combination(courses_sections_quantity, attempt):
     return combination
 
 def get_schedule_from_section_info(section_info):
+    if is_Prof_on(section_info):
+        a, section_info = get_profs_and_remaining_info_from_section_info(section_info)
     if is_NRC_on(section_info):
         a, section_info = get_NRC_and_remaining_info_from_section_info(section_info)
     if is_customName_on(section_info):
         a, section_info = get_customName_and_remaining_info_from_section_info(section_info)
     return section_info
+
+def is_Prof_on(section_info):
+    return "(" in section_info
+
+def get_profs_and_remaining_info_from_section_info(section_info):
+    index_start, index_end = string_between_two_substrings("(",")",section_info)
+    return section_info[index_start:index_end], section_info[:(index_start-2)]+section_info[(index_end+1):]
+
 
 def is_NRC_on(section_info):
     return "$" in section_info

@@ -29,7 +29,11 @@ def create_csv_from_list(Semestre = "2025-1", courses_id_bundle=["MAT1630", "MAT
             courses_data = get_courses_data(Semestre=Semestre, Sigla=courses_id_bundle[j])
             temp_str = courses_id_bundle[j]
             for i in range(len(courses_data["schedule"])):
-                temp_str += f',${courses_data["nrc"][i]} {courses_data["schedule"][i]}'
+                profs = ""
+                for p in range(len(courses_data["profs"][i])):
+                    profs += courses_data["profs"][i][p] + "/"
+                profs = profs[:-1]
+                temp_str += f',${courses_data["nrc"][i]} {courses_data["schedule"][i]} ({profs})'
 
             if j != (len(courses_id_bundle)-1):
                 csv_content += temp_str + "\n"
@@ -44,7 +48,12 @@ def create_csv_from_list(Semestre = "2025-1", courses_id_bundle=["MAT1630", "MAT
                 temp_str=""
                 courses_data = get_courses_data(Semestre=Semestre, Sigla=courses_id[k])
                 for q in range(len(courses_data["schedule"])):
-                    temp_str += f',%{courses_id[k]} ${courses_data["nrc"][q]} {courses_data["schedule"][q]}'
+                    profs = ""
+                    for p in range(len(courses_data["profs"][q])):
+                        profs += courses_data["profs"][q][p] + "/"
+                    if len(profs) != 0:
+                        profs = profs[:-1]
+                    temp_str += f',%{courses_id[k]} ${courses_data["nrc"][q]} {courses_data["schedule"][q]} ({profs})'
                 csv_content += temp_str
             if j != (len(courses_id_bundle)-1):
                 csv_content += "\n"
@@ -80,11 +89,28 @@ def get_courses_data_from_html_content(html_content):
 
     nrcs = []
     schedules = []
+    profs = []
     for i in range(total):
 
         # NRCs
         start_index, end_index = string_between_two_substrings('<td style="font-size:13px;text-align:center;">', "</td>", content_cuts[i])
         nrcs.append(content_cuts[i][start_index:end_index])
+
+
+
+        # Profs
+        cut = content_cuts[i]
+        si, ei = string_between_two_substrings('<td style="font-size:13px;text-align:left;"><a', '</td>', cut)
+        cut = cut[si:ei]
+        n = cut.count("</a>")
+        l = []
+        for k in range(n):
+            si, ei = string_between_two_substrings('>', "</a>", cut)
+            l.append(cut[si:ei])
+            cut = cut[ei:]
+            cut = cut[find_kth_occurrence("title", cut, 1):]
+        profs.append(l)
+        
 
         # schedule
         start_index, end_index = string_between_two_substrings("<table>", "</table>", content_cuts[i])
@@ -124,6 +150,7 @@ def get_courses_data_from_html_content(html_content):
 
     courses_data["nrc"] = nrcs
     courses_data["schedule"] = schedules
+    courses_data["profs"] = profs
 
     return courses_data
 

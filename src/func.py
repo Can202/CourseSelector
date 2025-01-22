@@ -18,11 +18,11 @@ def csv_reader(*, path_file = ""):
     return data
 
 def json_reader(*, path_file = ""):
-    with open(path_file, 'r') as file:
+    with open(path_file, 'r',encoding="utf-8") as file:
         return json.load(file)
 
 def json_writer(*, path_file = "", data):
-    with open(path_file, 'w') as file:
+    with open(path_file, 'w',encoding="utf-8") as file:
         json.dump(data, file, indent=4)
 
 def multiplication_of_each_element(some_list):
@@ -124,7 +124,7 @@ def Debug(text, *, debug_mode = True,ignore_debug_statement=False):
 # You have to put it in a for loop, giving the total length and i variable,
 # If the part has a lot of for loops, you can create Parts, the function will divide the percentages
 # for each part.
-def loadingAnimation(*,part=1, i=0, n=100, done=False, maxPart = 5, progress_callback = None):
+def loadingAnimation(*,part=1, i=0, n=100, done=False, maxPart = 6, progress_callback = None):
     percentageperPart = 100//maxPart
     if done:
         print(f"Loaded [{'-' * 100}] 100%  \n", end="")
