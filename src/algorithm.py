@@ -202,7 +202,7 @@ def check_NRC_alternatives(calendars, main_data,progress_callback=None):
                     if is_customName_on(a):
                         name, a = get_customName_and_remaining_info_from_section_info(a)
                     
-                    profs = profs_str.split("*")
+                    profs = profs_str.split("/")
                     banned = False
                     featured = False
                     for k in range(len(profs)):
