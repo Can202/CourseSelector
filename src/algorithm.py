@@ -173,6 +173,8 @@ def combine_NRCs(calendar1, calendar2):
     return nrc1
 
 def check_NRC_alternatives(calendars, main_data,progress_callback=None):
+    list_of_banned_profs = get_list_of_profs("professors_banned.txt")
+    list_of_featured_profs = get_list_of_profs("professors_featured.txt")
     for index in range(len(calendars)):
         loadingAnimation(part=5, i=index, n=len(calendars),progress_callback=progress_callback)
         for j in range(len(main_data)):
@@ -199,6 +201,19 @@ def check_NRC_alternatives(calendars, main_data,progress_callback=None):
                         nrc, a = get_NRC_and_remaining_info_from_section_info(main_data[j][k])
                     if is_customName_on(a):
                         name, a = get_customName_and_remaining_info_from_section_info(a)
+                    
+                    profs = profs_str.split("*")
+                    banned = False
+                    featured = False
+                    for k in range(len(profs)):
+                        if profs[k] in list_of_banned_profs:
+                            banned = True
+                        if profs[k] in list_of_featured_profs:
+                            featured = True
+                    if featured:
+                        nrc = "*" + nrc + "*"
+                    if banned:
+                        nrc = "!" + nrc + "!"
 
                     if not(nrc in calendars[index]["sections_nrc_bundle"][updater]):
                         if name == calendars[index]["courses_id"][updater]:
