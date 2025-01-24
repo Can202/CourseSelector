@@ -58,7 +58,7 @@ def all_calendars_with_courses_extra_info(main_data, courses_index, courses_sect
     if debug_woconflict != 0:
         # Mark NRC with professors banned (p.3)
         if calendars[0]["nrc_active"]:
-            calendars = mark_NRC_with_professors_banned(calendars,progress_callback)
+            calendars = mark_NRC_with_professors_banned_and_featured(calendars,progress_callback)
         # Combine calendars with the same schedule (p.4)
         calendars = combine_NRC_for_exact_schedule(calendars, calendars[0]["nrc_active"],progress_callback)
 
@@ -82,10 +82,10 @@ def all_calendars_with_courses_extra_info(main_data, courses_index, courses_sect
     return calendars, points
 
 
-def get_list_of_banned_profs():
-    if not os.path.exists("professors_banned.txt"):
+def get_list_of_profs(path="professors_banned.txt"):
+    if not os.path.exists(path):
         return [""]
-    raw_list = csv_reader(path_file="professors_banned.txt")
+    raw_list = csv_reader(path_file=path)
     a = raw_list.split("\n")
     list_of_banned_profs = []
     for i in range(len(a)):
@@ -94,15 +94,21 @@ def get_list_of_banned_profs():
 
     return list_of_banned_profs
 
-def mark_NRC_with_professors_banned(calendars, progress_callback=None):
-    list_of_banned_profs = get_list_of_banned_profs()
+def mark_NRC_with_professors_banned_and_featured(calendars, progress_callback=None):
+    list_of_banned_profs = get_list_of_profs("professors_banned.txt")
+    list_of_featured_profs = get_list_of_profs("professors_featured.txt")
     for i in range(len(calendars)):
         loadingAnimation(part=3, i=i, n=len(calendars),progress_callback=progress_callback)
         for k in range(len(calendars[i]["profs"])):
             banned = False
+            featured = False
             for q in range(len(calendars[i]["profs"][k])):
                 if calendars[i]["profs"][k][q] in list_of_banned_profs:
                     banned = True
+                if calendars[i]["profs"][k][q] in list_of_featured_profs:
+                    featured = True
+            if featured:
+                calendars[i]["sections_nrc_bundle"][k] = "*" + calendars[i]["sections_nrc_bundle"][k] + "*"
             if banned:
                 calendars[i]["sections_nrc_bundle"][k] = "!" + calendars[i]["sections_nrc_bundle"][k] + "!"
     return calendars

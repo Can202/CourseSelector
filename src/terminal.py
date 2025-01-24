@@ -137,9 +137,10 @@ def reset_default():
         print("Not going to reset")
         return 0
 
-    shutil.copyfile("default/config","config.json")
+    pointsys.reset_config()
     print("Changed")
     return 0
+
 
 def load_custom_cache_menu():
     print("Your cache:")

@@ -2,6 +2,7 @@ from func import *
 import algorithm
 import parsing
 import cache
+import pointsys
 
 import tkinter as tk
 from ttkbootstrap import ttk
@@ -70,7 +71,7 @@ class MainApp(tk.Tk):
         self.change_frames(actual=self.clear_cache_frame,new=self.main_frame)
     def reset_and_back(self, reset):
         if reset:
-            shutil.copyfile("default/config","config.json")
+            pointsys.reset_config()
         self.change_frames(actual=self.reset_default_frame,new=self.main_frame)
 
     def change_frames(self, *, actual, new):

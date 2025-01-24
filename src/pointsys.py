@@ -1,4 +1,5 @@
 from parsing import *
+import shutil
 
 # Main functions, returns a point list where the index matches the calendar index in calendars list
 def point_system(calendars,progress_callback=None):
@@ -88,3 +89,8 @@ def fn_nrc_quantity(calendar, nrc_quantity,nrc_alternatives):
     
     return ct_nrc_quantity*nrc_quantity + ct_nrc_alternatives*nrc_alternatives
 
+
+def reset_config():
+    shutil.copyfile("default/config","config.json")
+    shutil.copyfile("default/professors_banned","professors_banned.txt")
+    shutil.copyfile("default/professors_featured","professors_featured.txt")
