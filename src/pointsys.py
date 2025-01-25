@@ -59,26 +59,65 @@ def classes_in_days(calendar, days, weight):
 
 # Not working right yet
 def free_modules(calendar, fm_days, fm_min, fm_max, fm_next, free_module_weight):
-    days = 0
+    DAYSW = 2
+    MINMAXW = 1
+    NEXTW = 5
+    lens = []
+    days = [""] * 6
+    day_counter = 0
+
     points = 0
+
     for j in range(6):
-        len = 0
+        lent = 0
         this_day = False
+        added = False
+        started = False
+        on_fm = False
         for k in range(9):
             i = k+1
-            if get_section_class_on_time(calendar=calendar, day = get_day(j), hour = i) == "":
-                len += 1
+            if get_section_class_on_time(calendar=calendar, day = get_day(j), hour = i) != "" and not started:
+                started = True
+            if get_section_class_on_time(calendar=calendar, day = get_day(j), hour = i) != "" and on_fm:
+                on_fm = False
+                added = True
+                lens.append(lent)
+                lent = 0
+            if get_section_class_on_time(calendar=calendar, day = get_day(j), hour = i) == "" and started:
+                on_fm = True
+                lent += 1
                 this_day = True
-            else:
-                points -= len
-                len = 0
+            if i == 9 and on_fm and not added:
+                this_day = False
         if this_day:
-            days +=1
+            days[j] = "x"
+            day_counter += 1
     
-    points -= 2 * abs(fm_days-days)
+    points -= DAYSW * abs(fm_days-day_counter)
+    for ln in lens:
+            points -= MINMAXW * distance_from_min_max(ln, fm_min, fm_max)
+    
+    options = fm_next.split("/")
+    for j in range(6):
+        if days[j] == "x":
+            is_there = False
+            for q in range(len(options)):
+                for k in range(9):
+                    i = k+1
+                    if options[q] in get_section_class_on_time(calendar=calendar, day = get_day(j), hour = i):
+                        is_there = True
+            if is_there:
+                points += NEXTW
 
-            
     return points * free_module_weight
+
+def distance_from_min_max(d,min,max):
+    distance = 0
+    if d<min:
+        distance = abs(min - d)
+    elif max<d:
+        distance = abs(d-max)
+    return distance
 
 def fn_nrc_quantity(calendar, nrc_quantity,nrc_alternatives):
     ct_nrc_quantity = 0

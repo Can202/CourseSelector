@@ -32,3 +32,75 @@ print(parsing.get_section_schedule_dict(section_schedule="CLAS/L-W:2 CLAS/V:2 AY
 
 
 print(automatic.check_if_only_type_enabled_and_get_type("MAT1630(AYU*CLAS)"))
+
+
+
+calendar = {
+            "sections_schedule": [
+                "CLAS/L-W:2 AYU/W:5",
+                "CLAS/J:5-6",
+                "LAB/L:3 AYU/L:6 CLAS/M-J:3",
+                "CLAS/L-W:4 AYU/V:4",
+                "CLAS/L-W:1 AYU/M:4 LAB/J:4",
+                "LAB/J:1"
+            ],
+            "courses_id": [
+                "IMT1001",
+                "VET161G",
+                "MAT1640",
+                "FIS1523",
+                "MAT1630",
+                "FIS0152"
+            ],
+            "sections_nrc_bundle": [
+                "!11332!",
+                "29505",
+                "14959",
+                "14467/31978",
+                "20962",
+                "26637"
+            ],
+            "nrc_active": True,
+            "sections_nrc_alternative_bundle": [
+                "",
+                "FIL2005: 28764",
+                "",
+                "",
+                "",
+                "26635/26638/26641/26645/26646"
+            ],
+            "courses_bundle_id": [
+                "IMT1001",
+                "OPT",
+                "MAT1640",
+                "FIS1523",
+                "MAT1630",
+                "FIS0152"
+            ],
+            "profs": [
+                [
+                    "Barnafi Nicol\u00e1s"
+                ],
+                [
+                    "Mendiz Daniela",
+                    "Lillo Pablo"
+                ],
+                [
+                    "Allahbakhshi Mahnaz",
+                    "Cortes Victor"
+                ],
+                [
+                    "Varas Alejandro"
+                ],
+                [
+                    "D\u00edaz Mat\u00edas",
+                    "Cortes Victor"
+                ],
+                [
+                    "Morales Luis"
+                ]
+            ]
+        }
+
+print(pointsys.free_modules(calendar, 1,2,2,"LAB MAT1630/LAB MAT1640",2))
+parsing.calendar_show(calendar)
