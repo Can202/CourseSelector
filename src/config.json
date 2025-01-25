@@ -5,11 +5,11 @@
     "weight_in_preferred_hours":4,
     "weight_in_preferred_days":6,
     "free_module": {
-        "quantity_days": 2,
+        "quantity_days": 0,
         "min_hours": 1,
         "max_hours": 2,
-        "next_to": "xD",
-        "weight":2
+        "next_to": "LAB MAT1640/LAB MAT1630",
+        "weight":1
     },
     "nrc":{
         "nrc_quantity_weight": 3,

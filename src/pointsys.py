@@ -102,10 +102,11 @@ def free_modules(calendar, fm_days, fm_min, fm_max, fm_next, free_module_weight)
         if days[j] == "x":
             is_there = False
             for q in range(len(options)):
-                for k in range(9):
-                    i = k+1
-                    if options[q] in get_section_class_on_time(calendar=calendar, day = get_day(j), hour = i):
-                        is_there = True
+                if options[q] != "":
+                    for k in range(9):
+                        i = k+1
+                        if options[q] in get_section_class_on_time(calendar=calendar, day = get_day(j), hour = i):
+                            is_there = True
             if is_there:
                 points += NEXTW
 
