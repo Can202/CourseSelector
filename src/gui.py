@@ -163,7 +163,6 @@ class getCalendarsFrame(tk.Frame):
 
     def update_progress(self, current, total):
         self.progress_bar["value"] = (current / total) * 100
-        self.situation_label.config(text=f"Progreso: {current}%")
     def update_status(self, message):
         self.situation_label.config(text=message)
     

@@ -11,6 +11,8 @@
             ListOfCoursesScreen:
             LoadScreen:
             ShowScreen:
+            CacheScreen:
+            ConfigScreen:
 
 
 <FirstScreen>:
@@ -19,8 +21,20 @@
     MDRectangleFlatIconButton:
         text:"Crea tu horario"
         on_release: root.manager.current = "listofcourses"
-        pos_hint: {"center_x": 0.5, "center_y": 0.9}
+        pos_hint: {"center_x": 0.5, "center_y": 0.8}
         icon: "calendar-month"
+
+    MDRectangleFlatIconButton:
+        text:"Cargar horarios desde tu caché"
+        on_release: root.manager.current = "cache"
+        pos_hint: {"center_x": 0.5, "center_y": 0.6}
+        icon: "cached"
+
+    MDRectangleFlatIconButton:
+        text:"Configurar tu sistema de puntaje"
+        on_release: root.manager.current = "config"
+        pos_hint: {"center_x": 0.5, "center_y": 0.4}
+        icon: "cog"
 
 <ListOfCoursesScreen>:
     name: "listofcourses"
@@ -46,10 +60,15 @@
             MDRectangleFlatButton:
                 text: "No"
     
-    MDIconButton:
-        on_release: root.manager.current = "first"
-        pos_hint: {"center_x": 0.5, "center_y": 0.1}
-        icon: "arrow-left"
+    MDFloatLayout:
+        size_hint_y: None
+        height: 0.1 * root.height
+        pos_hint: {"x": 0, "y": 0}
+        padding: dp(10)
+        MDIconButton:
+            on_release: root.manager.current = "first"
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            icon: "home"
 
 
 <LoadScreen>:
@@ -80,26 +99,80 @@
             on_release: root.start_loading()
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
             icon: "play"
-    MDIconButton:
-        on_release: root.go_back()
-        pos_hint: {"center_x": 0.5, "center_y": 0.1}
-        icon: "arrow-left"
+            
+    MDFloatLayout:
+        size_hint_y: None
+        height: 0.1 * root.height
+        pos_hint: {"x": 0, "y": 0}
+        padding: dp(10)
+        MDIconButton:
+            on_release: root.go_back()
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            icon: "home"
 
 <ShowScreen>:
     name: "show"
-    MDScrollView:
-        do_scroll_x: False
-        MDBoxLayout:
-            orientation: "vertical"
-            adaptive_height: True  # Allows scrolling
-            spacing: dp(10)  # Optional: Adds spacing between cards
+    MDBoxLayout:
+        orientation: "vertical"
+        MDScrollView:
+            id:my_scrollview
+            do_scroll_x: False
+            do_scroll_y: True
+            size_hint_y: None
+            height: 0.9 * root.height
+            MDBoxLayout:
+                orientation: "vertical"
+                adaptive_height: True  # Allows scrolling
+                spacing: dp(10)  # Optional: Adds spacing between cards
+                padding: dp(10)
+                id: cards_box
+        MDFloatLayout:
+            size_hint_y: None
+            height: 0.1 * root.height
+            pos_hint: {"x": 0, "y": 0}
             padding: dp(10)
-            id: cards_box
-    MDIconButton:
-        on_release: root.manager.current = "first"
-        pos_hint: {"center_x": 0.5, "center_y": 0.1}
-        icon: "arrow-left"
-    MDRectangleFlatButton:
-        text:"xd"
-        on_release: root.test()
-        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            MDIconButton:
+                on_release: root.manager.current = "first"
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                icon: "home"
+                
+            MDIconButton:
+                on_release: root.go_back()
+                pos_hint: {"center_x": 0.4, "center_y": 0.5}
+                icon: "arrow-left"
+            MDIconButton:
+                on_release: root.go_next()
+                pos_hint: {"center_x": 0.6, "center_y": 0.5}
+                icon: "arrow-right"
+
+<CacheScreen>:
+    name: "cache"
+    MDFloatLayout:
+        size_hint_y: None
+        height: 0.1 * root.height
+        pos_hint: {"x": 0, "y": 0}
+        padding: dp(10)
+        MDIconButton:
+            on_release: root.manager.current = "first"
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            icon: "home"
+        MDRectangleFlatButton:
+            on_release: root.cache_btn()
+            pos_hint: {"center_x": 0.8, "center_y": 0.5}
+            text: "Limpiar Caché"
+            
+<ConfigScreen>:
+    name: "config"
+    MDFloatLayout:
+        size_hint_y: None
+        height: 0.1 * root.height
+        pos_hint: {"x": 0, "y": 0}
+        padding: dp(10)
+        MDIconButton:
+            on_release: root.manager.current = "first"
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            icon: "home"
+        MDRectangleFlatButton:
+            on_release: root.reset_btn()
+            pos_hint: {"center_x": 0.8, "center_y": 0.5}
+            text: "Reiniciar Configuración"

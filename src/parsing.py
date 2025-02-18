@@ -158,6 +158,29 @@ def calendar_show(calendar, PRINT = True,len_between_columns=17):
     text += "\n"
     return text
 
+
+def calendar_show_array(calendar):
+    hour_options = 10
+    day_options = 6
+    start_hour_counter = 0
+    start_day_counter = -1 # day 0 is MONDAY, so to print first a column with the hours, we need to start at -1
+
+    array = []
+
+    for hour in range(start_hour_counter, hour_options):
+        fw = []
+        for day_number in range(start_day_counter, day_options):
+            if day_number == start_day_counter:
+                fw.append(str(hour))
+            elif hour == start_hour_counter:
+                day = get_day(day_number)
+                fw.append(day)
+            else:
+                section_class_on_time = get_section_class_on_time(calendar=calendar,day=get_day(day_number),hour=hour)
+                fw.append(section_class_on_time)
+        array.append(fw)
+    return array
+
 # Get day from day number
 def get_day(day_number):
     if day_number==MONDAY:
@@ -187,3 +210,22 @@ def get_day_number(day):
         return FRIDAY
     if day=='S':
         return SATURDAY
+    
+
+    
+def show_nth_calendar_with_NRC_information_str(calendars, points, n):
+    text = f"---Calendar {n+1}---\n"
+    text += calendar_show(calendars[n], PRINT=False)
+    text += f"score: {points[n]}\n"
+    text += "NRCs:\n"
+    
+    max_len = 0
+    for i in range(len(calendars[n]["courses_id"])):
+        if max_len < len(calendars[n]['sections_nrc_bundle'][i]):
+            max_len = len(calendars[n]['sections_nrc_bundle'][i])
+    for i in range(len(calendars[n]["courses_id"])):
+        if calendars[n]['sections_nrc_alternative_bundle'][i] != "":
+            text += f"{calendars[n]['courses_id'][i]}: {(calendars[n]['sections_nrc_bundle'][i]).ljust(max_len+2)} ({calendars[n]['sections_nrc_alternative_bundle'][i]})\n"
+        else:
+            text += f"{calendars[n]['courses_id'][i]}: {(calendars[n]['sections_nrc_bundle'][i]).ljust(max_len+2)}\n"
+    return text
