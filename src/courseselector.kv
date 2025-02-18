@@ -1,0 +1,105 @@
+<MainScreen>:
+    size: root.width, root.height
+    BoxLayout:
+        id: main_box
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "Creados de horarios"
+        MDScreenManager:
+            id: manager
+            FirstScreen:
+            ListOfCoursesScreen:
+            LoadScreen:
+            ShowScreen:
+
+
+<FirstScreen>:
+    name: "first"
+
+    MDRectangleFlatIconButton:
+        text:"Crea tu horario"
+        on_release: root.manager.current = "listofcourses"
+        pos_hint: {"center_x": 0.5, "center_y": 0.9}
+        icon: "calendar-month"
+
+<ListOfCoursesScreen>:
+    name: "listofcourses"
+    BoxLayout:
+        orientation:"vertical"
+        size_hint_y: None  # Prevents stretching vertically
+        height: self.minimum_height  # Wrap content height
+        spacing: "40dp"
+        pos_hint: {"center_x": 0.5, "top": 0.9}  # Moves it to the top
+        MDLabel:
+            halign: "center"
+            theme_text_color: "Primary"
+            text: "Quieres usar los cursos cargados anteriormente?"
+        BoxLayout:
+            orientation:"horizontal"
+            size_hint: None, None
+            size: self.minimum_size
+            pos_hint: {"center_x": 0.5}
+            spacing: "10dp"
+            MDRectangleFlatButton:
+                text: "Sí"
+                on_release: root.manager.current = "load"
+            MDRectangleFlatButton:
+                text: "No"
+    
+    MDIconButton:
+        on_release: root.manager.current = "first"
+        pos_hint: {"center_x": 0.5, "center_y": 0.1}
+        icon: "arrow-left"
+
+
+<LoadScreen>:
+    name: "load"
+    BoxLayout:
+        orientation:"vertical"
+        size_hint_y: None  # Prevents stretching vertically
+        height: self.minimum_height  # Wrap content height
+        spacing: "40dp"
+        pos_hint: {"center_x": 0.5, "top": 0.9}  # Moves it to the top
+        MDLabel:
+            halign: "center"
+            id: statuslabel
+            text: "0 %"
+        BoxLayout:
+            size_hint_y: None
+            height: 20  # Adjust the height of the progress bar
+            padding: dp(5)
+            MDProgressBar:
+                id: progress_bar
+                size_hint_x: 0.5  # Adjust width (0.5 = 50% of parent width)
+                pos_hint: {"center_x": 0.5}  # Center it horizontally
+                value: 0
+        
+        MDRectangleFlatIconButton:
+            id: startprogressbtn
+            text:"Iniciar"
+            on_release: root.start_loading()
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            icon: "play"
+    MDIconButton:
+        on_release: root.go_back()
+        pos_hint: {"center_x": 0.5, "center_y": 0.1}
+        icon: "arrow-left"
+
+<ShowScreen>:
+    name: "show"
+    MDScrollView:
+        do_scroll_x: False
+        MDBoxLayout:
+            orientation: "vertical"
+            adaptive_height: True  # Allows scrolling
+            spacing: dp(10)  # Optional: Adds spacing between cards
+            padding: dp(10)
+            id: cards_box
+    MDIconButton:
+        on_release: root.manager.current = "first"
+        pos_hint: {"center_x": 0.5, "center_y": 0.1}
+        icon: "arrow-left"
+    MDRectangleFlatButton:
+        text:"xd"
+        on_release: root.test()
+        pos_hint: {"center_x": 0.5, "center_y": 0.5}
