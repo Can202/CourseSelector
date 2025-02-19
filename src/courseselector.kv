@@ -131,6 +131,11 @@
             height: 0.1 * root.height
             pos_hint: {"x": 0, "y": 0}
             padding: dp(10)
+            
+            MDLabel:
+                id:total_calendars_label
+                text: ""
+                pos_hint: {"center_y": 0.5, "x": 0.05}
             MDIconButton:
                 on_release: root.manager.current = "first"
                 pos_hint: {"center_x": 0.5, "center_y": 0.5}
@@ -147,19 +152,33 @@
 
 <CacheScreen>:
     name: "cache"
-    MDFloatLayout:
-        size_hint_y: None
-        height: 0.1 * root.height
-        pos_hint: {"x": 0, "y": 0}
-        padding: dp(10)
-        MDIconButton:
-            on_release: root.manager.current = "first"
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            icon: "home"
-        MDRectangleFlatButton:
-            on_release: root.cache_btn()
-            pos_hint: {"center_x": 0.8, "center_y": 0.5}
-            text: "Limpiar Caché"
+    MDBoxLayout:
+        orientation: "vertical"
+        MDScrollView:
+            id:my_scrollview
+            do_scroll_x: False
+            do_scroll_y: True
+            size_hint_y: None
+            height: 0.9 * root.height
+            MDBoxLayout:
+                orientation: "vertical"
+                adaptive_height: True  # Allows scrolling
+                spacing: dp(10)  # Optional: Adds spacing between cards
+                padding: dp(10)
+                id: btn_box
+        MDFloatLayout:
+            size_hint_y: None
+            height: 0.1 * root.height
+            pos_hint: {"x": 0, "y": 0}
+            padding: dp(10)
+            MDIconButton:
+                on_release: root.manager.current = "first"
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                icon: "home"
+            MDRectangleFlatButton:
+                on_release: root.cache_btn()
+                pos_hint: {"center_x": 0.8, "center_y": 0.5}
+                text: "Limpiar Caché"
             
 <ConfigScreen>:
     name: "config"

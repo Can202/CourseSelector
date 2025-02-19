@@ -155,6 +155,7 @@ class ShowScreen(MDScreen):
 
 
     def on_enter(self):
+        self.ids.total_calendars_label.text = "Horarios totales: "+ str(len(self.app.main_screen.calendars))
         self.change_tables(0)
         
     def change_to_more_information(self, instance, text):
@@ -271,6 +272,45 @@ class ShowScreen(MDScreen):
         return card
 
 class CacheScreen(MDScreen):
+    def on_kv_post(self, base_widget):
+        self.cache_btns = []
+        caches = cache.get_cache_information_in_str()
+        for i in range(len(caches), cache.MAX_CACHE+1):
+            caches.append("")
+        for i in range(cache.MAX_CACHE):
+            opacity = 1
+            disabled = False
+            if caches[i] == "":
+                opacity = 0
+                disabled = True
+            self.cache_btns.append(MDFlatButton(text=caches[i], pos_hint={"center_x":0.5}, opacity = opacity, disabled = disabled, on_release=lambda instance, i=i: self.load_cache(instance, i+1)))
+            self.ids.btn_box.add_widget(self.cache_btns[i])
+
+    def on_enter(self):
+        self.update_cache_list()
+    def update_cache_list(self):
+        caches = cache.get_cache_information_in_str()
+        for i in range(len(caches), cache.MAX_CACHE+1):
+            caches.append("")
+        for i in range(cache.MAX_CACHE):
+            a = i
+            opacity = 1
+            disabled = False
+            if caches[i] == "":
+                opacity = 0
+                disabled = True
+            self.cache_btns[i].text = caches[i]
+            self.cache_btns[i].opacity = opacity
+            self.cache_btns[i].disabled = disabled
+
+
+    def load_cache(self, instance, cache_id):
+        print(cache_id)
+        cache.save_csv_cache(number=cache_id)
+        self.app = MDApp.get_running_app()
+        self.app.main_screen.calendars, self.app.main_screen.points = cache.load_cache(number=cache_id)
+        self.manager.current="show"
+        pass
     def cache_removal(self, instance):
         print("Caché limpiado")
         cache.clear()

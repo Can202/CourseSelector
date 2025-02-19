@@ -93,3 +93,11 @@ def clear():
             os.remove(item_path)
         elif os.path.isdir(item_path):
             shutil.rmtree(item_path)
+
+def get_cache_information_in_str():
+    list_of_str = []
+    for i in range(1, MAX_CACHE+1):
+        courses, date, semester = load_cache_info(number=i)
+        if date != "":
+            list_of_str.append(f"({date}): {semester} / {courses}")
+    return list_of_str
