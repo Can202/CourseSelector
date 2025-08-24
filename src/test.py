@@ -1,3 +1,7 @@
+import func
+import parsing
+import sat
+
 def csv_reader(*, path_file=""):
     file = open(path_file, "r", encoding="utf-8")
     data = file.read()
@@ -16,3 +20,8 @@ def plain_text_to_array(*, data=""):
 data1 = csv_reader(path_file="data.csv")
 data_array = plain_text_to_array(data=data1)  # there exist empty elements at the end of list
 print(data_array)
+
+# get data from raw data convierte texto a lista doble separada por comas (csv)
+lista_test = parsing.get_main_data()
+sat.get_sat_solutions(lista_test)
+
