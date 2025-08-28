@@ -41,11 +41,12 @@ def get_sat_solutions(main_data):
 def main_data_to_days_and_modules(main_data, bool_sat_model, variables_dict, total_days=6, total_modules=9):
     nrc_by_course = []
     courses_id = []
+    course_num = 0
     for course in main_data:
         nrc_this_course = []
-        i = 1
         courses_id.append(course[0])
         course.pop(0)
+        i = 1
         for nrc in course:
             nrc_data = nrc.split(" ")
 
@@ -65,15 +66,17 @@ def main_data_to_days_and_modules(main_data, bool_sat_model, variables_dict, tot
             print(nrc_data)
 
             modules_used_array = parsing.get_schedule_number_array(nrc_data)
+            print(modules_used_array)
             # Creating constraints
-            for j in range(1, total_days + 1):
-                for k in range(1, total_modules + 1):
-                    if modules_used_array[i-1, j-1] == 0:
-                        bool_sat_model.AddImplication(variables_dict[f"{courses_id[i-1]}_SEC_{i}"],
-                                                      variables_dict[f"{courses_id[i-1]}_D{j}_M{k}"].Not())
+            for j in range(total_days):
+                for k in range(total_modules):
+                    if modules_used_array[k, j] == 0:
+                        bool_sat_model.AddImplication(variables_dict[f"{courses_id[course_num]}_SEC_{i}"],
+                                                      variables_dict[f"{courses_id[course_num]}_D{j+1}_M{k+1}"].Not())
                     else:
-                        bool_sat_model.AddImplication(variables_dict[f"{courses_id[i - 1]}_SEC_{i}"],
-                                                      variables_dict[f"{courses_id[i - 1]}_D{j}_M{k}"])
-        i += 1
-        nrc_by_course.append(nrc_this_course)
+                        bool_sat_model.AddImplication(variables_dict[f"{courses_id[course_num]}_SEC_{i}"],
+                                                      variables_dict[f"{courses_id[course_num]}_D{j+1}_M{k+1}"])
+            nrc_by_course.append(nrc_this_course)
+            i += 1
+        course_num += 1
     return nrc_by_course, courses_id
