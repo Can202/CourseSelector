@@ -23,10 +23,10 @@ def plain_text_to_array(*, data=""):
 
 # get data from raw data convierte texto a lista doble separada por comas (csv)
 lista_test = parsing.get_main_data()
-print(lista_test)
-a, b = sat.get_sat_solutions(lista_test)
+# print(lista_test)
+a = sat.get_sat_solutions(lista_test)
 print(a)
-print(b)
+print(sat.get_nrc_info())
 
 #number_array = parsing.get_schedule_number_array("AYU/L:6 CLAS/M-J:2 LAB/W:6")
 #print(number_array)
