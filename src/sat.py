@@ -59,6 +59,23 @@ def main_data_to_days_and_modules(bool_sat_model, variables_dict, total_days=6, 
     return courses_id
 
 
+# Se ha hecho solo un caso, se deben juntar todos en un gran Or.
+def one_ncr_course_constraint(bool_sat_model, variables_dict):
+    courses_id, main_data = get_courses_id()
+    nrc_by_course = get_nrc_info()
+    final_constraint = []
+
+    for i in range(len(courses_id)):
+        for j in range(len(nrc_by_course[i])):
+            c = bool_sat_model.NewBoolVar(f"c_{i}")
+            all_constraints = [variables_dict[f"{courses_id[i]}_SEC_{j+1}"] if j == k else
+                               ~variables_dict[f"{courses_id[i]}_SEC_{k+1}"] for k in range(len(nrc_by_course[i]))]
+            bool_sat_model.AddBoolAnd(all_constraints).OnlyEnforceIf(c)
+            final_constraint.append(c)
+    bool_sat_model.AddBoolOr(final_constraint)
+
+
+
 def get_courses_id():
     main_data = parsing.get_main_data()
     courses_id = []
@@ -105,4 +122,3 @@ def get_nrc_info(*, is_nrc_data=False):
             return nrc_data
     # Return case 2: List of all nrc codes with index [course][section] (is_nrc_data = False)
     return nrc_by_course
-
