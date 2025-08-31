@@ -29,24 +29,36 @@ def get_sat_solutions(main_data):
             for k in range(1, total_modules + 1):
                 variables[f"{main_data[i][0]}_D{j}_M{k}"] = model.NewBoolVar(f"{main_data[i][0]}_D{j}_M{k}")
 
-    courses_id = main_data_to_days_and_modules(model, variables, total_days, total_modules)
+    courses_id, blabla = get_courses_id()
+    main_data_to_days_and_modules(model, variables, total_days, total_modules)
     one_ncr_course_constraint(model, variables)
-    at_most_one_module(bool_sat_model=model,variables_dict=variables,courses_id=courses_id,total_days=total_days,total_modules=total_modules)
-    # leer data para llevar cada nrc a sus cursos como más variables
-    # poner condiciones (único nrc por curso) implicancia de bloques de cada nrc, restricción tope
-    # resolver, guardar soluciones en objetos de clases calendar/nrc/block ?
-    # test
-    # print(model)
+    at_most_one_module(bool_sat_model=model, variables_dict=variables, courses_id=courses_id,
+                       total_days=total_days, total_modules=total_modules)
 
+    solver = cp_model.CpSolver()
+    result = solver.Solve(model)
+
+    if result in (cp_model.OPTIMAL, cp_model.FEASIBLE):
+        print("Solución encontrada:")
+        for var_name, var in variables.items():
+            if solver.Value(var) == 1:
+                print(var_name, "= 1")
+    elif result == cp_model.INFEASIBLE:
+        print("a bueno cagaste")
+    else:
+        print("No hay solución :(")
+        print(result)
+    # resolver, guardar soluciones en objetos de clases calendar/nrc/block ?
     return courses_id
 
 
 def main_data_to_days_and_modules(bool_sat_model, variables_dict, total_days=6, total_modules=9):
 
     courses_id, main_data = get_courses_id()
+    nrc_by_course = get_nrc_info()
     course_num = 0
-    for course in main_data:
-        for i in range(1, len(course)+1):
+    for course_num in range(len(courses_id)):
+        for i in range(1, len(nrc_by_course[course_num])+1):
             nrc_data = get_nrc_info(is_nrc_data=True)
             modules_used_array = parsing.get_schedule_number_array(nrc_data)
             # Creating constraints
