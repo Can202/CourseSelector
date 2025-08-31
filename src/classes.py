@@ -1,3 +1,4 @@
+from ortools.sat.python import cp_model
 
 class NRC:
 
@@ -32,3 +33,19 @@ asd = Block("M5", "cat")
 test_nrc = NRC([])
 test_nrc.add_block(asd)
 print(test_nrc.blocks)
+
+class AllSolutionsPrinter(cp_model.CpSolverSolutionCallback):
+    def __init__(self, variables_dict):
+        cp_model.CpSolverSolutionCallback.__init__(self)
+        self.__variables_dict = variables_dict
+        self.__solution_count = 0
+
+    def OnSolutionCallback(self):
+        self.__solution_count += 1
+        print(f"\nSolución {self.__solution_count}:")
+        for name, var in self.__variables_dict.items():
+            if self.Value(var) == 1:
+                print(name, "= 1")
+
+    def SolutionCount(self):
+        return self.__solution_count

@@ -1,6 +1,7 @@
 from ortools.sat.python import cp_model
 from func import *
 import parsing
+from classes import *
 
 
 def get_sat_solutions(main_data):
@@ -49,17 +50,20 @@ def get_sat_solutions(main_data):
         print("No hay solución :(")
         print(result)
     # resolver, guardar soluciones en objetos de clases calendar/nrc/block ?
-    return courses_id
+
+    solver = cp_model.CpSolver()
+    solution_printer = AllSolutionsPrinter(variables)
+    status = solver.SearchForAllSolutions(model, solution_printer)
+    return solution_printer
 
 
 def main_data_to_days_and_modules(bool_sat_model, variables_dict, total_days=6, total_modules=9):
 
     courses_id, main_data = get_courses_id()
     nrc_by_course = get_nrc_info()
-    course_num = 0
     for course_num in range(len(courses_id)):
         for i in range(1, len(nrc_by_course[course_num])+1):
-            nrc_data = get_nrc_info(is_nrc_data=True)
+            nrc_data = get_nrc_info(is_nrc_data=True, course_pos=course_num, nrc_pos=i-1)
             modules_used_array = parsing.get_schedule_number_array(nrc_data)
             # Creating constraints
             for j in range(total_days):
@@ -70,7 +74,6 @@ def main_data_to_days_and_modules(bool_sat_model, variables_dict, total_days=6, 
                     else:
                         bool_sat_model.AddImplication(variables_dict[f"{courses_id[course_num]}_SEC_{i}"],
                                                       variables_dict[f"{courses_id[course_num]}_D{j+1}_M{k+1}"])
-        course_num += 1
     return courses_id
 
 
@@ -109,9 +112,28 @@ def correct_main_data():
     return main_data
 
 
-def get_nrc_info(*, is_nrc_data=False):
-    nrc_by_course = []
+def get_nrc_info(*, is_nrc_data=False, course_pos=0, nrc_pos=0):
     main_data = correct_main_data()
+
+    if is_nrc_data:
+        nrc = main_data[course_pos][nrc_pos]
+        nrc_data = nrc.split(" ")
+
+        nrc_data.pop(0)
+        cleaning_prof = True
+        while cleaning_prof:
+            if ":" in nrc_data[-1]:
+                cleaning_prof = False
+            else:
+                nrc_data.pop(-1)
+        #print(nrc_data)
+
+        nrc_data = " ".join(nrc_data)
+        # Return case 1: data of modules of only one nrc as string
+        return nrc_data
+
+    nrc_by_course = []
+
     for course in main_data:
         nrc_this_course = []
         for nrc in course:
@@ -120,20 +142,6 @@ def get_nrc_info(*, is_nrc_data=False):
             nrc_id = nrc_data[0][1:]
             nrc_this_course.append(nrc_id)
 
-            if not is_nrc_data:
-                continue
-            # Cleaning nrc_data to only show courses.
-            nrc_data.pop(0)
-            cleaning_prof = True
-            while cleaning_prof:
-                if ":" in nrc_data[-1]:
-                    cleaning_prof = False
-                else:
-                    nrc_data.pop(-1)
-
-            nrc_data = " ".join(nrc_data)
-            # Return case 1: data of modules of only one nrc as string
-            return nrc_data
         nrc_by_course.append(nrc_this_course)
     # Return case 2: List of all nrc codes with index [course][section] (is_nrc_data = False)
     return nrc_by_course
