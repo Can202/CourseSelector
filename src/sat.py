@@ -30,11 +30,14 @@ def get_sat_solutions(main_data):
                 variables[f"{main_data[i][0]}_D{j}_M{k}"] = model.NewBoolVar(f"{main_data[i][0]}_D{j}_M{k}")
 
     courses_id = main_data_to_days_and_modules(model, variables, total_days, total_modules)
+    one_ncr_course_constraint(model, variables)
+    at_most_one_module(bool_sat_model=model,variables_dict=variables,courses_id=courses_id,total_days=total_days,total_modules=total_modules)
     # leer data para llevar cada nrc a sus cursos como más variables
     # poner condiciones (único nrc por curso) implicancia de bloques de cada nrc, restricción tope
     # resolver, guardar soluciones en objetos de clases calendar/nrc/block ?
     # test
     # print(model)
+
     return courses_id
 
 
@@ -63,17 +66,17 @@ def main_data_to_days_and_modules(bool_sat_model, variables_dict, total_days=6, 
 def one_ncr_course_constraint(bool_sat_model, variables_dict):
     courses_id, main_data = get_courses_id()
     nrc_by_course = get_nrc_info()
-    final_constraint = []
 
     for i in range(len(courses_id)):
-        for j in range(len(nrc_by_course[i])):
-            c = bool_sat_model.NewBoolVar(f"c_{i}")
-            all_constraints = [variables_dict[f"{courses_id[i]}_SEC_{j+1}"] if j == k else
-                               ~variables_dict[f"{courses_id[i]}_SEC_{k+1}"] for k in range(len(nrc_by_course[i]))]
-            bool_sat_model.AddBoolAnd(all_constraints).OnlyEnforceIf(c)
-            final_constraint.append(c)
-    bool_sat_model.AddBoolOr(final_constraint)
+        all_constraints = [variables_dict[f"{courses_id[i]}_SEC_{k+1}"] for k in range(len(nrc_by_course[i]))]
+        bool_sat_model.AddExactlyOne(all_constraints)
 
+
+def at_most_one_module(*, bool_sat_model, variables_dict, courses_id, total_days=6, total_modules=9):
+    for i in range(total_days):
+        for j in range(total_modules):
+            block_constraint = [variables_dict[f"{courses_id[k]}_D{i+1}_M{j+1}"] for k in range(len(courses_id))]
+            bool_sat_model.AddAtMostOne(block_constraint)
 
 
 def get_courses_id():
@@ -104,7 +107,6 @@ def get_nrc_info(*, is_nrc_data=False):
 
             nrc_id = nrc_data[0][1:]
             nrc_this_course.append(nrc_id)
-            nrc_by_course.append(nrc_this_course)
 
             if not is_nrc_data:
                 continue
@@ -120,5 +122,6 @@ def get_nrc_info(*, is_nrc_data=False):
             nrc_data = " ".join(nrc_data)
             # Return case 1: data of modules of only one nrc as string
             return nrc_data
+        nrc_by_course.append(nrc_this_course)
     # Return case 2: List of all nrc codes with index [course][section] (is_nrc_data = False)
     return nrc_by_course
