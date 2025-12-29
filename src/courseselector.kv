@@ -13,6 +13,7 @@
             ShowScreen:
             CacheScreen:
             ConfigScreen:
+            CreateScreen:
 
 
 <FirstScreen>:
@@ -59,6 +60,7 @@
                 on_release: root.manager.current = "load"
             MDRectangleFlatButton:
                 text: "No"
+                on_release: root.manager.current = "create"
     
     MDFloatLayout:
         size_hint_y: None
@@ -195,3 +197,48 @@
             on_release: root.reset_btn()
             pos_hint: {"center_x": 0.8, "center_y": 0.5}
             text: "Reiniciar Configuración"
+
+<CreateScreen>:
+    name: "create"
+    MDBoxLayout:
+        orientation: "vertical"
+        CreateRecycleView:
+            id: rv
+        MDFloatLayout:
+            size_hint_y: None
+            height: 0.1 * root.height
+            pos_hint: {"x": 0, "y": 0}
+            padding: dp(10)
+            MDIconButton:
+                on_release: root.manager.current = "first"
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                icon: "home"
+
+<CreateRecycleView>:
+    viewclass: "CreateBox"
+    RecycleBoxLayout:
+        default_size: None, 100
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: "vertical"
+<CreateBox>:
+    size_hint_x: None
+    width: root.width
+    orientation: "horizontal"
+    padding: dp(5)
+    spacing: dp(10)
+    MDTextField:
+        id: entry
+        size_hint_x: None
+        multiline: False
+        width: dp(80)
+    MDRectangleFlatButton:
+        pos_hint: {"center_x": 0.8} 
+        text: "Añadir" + root.i
+    MDRectangleFlatButton:
+        id: removebtn
+        pos_hint: {"center_x": 0.9} 
+        text: root.eliminado
+        on_release: root.i = "xD"
+    

@@ -3,9 +3,25 @@
 import requests
 from func import *
 import time
+from selenium import webdriver
 
-def get_html_content_from_BuscaCursos(Semestre, Sigla, Campus):
+def get_html_content_from_BuscaCursos(Semestre, Sigla, Campus, useSelenium=False):
     url = f"https://buscacursos.uc.cl/?cxml_semestre={Semestre}&cxml_sigla={Sigla}&cxml_nrc=&cxml_nombre=&cxml_categoria=TODOS&cxml_area_fg=TODOS&cxml_formato_cur=TODOS&cxml_profesor=&cxml_campus={Campus}&cxml_unidad_academica=TODOS&cxml_horario_tipo_busqueda=si_tenga&cxml_horario_tipo_busqueda_actividad=TODOS&cxml_periodo=TODOS&cxml_escuela=TODOS&cxml_nivel=TODOS#resultados"
+    if useSelenium:
+        driver = webdriver.Firefox()
+
+        try:
+            driver.get(url)
+            html_content = driver.page_source
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return "ERROR"
+        finally:
+            driver.quit()
+
+        return html_content
+    
+
     try:
         response = requests.get(url)
         response.raise_for_status()
@@ -41,7 +57,7 @@ def get_only_type_schedule(schedule, only_type_list):
     schedule = schedule[:-1]
     return schedule
 
-def create_csv_from_list(Semestre = "2025-1", courses_id_bundle=["MAT1630", "MAT1640", "OFG-FIL2005/VET161G"], progress_callback=None):
+def create_csv_from_list(Semestre = "2025-1", courses_id_bundle=["MAT1630", "MAT1640", "OFG-FIL2005/VET161G"], selenium = False, progress_callback=None):
     a = ""
     for course_id_bundle in courses_id_bundle:
         a += course_id_bundle + " "
@@ -54,7 +70,7 @@ def create_csv_from_list(Semestre = "2025-1", courses_id_bundle=["MAT1630", "MAT
             course_id_bundle = courses_id_bundle[j]
             course_id_bundle, only_type_list = check_if_only_type_enabled_and_get_type(course_id_bundle) 
 
-            courses_data = get_courses_data(Semestre=Semestre, Sigla=course_id_bundle)
+            courses_data = get_courses_data(Semestre=Semestre, Sigla=course_id_bundle, selenium=selenium)
             temp_str = course_id_bundle
             for i in range(len(courses_data["schedule"])):
                 schedule = get_only_type_schedule(courses_data["schedule"][i], only_type_list)
@@ -78,7 +94,7 @@ def create_csv_from_list(Semestre = "2025-1", courses_id_bundle=["MAT1630", "MAT
                 
                 course_id = courses_id[k]
                 course_id, only_type_list = check_if_only_type_enabled_and_get_type(course_id) 
-                courses_data = get_courses_data(Semestre=Semestre, Sigla=course_id)
+                courses_data = get_courses_data(Semestre=Semestre, Sigla=course_id,selenium=selenium)
                 for q in range(len(courses_data["schedule"])):
                     schedule = get_only_type_schedule(courses_data["schedule"][q], only_type_list)
                     profs = ""
@@ -199,8 +215,8 @@ def legit_schedule_segment(schedule_segment):
             days_check = True
     return (number_check and days_check)
 
-def get_courses_data(*,Semestre="", Sigla="", Campus = "San+Joaqu%C3%ADn"):
-    html_content = get_html_content_from_BuscaCursos(Semestre, Sigla, Campus)
+def get_courses_data(*,Semestre="", Sigla="", Campus = "San+Joaqu%C3%ADn", selenium=False):
+    html_content = get_html_content_from_BuscaCursos(Semestre, Sigla, Campus, selenium)
     courses_data = get_courses_data_from_html_content(html_content)
     return courses_data
 

@@ -19,6 +19,7 @@ from kivy.uix.widget import Widget
 from kivy.graphics import Color, Rectangle
 from kivy.core.clipboard import Clipboard
 from kivy.core.text import Label as CoreLabel
+from kivy.properties import StringProperty, ListProperty,DictProperty
 
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
 
@@ -32,6 +33,7 @@ from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.button import MDIconButton, MDFlatButton
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.dialog import MDDialog
+from kivymd.uix.recycleview import MDRecycleView
 
 from kivy.core.window import Window
 Window.size = (1000, Window.height)
@@ -346,6 +348,19 @@ class ConfigScreen(MDScreen):
             ],
         )
         self.dialog.open()
+
+class CreateScreen(MDScreen):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+class CreateRecycleView(MDRecycleView):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.data = [{"i":"A"}]
+
+class CreateBox(MDBoxLayout):
+    i = StringProperty("")
+    eliminado = StringProperty("Eliminar")
 
 class CourseSelectorApp(MDApp):
     def build(self):

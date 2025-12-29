@@ -2,6 +2,8 @@
 import json
 import requests
 import os
+from selenium import webdriver
+from selenium.common.exceptions import WebDriverException
 DEBUG = False
 
 # Here will be functions to make some specific functionality
@@ -42,6 +44,17 @@ def check_website_connection(url, timeout=5):
     except requests.RequestException as e:
         return False
     
+
+def check_website_connection_Selenium(url, timeout=5):
+    try:
+        driver = webdriver.Firefox()
+        driver.set_page_load_timeout(timeout)
+        driver.get(url)
+        driver.quit()
+        return True
+    except WebDriverException:
+        return False
+
 # Find the kth ocurrence of a string in another
 def find_kth_occurrence(substring, string, k):
     count = 0

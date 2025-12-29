@@ -226,10 +226,15 @@ def configure():
 
 def menu_automatic():
 
+    Selenium = False
+
     if not check_website_connection("https://buscacursos.uc.cl"):
         print("No connection to BuscaCursos.")
-        print("Check your connection to the internet or check if the BuscaCursos web is working")
-        return -1
+        print("Trying using Firefox...")
+        Selenium = True
+        if not check_website_connection_Selenium("https://buscacursos.uc.cl"): 
+            print("Check your connection to the internet or check if the BuscaCursos web is working")
+            return -1
 
     print("----- EXAMPLE -----")
     print("Semester: 2025-1")
@@ -238,7 +243,7 @@ def menu_automatic():
     semestre = input("Semester: ")
     courses = input("Courses to look: ")
     course = courses.split(" ")
-    automatic.create_csv_from_list(Semestre=semestre, courses_id_bundle=course)
+    automatic.create_csv_from_list(Semestre=semestre, courses_id_bundle=course, selenium=Selenium)
     print("Done!")
     print("Review the csv file! To check if everything is right.")
 
